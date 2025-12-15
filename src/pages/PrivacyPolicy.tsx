@@ -33,7 +33,7 @@ export default function PrivacyPolicy() {
                   CloudePulse ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our backup monitoring platform and related services.
                 </p>
                 <p className="mt-4">
-                  CloudePulse is operated by Kamitsund Maritime IT AS, a company registered in Norway (support@kamit.no).
+                  CloudePulse AS is a company registered in Norway.
                 </p>
               </section>
 
@@ -127,8 +127,8 @@ export default function PrivacyPolicy() {
                   For any questions about this Privacy Policy or to exercise your rights, please contact us at:
                 </p>
                 <p className="mt-4">
-                  <strong>Kamitsund Maritime IT AS</strong><br />
-                  Email: <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a>
+                  <strong>CloudePulse AS</strong><br />
+                  Email: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
               </section>
 

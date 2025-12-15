@@ -30,18 +30,18 @@ export default function GDPR() {
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Commitment to GDPR</h2>
                 <p>
-                  CloudePulse is committed to protecting your personal data and complying with the General Data Protection Regulation (GDPR). As a company operated by Kamitsund Maritime IT AS in Norway, we take our data protection obligations seriously.
+                  CloudePulse is committed to protecting your personal data and complying with the General Data Protection Regulation (GDPR). As a company registered in Norway, we take our data protection obligations seriously.
                 </p>
               </section>
 
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Data Controller</h2>
                 <p>
-                  Kamitsund Maritime IT AS is the data controller for personal data collected through CloudePulse. We determine the purposes and means of processing your personal data.
+                  CloudePulse AS is the data controller for personal data collected through CloudePulse. We determine the purposes and means of processing your personal data.
                 </p>
                 <p className="mt-4">
                   <strong>Contact:</strong><br />
-                  Email: <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a>
+                  Email: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
               </section>
 
@@ -105,7 +105,7 @@ export default function GDPR() {
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. How to Exercise Your Rights</h2>
                 <p>
-                  To exercise any of your rights, please contact us at <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a>. We will respond to your request within 30 days.
+                  To exercise any of your rights, please contact us at <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>. We will respond to your request within 30 days.
                 </p>
                 <p className="mt-4">
                   When making a request, please provide:
@@ -139,7 +139,7 @@ export default function GDPR() {
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Data Processing Agreement</h2>
                 <p>
-                  As CloudePulse processes data on behalf of MSPs, we act as a data processor. We offer a Data Processing Agreement (DPA) to all customers upon request. Contact <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a> to receive a copy.
+                  As CloudePulse processes data on behalf of MSPs, we act as a data processor. We offer a Data Processing Agreement (DPA) to all customers upon request. Contact <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a> to receive a copy.
                 </p>
               </section>
 
@@ -172,8 +172,8 @@ export default function GDPR() {
                   For any GDPR-related questions or to exercise your rights, please contact us at:
                 </p>
                 <p className="mt-4">
-                  <strong>Kamitsund Maritime IT AS</strong><br />
-                  Email: <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a>
+                  <strong>CloudePulse AS</strong><br />
+                  Email: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
               </section>
             </div>

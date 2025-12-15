@@ -166,11 +166,11 @@ export default function Pricing() {
               We offer custom plans for larger MSPs. Get in touch and we'll find the right solution for you.
             </p>
             <a
-              href="mailto:support@kamit.no"
+              href="mailto:support@cloudepulse.com"
               className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
             >
               <Mail className="w-5 h-5" />
-              Contact support@kamit.no
+              Contact support@cloudepulse.com
             </a>
           </div>
         </motion.div>

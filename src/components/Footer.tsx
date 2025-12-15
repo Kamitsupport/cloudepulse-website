@@ -10,7 +10,7 @@ const footerLinks = {
   ],
   company: [
     { name: 'About Us', href: '#' },
-    { name: 'Contact', href: 'mailto:support@kamit.no' },
+    { name: 'Contact', href: 'mailto:support@cloudepulse.com' },
   ],
   legal: [
     { name: 'Privacy Policy', href: '/privacy' },
@@ -24,7 +24,7 @@ const socialLinks = [
   { name: 'Twitter', icon: Twitter, href: '#' },
   { name: 'LinkedIn', icon: Linkedin, href: '#' },
   { name: 'GitHub', icon: Github, href: '#' },
-  { name: 'Email', icon: Mail, href: 'mailto:support@kamit.no' },
+  { name: 'Email', icon: Mail, href: 'mailto:support@cloudepulse.com' },
 ];
 
 export default function Footer() {

@@ -6,7 +6,6 @@ import {
   Features,
   HowItWorks,
   Pricing,
-  Testimonials,
   TrialSignupForm,
   Footer,
 } from './components';
@@ -21,7 +20,6 @@ function HomePage() {
         <Features />
         <HowItWorks />
         <Pricing />
-        <Testimonials />
         <TrialSignupForm />
       </main>
       <Footer />

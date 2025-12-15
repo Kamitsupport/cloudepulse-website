@@ -33,7 +33,7 @@ export default function TermsOfService() {
                   By accessing or using CloudePulse services, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this service.
                 </p>
                 <p className="mt-4">
-                  CloudePulse is operated by Kamitsund Maritime IT AS, a company registered in Norway.
+                  CloudePulse AS is a company registered in Norway.
                 </p>
               </section>
 
@@ -122,7 +122,7 @@ export default function TermsOfService() {
 
                 <h3 className="text-xl font-medium text-gray-800 mb-3 mt-6">7.2 Support</h3>
                 <p>
-                  Support is provided via email at support@kamit.no. Response times vary based on your subscription plan.
+                  Support is provided via email at support@cloudepulse.com. Response times vary based on your subscription plan.
                 </p>
               </section>
 
@@ -174,8 +174,8 @@ export default function TermsOfService() {
                   For questions about these Terms of Service, please contact us at:
                 </p>
                 <p className="mt-4">
-                  <strong>Kamitsund Maritime IT AS</strong><br />
-                  Email: <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a>
+                  <strong>CloudePulse AS</strong><br />
+                  Email: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
               </section>
             </div>

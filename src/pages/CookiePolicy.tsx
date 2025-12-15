@@ -142,8 +142,8 @@ export default function CookiePolicy() {
                   If you have questions about our use of cookies, please contact us at:
                 </p>
                 <p className="mt-4">
-                  <strong>Kamitsund Maritime IT AS</strong><br />
-                  Email: <a href="mailto:support@kamit.no" className="text-primary-600 hover:text-primary-700">support@kamit.no</a>
+                  <strong>CloudePulse AS</strong><br />
+                  Email: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
               </section>
             </div>
