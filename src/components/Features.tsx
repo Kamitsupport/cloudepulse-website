@@ -5,9 +5,13 @@ import {
   Network,
   Bug,
   Users,
-  Clock,
-  BarChart3,
+  Globe,
+  Webhook,
   Bell,
+  AlertTriangle,
+  Download,
+  FileWarning,
+  Activity,
 } from 'lucide-react';
 
 const features = [
@@ -15,31 +19,63 @@ const features = [
     icon: HardDrive,
     title: 'Backup Monitoring',
     description:
-      'Automatically parse backup reports from Veeam, Synology, Acronis, and more. Get instant alerts for failures.',
+      'Forward backup emails to CloudePulse and let our intelligent parser detect success, warnings, and failures automatically. Supports Veeam, Synology Active Backup, Ahsay, Atera RMM, and custom robocopy scripts. See 7-day history at a glance.',
     color: 'from-blue-500 to-blue-600',
     bgColor: 'bg-blue-100',
   },
   {
-    icon: ShieldAlert,
-    title: 'Firewall Alerts',
+    icon: AlertTriangle,
+    title: 'Missing Backup Alerts',
     description:
-      'Monitor firewall health and security events. Stay ahead of threats with proactive notifications.',
+      'CloudePulse knows when to expect your backup reports. If a scheduled backup doesn\'t report in on time, you get alerted immediately. No more silent failures going unnoticed for days.',
+    color: 'from-orange-500 to-orange-600',
+    bgColor: 'bg-orange-100',
+  },
+  {
+    icon: Globe,
+    title: 'Website Monitoring',
+    description:
+      'Monitor client websites for uptime, SSL certificate expiration, and keyword presence. Get alerted when sites go down, certificates are about to expire, or critical content changes. Built-in alternative to UptimeRobot and Pingdom.',
+    color: 'from-teal-500 to-teal-600',
+    bgColor: 'bg-teal-100',
+  },
+  {
+    icon: Webhook,
+    title: 'Log Center',
+    description:
+      'Create webhook endpoints for each customer to receive logs from firewalls, NAS devices, and other systems. Filter by keywords, set severity levels, and get real-time alerts on security events and system warnings.',
+    color: 'from-violet-500 to-violet-600',
+    bgColor: 'bg-violet-100',
+  },
+  {
+    icon: Download,
+    title: 'CloudePulse Backup Agent',
+    description:
+      'Built for Windows Scheduled Task backups that most MSPs forget to monitor. Robocopy scripts, xcopy jobs, and custom batch file backups rarely send email reports - our agent watches these backup folders, detects when jobs complete (or fail), and reports status to CloudePulse automatically. Simple MSI install, runs as a Windows service.',
+    color: 'from-sky-500 to-sky-600',
+    bgColor: 'bg-sky-100',
+  },
+  {
+    icon: FileWarning,
+    title: 'CloudePulse FileMon Agent',
+    description:
+      'Deploy our ransomware canary system on Windows endpoints. The FileMon agent creates hidden canary files and monitors them 24/7. If ransomware modifies or deletes these files, you get instant alerts before the damage spreads.',
     color: 'from-red-500 to-red-600',
     bgColor: 'bg-red-100',
   },
   {
     icon: Network,
-    title: 'Port Monitoring',
+    title: 'Port & TCP Monitoring',
     description:
-      'Track open ports and services across your network. Detect unauthorized changes instantly.',
+      'Scan client networks for open ports and track changes over time. Monitor critical TCP connections to ensure services stay available. Get alerted when unauthorized ports open or critical services become unreachable.',
     color: 'from-purple-500 to-purple-600',
     bgColor: 'bg-purple-100',
   },
   {
-    icon: Bug,
-    title: 'Ransomware Detection',
+    icon: ShieldAlert,
+    title: 'Firewall & Security Events',
     description:
-      'Early warning system for ransomware indicators. Protect your clients before damage occurs.',
+      'Configure your firewalls (UniFi, Fortinet, pfSense, etc.) to send webhooks to CloudePulse Log Center. Filter important security events, block brute force alerts, and VPN connection logs. Stay ahead of threats.',
     color: 'from-amber-500 to-amber-600',
     bgColor: 'bg-amber-100',
   },
@@ -47,23 +83,15 @@ const features = [
     icon: Users,
     title: 'Customer Database',
     description:
-      'Centralized customer management with complete service history and documentation.',
+      'Manage all your MSP customers in one place. Add custom fields for any data you need to track. Configure notification contacts, billing settings, and service levels per customer. Export data when needed.',
     color: 'from-green-500 to-green-600',
     bgColor: 'bg-green-100',
   },
   {
-    icon: Clock,
-    title: 'Time Tracking',
+    icon: Activity,
+    title: 'Dashboard & Analytics',
     description:
-      'Built-in time tracking for accurate billing. Track hours by customer and project.',
-    color: 'from-cyan-500 to-cyan-600',
-    bgColor: 'bg-cyan-100',
-  },
-  {
-    icon: BarChart3,
-    title: 'Reports & Analytics',
-    description:
-      'Beautiful reports for your clients. Show value with detailed analytics and trends.',
+      'Get a real-time overview of all monitored systems at a glance. See backup success rates, website uptime percentages, active alerts, and 7-day trends. Know your MSP health status instantly every morning.',
     color: 'from-indigo-500 to-indigo-600',
     bgColor: 'bg-indigo-100',
   },
@@ -71,9 +99,17 @@ const features = [
     icon: Bell,
     title: 'Smart Notifications',
     description:
-      'Customizable alerts via email, SMS, or push. Never miss a critical event.',
+      'Configure alerts exactly how you want them. Set per-customer notification preferences, choose severity thresholds, and receive alerts via email, SMS, or push notifications. Reduce alert fatigue with intelligent filtering.',
     color: 'from-pink-500 to-pink-600',
     bgColor: 'bg-pink-100',
+  },
+  {
+    icon: Bug,
+    title: 'Ransomware Early Warning',
+    description:
+      'Combine FileMon canary agents, Log Center security events, and backup monitoring into a comprehensive ransomware defense. Detect threats early through multiple signals and respond before critical damage occurs.',
+    color: 'from-rose-500 to-rose-600',
+    bgColor: 'bg-rose-100',
   },
 ];
 
@@ -137,7 +173,7 @@ export default function Features() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
         >
           {features.map((feature) => (
             <motion.div
@@ -166,6 +202,16 @@ export default function Features() {
                       ? '#06b6d4'
                       : feature.color.includes('indigo')
                       ? '#6366f1'
+                      : feature.color.includes('teal')
+                      ? '#14b8a6'
+                      : feature.color.includes('violet')
+                      ? '#8b5cf6'
+                      : feature.color.includes('sky')
+                      ? '#0ea5e9'
+                      : feature.color.includes('orange')
+                      ? '#f97316'
+                      : feature.color.includes('rose')
+                      ? '#f43f5e'
                       : '#ec4899',
                   }}
                 />
@@ -187,6 +233,44 @@ export default function Features() {
           ))}
         </motion.div>
 
+        {/* Replaces Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="mt-20 text-center"
+        >
+          <h3 className="text-2xl font-bold text-gray-900 mb-4">
+            Enterprise Features. <span className="gradient-text">MSP-Friendly Pricing.</span>
+          </h3>
+          <p className="text-gray-600 mb-8 max-w-3xl mx-auto">
+            Big enterprise tools are expensive and packed with features you don't need. CloudePulse gives small and medium MSPs the essential monitoring capabilities - backup monitoring, website uptime, ransomware detection - all in one affordable platform. No bloat, no enterprise pricing.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {[
+              { name: 'BackupRadar', category: 'Backup Monitoring' },
+              { name: 'Huntress', category: 'Ransomware Detection' },
+              { name: 'UptimeRobot', category: 'Website Monitoring' },
+              { name: 'Pingdom', category: 'Uptime & SSL' },
+              { name: 'StatusCake', category: 'Website Monitoring' },
+              { name: 'Veeam ONE', category: 'Backup Analytics' },
+            ].map((tool) => (
+              <motion.div
+                key={tool.name}
+                whileHover={{ scale: 1.05 }}
+                className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl"
+              >
+                <span className="font-semibold text-gray-800">{tool.name}</span>
+                <span className="block text-xs text-gray-500">{tool.category}</span>
+              </motion.div>
+            ))}
+          </div>
+          <p className="text-sm text-gray-500 mt-6">
+            Lightweight alternatives that work alongside your existing RMM - NinjaOne, Atera, ConnectWise, or Datto
+          </p>
+        </motion.div>
+
         {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -196,7 +280,7 @@ export default function Features() {
           className="text-center mt-16"
         >
           <p className="text-gray-600 mb-4">
-            And many more features coming soon...
+            More features in development: Time Tracking, Script Library, Newsletters, and more.
           </p>
           <button
             onClick={() => {

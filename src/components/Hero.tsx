@@ -112,9 +112,10 @@ export default function Hero() {
               transition={{ delay: 0.4 }}
               className="text-lg sm:text-xl text-gray-600 mb-8 max-w-xl"
             >
-              The all-in-one platform for MSPs to monitor backups, firewalls,
-              ports, and more. Get instant alerts, actionable insights, and
-              peace of mind.
+              The all-in-one platform for MSPs to monitor backups, websites,
+              firewalls, and ransomware threats. Forward backup emails, deploy
+              lightweight Windows agents, and get alerts when backups fail
+              <span className="font-semibold text-gray-800"> or don't arrive at all</span>.
             </motion.p>
 
             {/* Slogan */}
@@ -199,37 +200,39 @@ export default function Hero() {
               {/* Dashboard Content */}
               <div className="p-6 space-y-4">
                 {/* Stats Row */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-4 gap-3">
                   {[
-                    { label: 'Systems', value: '48', color: 'text-primary-600' },
-                    { label: 'Healthy', value: '45', color: 'text-green-600' },
-                    { label: 'Alerts', value: '3', color: 'text-amber-600' },
+                    { label: 'Customers', value: '27', color: 'text-primary-600' },
+                    { label: 'Backups', value: '39', color: 'text-green-600' },
+                    { label: 'Websites', value: '10', color: 'text-teal-600' },
+                    { label: 'Alerts', value: '2', color: 'text-amber-600' },
                   ].map((stat) => (
-                    <div key={stat.label} className="text-center p-3 bg-gray-50 rounded-xl">
-                      <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+                    <div key={stat.label} className="text-center p-2 bg-gray-50 rounded-xl">
+                      <div className={`text-xl font-bold ${stat.color}`}>{stat.value}</div>
                       <div className="text-xs text-gray-500">{stat.label}</div>
                     </div>
                   ))}
                 </div>
 
-                {/* Backup Systems List */}
-                <div className="space-y-3">
+                {/* Monitoring Status List */}
+                <div className="space-y-2">
                   {[
-                    { name: 'Server-01 Backup', status: 'success', time: '2h ago' },
-                    { name: 'Database Daily', status: 'success', time: '5h ago' },
-                    { name: 'Client-NAS Sync', status: 'warning', time: '1d ago' },
+                    { name: 'Veeam Backup - Server01', status: 'success', time: '2h ago' },
+                    { name: 'example.com uptime', status: 'success', time: '1m ago' },
+                    { name: 'FileMon - 6 agents armed', status: 'success', time: 'Live' },
+                    { name: 'Missing: Daily NAS backup', status: 'warning', time: 'Expected 6h ago' },
                   ].map((item) => (
                     <div
                       key={item.name}
-                      className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                      className="flex items-center justify-between p-2 bg-gray-50 rounded-xl"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         <div
                           className={`w-2 h-2 rounded-full ${
                             item.status === 'success' ? 'bg-green-500' : 'bg-amber-500'
                           }`}
                         />
-                        <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                        <span className="text-xs font-medium text-gray-700">{item.name}</span>
                       </div>
                       <span className="text-xs text-gray-400">{item.time}</span>
                     </div>
@@ -243,15 +246,15 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1, duration: 0.5 }}
-              className="absolute -left-8 top-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl p-4 border border-gray-100 w-48"
+              className="absolute -left-8 top-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-xl p-4 border border-gray-100 w-52"
             >
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
-                  <Shield className="w-4 h-4 text-green-600" />
+                <div className="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center">
+                  <Shield className="w-4 h-4 text-amber-600" />
                 </div>
-                <span className="text-xs font-semibold text-gray-800">All Clear!</span>
+                <span className="text-xs font-semibold text-gray-800">Missing Backup Alert</span>
               </div>
-              <p className="text-xs text-gray-500">All 48 backup systems are healthy and running.</p>
+              <p className="text-xs text-gray-500">Daily NAS backup hasn't reported in 6 hours. Expected at 03:00.</p>
             </motion.div>
 
             {/* Floating Stats Card */}
@@ -261,8 +264,9 @@ export default function Hero() {
               transition={{ delay: 1.2, duration: 0.5 }}
               className="absolute -right-4 bottom-20 bg-white rounded-2xl shadow-xl p-4 border border-gray-100"
             >
-              <div className="text-xs text-gray-500 mb-1">Uptime</div>
-              <div className="text-2xl font-bold text-green-600">99.9%</div>
+              <div className="text-xs text-gray-500 mb-1">Website Uptime</div>
+              <div className="text-2xl font-bold text-green-600">100%</div>
+              <div className="text-xs text-gray-400">Last 30 days</div>
             </motion.div>
           </motion.div>
         </div>
