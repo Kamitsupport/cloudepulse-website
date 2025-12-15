@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Activity, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Activity } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const footerLinks = {
@@ -17,16 +17,10 @@ const footerLinks = {
     { name: 'Terms of Service', href: '/terms' },
     { name: 'Cookie Policy', href: '/cookies' },
     { name: 'GDPR', href: '/gdpr' },
-    { name: 'Åpenhetsloven', href: '/transparency' },
+    { name: 'Transparency Act', href: '/transparency' },
   ],
 };
 
-const socialLinks = [
-  { name: 'Twitter', icon: Twitter, href: '#' },
-  { name: 'LinkedIn', icon: Linkedin, href: '#' },
-  { name: 'GitHub', icon: Github, href: '#' },
-  { name: 'Email', icon: Mail, href: 'mailto:support@cloudepulse.com' },
-];
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -73,25 +67,9 @@ export default function Footer() {
               The all-in-one platform for MSPs to monitor, manage, and report on
               IT services.
             </p>
-            <p className="text-lg font-semibold text-primary-400 mb-6">
+            <p className="text-lg font-semibold text-primary-400">
               Work smarter. Sleep better.
             </p>
-
-            {/* Social Links */}
-            <div className="flex gap-4">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.name}
-                  href={social.href}
-                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-primary-600 transition-colors"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  aria-label={social.name}
-                >
-                  <social.icon className="w-5 h-5" />
-                </motion.a>
-              ))}
-            </div>
           </div>
 
           {/* Product Links */}
