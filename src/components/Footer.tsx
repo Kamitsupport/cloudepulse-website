@@ -17,6 +17,7 @@ const footerLinks = {
     { name: 'Terms of Service', href: '/terms' },
     { name: 'Cookie Policy', href: '/cookies' },
     { name: 'GDPR', href: '/gdpr' },
+    { name: 'Åpenhetsloven', href: '/transparency' },
   ],
 };
 
