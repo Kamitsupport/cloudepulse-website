@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Activity, Play, ArrowRight, Shield, Zap, BarChart3 } from 'lucide-react';
+import { Activity, ArrowRight, Shield, Zap, BarChart3 } from 'lucide-react';
 
 export default function Hero() {
   const scrollToSection = (href: string) => {
@@ -143,14 +143,6 @@ export default function Hero() {
               >
                 Start Free Trial
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-              <motion.button
-                className="group px-8 py-4 bg-white text-gray-700 font-semibold rounded-2xl border-2 border-gray-200 hover:border-primary-300 flex items-center gap-2"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Play className="w-5 h-5 text-primary-500" />
-                Watch Demo
               </motion.button>
             </motion.div>
 
