@@ -161,7 +161,7 @@ export default function Footer() {
             <span className="text-gray-500">Missing a cookie banner? So are we!</span>
             <span className="text-gray-400">We use</span>
             <a
-              href="https://plausible.io"
+              href="https://plausible.io/about"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
