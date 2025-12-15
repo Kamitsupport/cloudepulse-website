@@ -9,7 +9,7 @@ const footerLinks = {
     { name: 'How It Works', href: '#how-it-works' },
   ],
   company: [
-    { name: 'About Us', href: '#' },
+    { name: 'About Us', href: '/about' },
     { name: 'Contact', href: 'mailto:support@cloudepulse.com' },
   ],
   legal: [
@@ -117,12 +117,21 @@ export default function Footer() {
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-gray-400 hover:text-primary-400 transition-colors"
-                  >
-                    {link.name}
-                  </a>
+                  {link.href.startsWith('/') ? (
+                    <Link
+                      to={link.href}
+                      className="text-sm text-gray-400 hover:text-primary-400 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      className="text-sm text-gray-400 hover:text-primary-400 transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
