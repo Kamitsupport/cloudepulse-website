@@ -23,98 +23,98 @@ export default function Transparency() {
               Back to Home
             </Link>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">Åpenhetsloven</h1>
-            <p className="text-gray-500 mb-8">Sist oppdatert: 15. desember 2025</p>
+            <h1 className="text-4xl font-bold text-gray-900 mb-8">Norwegian Transparency Act</h1>
+            <p className="text-gray-500 mb-8">Last updated: December 15, 2025</p>
 
             <div className="prose prose-lg max-w-none text-gray-600">
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Vår forpliktelse til åpenhet</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Commitment to Transparency</h2>
                 <p>
-                  Selv om CloudePulse AS per i dag ikke er omfattet av åpenhetsloven (Lov om virksomheters åpenhet og arbeid med grunnleggende menneskerettigheter og anstendige arbeidsforhold), er vi forpliktet til å drive vår virksomhet på en etisk og ansvarlig måte.
+                  Although CloudePulse AS is not currently subject to the Norwegian Transparency Act (Åpenhetsloven - Act relating to enterprises' transparency and work on fundamental human rights and decent working conditions), we are committed to conducting our business in an ethical and responsible manner.
                 </p>
                 <p className="mt-4">
-                  Vi jobber aktivt mot prinsippene i åpenhetsloven og FNs veiledende prinsipper for næringsliv og menneskerettigheter (UNGP), samt OECDs retningslinjer for flernasjonale selskaper.
+                  We actively work towards the principles of the Transparency Act, the UN Guiding Principles on Business and Human Rights (UNGP), and the OECD Guidelines for Multinational Enterprises.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Menneskerettigheter og arbeidsforhold</h2>
-                <p>CloudePulse AS forplikter seg til å:</p>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Human Rights and Working Conditions</h2>
+                <p>CloudePulse AS is committed to:</p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
-                  <li>Respektere grunnleggende menneskerettigheter i all vår virksomhet</li>
-                  <li>Sikre anstendige arbeidsforhold for alle ansatte</li>
-                  <li>Velge leverandører og samarbeidspartnere som deler våre verdier</li>
-                  <li>Kontinuerlig forbedre våre rutiner for aktsomhetsvurderinger</li>
+                  <li>Respecting fundamental human rights in all our operations</li>
+                  <li>Ensuring decent working conditions for all employees</li>
+                  <li>Selecting suppliers and partners who share our values</li>
+                  <li>Continuously improving our due diligence procedures</li>
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Våre leverandører</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Our Suppliers</h2>
                 <p>
-                  Som en skybasert programvaretjeneste har CloudePulse en begrenset leverandørkjede som hovedsakelig består av:
+                  As a cloud-based software service, CloudePulse has a limited supply chain primarily consisting of:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
-                  <li><strong>Skyinfrastruktur:</strong> Google Cloud Platform (Firebase) - en anerkjent leverandør med dokumenterte forpliktelser til menneskerettigheter og bærekraft</li>
-                  <li><strong>Hosting:</strong> Vercel og Cloudflare - etablerte selskaper med tydelige etiske retningslinjer</li>
+                  <li><strong>Cloud Infrastructure:</strong> Google Cloud Platform (Firebase) - a recognized provider with documented commitments to human rights and sustainability</li>
+                  <li><strong>Hosting:</strong> Vercel and Cloudflare - established companies with clear ethical guidelines</li>
                 </ul>
                 <p className="mt-4">
-                  Vi gjennomfører jevnlige vurderinger av våre leverandørers praksis og forpliktelser knyttet til menneskerettigheter og arbeidsforhold.
+                  We conduct regular assessments of our suppliers' practices and commitments related to human rights and working conditions.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Aktsomhetsvurderinger</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Due Diligence Assessments</h2>
                 <p>
-                  Vi gjennomfører aktsomhetsvurderinger i tråd med OECDs retningslinjer. Dette inkluderer:
+                  We conduct due diligence assessments in accordance with OECD guidelines. This includes:
                 </p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
-                  <li>Kartlegging av potensielle risikoer i vår virksomhet og leverandørkjede</li>
-                  <li>Vurdering av faktiske og potensielle negative konsekvenser</li>
-                  <li>Iverksetting av tiltak for å forebygge, redusere eller stanse negative konsekvenser</li>
-                  <li>Overvåking og evaluering av tiltakenes effektivitet</li>
+                  <li>Mapping potential risks in our operations and supply chain</li>
+                  <li>Assessing actual and potential adverse impacts</li>
+                  <li>Implementing measures to prevent, reduce, or stop adverse impacts</li>
+                  <li>Monitoring and evaluating the effectiveness of measures</li>
                 </ul>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Rett til informasjon</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Right to Information</h2>
                 <p>
-                  I tråd med åpenhetslovens intensjon, har alle rett til å be om informasjon om hvordan CloudePulse AS håndterer faktiske og potensielle negative konsekvenser for grunnleggende menneskerettigheter og anstendige arbeidsforhold.
+                  In accordance with the intent of the Transparency Act, anyone has the right to request information about how CloudePulse AS handles actual and potential adverse impacts on fundamental human rights and decent working conditions.
                 </p>
                 <p className="mt-4">
-                  Henvendelser kan sendes til: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
+                  Inquiries can be sent to: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
                 <p className="mt-4">
-                  Vi vil besvare henvendelser innen rimelig tid, og senest innen tre uker etter at forespørselen er mottatt.
+                  We will respond to inquiries within a reasonable time, and no later than three weeks after the request is received.
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Kontakt oss</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Contact Us</h2>
                 <p>
-                  Har du spørsmål om vårt arbeid med menneskerettigheter og arbeidsforhold, eller ønsker du mer informasjon? Ta kontakt med oss:
+                  Do you have questions about our work with human rights and working conditions, or would you like more information? Please contact us:
                 </p>
                 <p className="mt-4">
                   <strong>CloudePulse AS</strong><br />
-                  E-post: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
+                  Email: <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>
                 </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Referanser</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">References</h2>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>
                     <a href="https://lovdata.no/dokument/NL/lov/2021-06-18-99" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">
-                      Åpenhetsloven (Lovdata)
+                      Norwegian Transparency Act (Lovdata - in Norwegian)
                     </a>
                   </li>
                   <li>
                     <a href="https://www.forbrukertilsynet.no/vi-jobber-med/apenhetsloven" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">
-                      Forbrukertilsynet - Åpenhetsloven
+                      Norwegian Consumer Authority - Transparency Act
                     </a>
                   </li>
                   <li>
                     <a href="https://www.oecd.org/corporate/mne/" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">
-                      OECDs retningslinjer for flernasjonale selskaper
+                      OECD Guidelines for Multinational Enterprises
                     </a>
                   </li>
                 </ul>
