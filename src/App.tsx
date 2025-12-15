@@ -5,6 +5,7 @@ import {
   Hero,
   Features,
   HowItWorks,
+  WhyWeBuiltThis,
   Pricing,
   TrialSignupForm,
   Footer,
@@ -19,6 +20,7 @@ function HomePage() {
         <Hero />
         <Features />
         <HowItWorks />
+        <WhyWeBuiltThis />
         <Pricing />
         <TrialSignupForm />
       </main>
