@@ -155,6 +155,23 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Privacy Notice */}
+        <div className="py-4 border-t border-gray-800">
+          <div className="flex items-center justify-center gap-2 text-sm">
+            <span className="text-gray-500">Missing a cookie banner? So are we!</span>
+            <span className="text-gray-400">We use</span>
+            <a
+              href="https://plausible.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary-400 hover:text-primary-300 font-medium transition-colors"
+            >
+              Plausible
+            </a>
+            <span className="text-gray-400">for privacy-friendly analytics — no cookies needed.</span>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
         <div className="py-6 border-t border-gray-800 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400">
