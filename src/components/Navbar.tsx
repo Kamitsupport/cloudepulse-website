@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Activity, Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const navLinks = [
   { name: 'Features', href: '#features' },
@@ -44,19 +45,20 @@ export default function Navbar() {
         <div className="container-custom">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <motion.a
-              href="#"
-              className="flex items-center gap-2"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30">
-                <Activity className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold gradient-text hidden sm:block">
-                CloudePulse
-              </span>
-            </motion.a>
+            <Link to="/">
+              <motion.div
+                className="flex items-center gap-2"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30">
+                  <Activity className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xl font-bold gradient-text hidden sm:block">
+                  CloudePulse
+                </span>
+              </motion.div>
+            </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
@@ -75,6 +77,18 @@ export default function Navbar() {
                   {link.name}
                 </motion.button>
               ))}
+              <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
+                <Link
+                  to="/about"
+                  className={`text-sm font-medium transition-colors ${
+                    isScrolled
+                      ? 'text-gray-600 hover:text-primary-600'
+                      : 'text-gray-700 hover:text-primary-600'
+                  }`}
+                >
+                  About Us
+                </Link>
+              </motion.div>
             </div>
 
             {/* CTA Buttons */}
@@ -136,6 +150,19 @@ export default function Navbar() {
                   {link.name}
                 </motion.button>
               ))}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: navLinks.length * 0.1 }}
+              >
+                <Link
+                  to="/about"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block w-full text-left py-3 text-gray-600 hover:text-primary-600 font-medium border-b border-gray-100"
+                >
+                  About Us
+                </Link>
+              </motion.div>
               <div className="pt-4 space-y-3">
                 <a
                   href="https://app.cloudepulse.com"
