@@ -106,19 +106,20 @@ export default function AboutUs() {
                   <p className="mt-4">
                     We've been running an MSP for over 25 years. We've tried every tool out there - the big
                     names, the small players, the "all-in-one" solutions that somehow still need five other
-                    tools to work properly. Today, we run our operations on industry-standard tools like
-                    RMM platforms and Hudu for documentation. We know these tools inside and out - and we
-                    know exactly where they fall short.
+                    tools to work properly. Today, we run our entire operation with just three core applications:
+                    an RMM platform, Hudu for documentation, and CloudePulse for everything else - plus an
+                    accounting system. That's it. No bloated tool stack, no overlapping subscriptions.
                   </p>
                   <p className="mt-4">
                     And every year, it was the same story: <strong>prices going up, features we don't need
                     getting added, and the features we actually want nowhere to be found.</strong>
                   </p>
                   <p className="mt-4">
-                    We wanted to track credit card expirations for our clients' subscriptions. "Not in the
-                    roadmap." We wanted to send maintenance notifications without switching tools. "Use our
-                    partner integration." We wanted ransomware detection that didn't cost more than the
-                    endpoints it was protecting. "Have you seen our enterprise tier?"
+                    We wanted to track when our company credit cards expire - the ones we use to pay for
+                    clients' Microsoft 365, domain renewals, and other subscriptions. "Not in the roadmap."
+                    We wanted to send maintenance notifications without switching tools. "Use our partner
+                    integration." We wanted ransomware detection that didn't cost more than the endpoints
+                    it was protecting. "Have you seen our enterprise tier?"
                   </p>
                   <p className="mt-4 text-gray-800 font-medium">
                     Enough was enough. We decided to build exactly what we needed - nothing more, nothing less.
