@@ -12,6 +12,7 @@ import {
   Download,
   FileWarning,
   Activity,
+  Mail,
 } from 'lucide-react';
 
 const features = [
@@ -59,7 +60,7 @@ const features = [
     icon: FileWarning,
     title: 'CloudePulse FileMon Agent',
     description:
-      'Deploy our ransomware canary system on Windows endpoints. The FileMon agent creates hidden canary files and monitors them 24/7. If ransomware modifies or deletes these files, you get instant alerts before the damage spreads.',
+      'Deploy our ransomware canary system on Windows endpoints. The FileMon agent creates hidden canary files and monitors them 24/7. If ransomware triggers multiple canaries, the agent can automatically activate Windows Firewall to block all network traffic and prevent the attack from spreading.',
     color: 'from-red-500 to-red-600',
     bgColor: 'bg-red-100',
   },
@@ -88,6 +89,14 @@ const features = [
     bgColor: 'bg-green-100',
   },
   {
+    icon: Mail,
+    title: 'Customer Announcements',
+    description:
+      'Send branded email notifications to your customers about maintenance windows, security updates, or important announcements. Configure your own SMTP server (Microsoft 365, Gmail, SendGrid) and use reusable templates with dynamic variables.',
+    color: 'from-cyan-500 to-cyan-600',
+    bgColor: 'bg-cyan-100',
+  },
+  {
     icon: Activity,
     title: 'Dashboard & Analytics',
     description:
@@ -99,7 +108,7 @@ const features = [
     icon: Bell,
     title: 'Smart Notifications',
     description:
-      'Configure alerts exactly how you want them. Set per-customer notification preferences, choose severity thresholds, and receive alerts via email, SMS, or push notifications. Reduce alert fatigue with intelligent filtering.',
+      'Configure alerts exactly how you want them. Set per-customer notification preferences, choose severity thresholds, and receive instant in-app push notifications. Reduce alert fatigue with intelligent filtering and customizable alert rules.',
     color: 'from-pink-500 to-pink-600',
     bgColor: 'bg-pink-100',
   },
@@ -280,7 +289,7 @@ export default function Features() {
           className="text-center mt-16"
         >
           <p className="text-gray-600 mb-4">
-            More features in development: Time Tracking, Script Library, Newsletters, and more.
+            Plus Time Tracking, Script Library, Newsletters, Reminders, and Customer Announcements - all included.
           </p>
           <button
             onClick={() => {

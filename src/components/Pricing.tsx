@@ -11,7 +11,7 @@ const plans = [
     features: [
       'Up to 10 customers',
       'Up to 50 backup systems',
-      'Email notifications',
+      'In-app push notifications',
       'Basic reports',
       'Email support',
       '7-day data retention',
@@ -27,7 +27,7 @@ const plans = [
     features: [
       'Up to 50 customers',
       'Up to 250 backup systems',
-      'Email, SMS & push notifications',
+      'In-app push notifications',
       'Advanced reports & analytics',
       'Priority support',
       '30-day data retention',
@@ -45,7 +45,7 @@ const plans = [
     features: [
       'Unlimited customers',
       'Unlimited backup systems',
-      'All notification channels',
+      'In-app push notifications',
       'White-label solution',
       'Dedicated support',
       '90-day data retention',
