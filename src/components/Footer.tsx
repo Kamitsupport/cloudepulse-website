@@ -1,30 +1,22 @@
 import { motion } from 'framer-motion';
 import { Activity, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const footerLinks = {
   product: [
     { name: 'Features', href: '#features' },
     { name: 'Pricing', href: '#pricing' },
     { name: 'How It Works', href: '#how-it-works' },
-    { name: 'Roadmap', href: '#' },
   ],
   company: [
     { name: 'About Us', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'Contact', href: '#' },
-  ],
-  resources: [
-    { name: 'Documentation', href: '#' },
-    { name: 'API Reference', href: '#' },
-    { name: 'Status Page', href: '#' },
-    { name: 'Support', href: '#' },
+    { name: 'Contact', href: 'mailto:support@kamit.no' },
   ],
   legal: [
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '/terms' },
-    { name: 'Cookie Policy', href: '#' },
-    { name: 'GDPR', href: '#' },
+    { name: 'Cookie Policy', href: '/cookies' },
+    { name: 'GDPR', href: '/gdpr' },
   ],
 };
 
@@ -32,7 +24,7 @@ const socialLinks = [
   { name: 'Twitter', icon: Twitter, href: '#' },
   { name: 'LinkedIn', icon: Linkedin, href: '#' },
   { name: 'GitHub', icon: Github, href: '#' },
-  { name: 'Email', icon: Mail, href: 'mailto:hello@cloudepulse.com' },
+  { name: 'Email', icon: Mail, href: 'mailto:support@kamit.no' },
 ];
 
 export default function Footer() {
@@ -63,7 +55,7 @@ export default function Footer() {
 
       <div className="container-custom relative">
         {/* Main Footer Content */}
-        <div className="py-16 grid grid-cols-2 md:grid-cols-6 gap-8">
+        <div className="py-16 grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Brand Column */}
           <div className="col-span-2">
             <motion.a
@@ -135,35 +127,18 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources Links */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
-            <ul className="space-y-3">
-              {footerLinks.resources.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-sm text-gray-400 hover:text-primary-400 transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Legal Links */}
           <div>
             <h3 className="text-white font-semibold mb-4">Legal</h3>
             <ul className="space-y-3">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
+                  <Link
+                    to={link.href}
                     className="text-sm text-gray-400 hover:text-primary-400 transition-colors"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

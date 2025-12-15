@@ -1,7 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { db } from '../config/firebase';
 import {
   Send,
   CheckCircle,
@@ -10,16 +8,61 @@ import {
   User,
   Mail,
   Phone,
-  Users,
   Loader2,
+  Globe,
+  FileText,
 } from 'lucide-react';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
+import type { CountryCode } from 'libphonenumber-js';
+import 'react-phone-number-input/style.css';
+
+// Country names mapping
+const countryNames: Record<string, string> = {
+  AF: 'Afghanistan', AL: 'Albania', DZ: 'Algeria', AD: 'Andorra', AO: 'Angola',
+  AR: 'Argentina', AM: 'Armenia', AU: 'Australia', AT: 'Austria', AZ: 'Azerbaijan',
+  BH: 'Bahrain', BD: 'Bangladesh', BY: 'Belarus', BE: 'Belgium', BZ: 'Belize',
+  BJ: 'Benin', BT: 'Bhutan', BO: 'Bolivia', BA: 'Bosnia and Herzegovina', BW: 'Botswana',
+  BR: 'Brazil', BN: 'Brunei', BG: 'Bulgaria', BF: 'Burkina Faso', BI: 'Burundi',
+  KH: 'Cambodia', CM: 'Cameroon', CA: 'Canada', CV: 'Cape Verde', CF: 'Central African Republic',
+  TD: 'Chad', CL: 'Chile', CN: 'China', CO: 'Colombia', KM: 'Comoros',
+  CG: 'Congo', CD: 'DR Congo', CR: 'Costa Rica', CI: 'Ivory Coast', HR: 'Croatia',
+  CU: 'Cuba', CY: 'Cyprus', CZ: 'Czech Republic', DK: 'Denmark', DJ: 'Djibouti',
+  DO: 'Dominican Republic', EC: 'Ecuador', EG: 'Egypt', SV: 'El Salvador', GQ: 'Equatorial Guinea',
+  ER: 'Eritrea', EE: 'Estonia', SZ: 'Eswatini', ET: 'Ethiopia', FJ: 'Fiji',
+  FI: 'Finland', FR: 'France', GA: 'Gabon', GM: 'Gambia', GE: 'Georgia',
+  DE: 'Germany', GH: 'Ghana', GR: 'Greece', GT: 'Guatemala', GN: 'Guinea',
+  GW: 'Guinea-Bissau', GY: 'Guyana', HT: 'Haiti', HN: 'Honduras', HK: 'Hong Kong',
+  HU: 'Hungary', IS: 'Iceland', IN: 'India', ID: 'Indonesia', IR: 'Iran',
+  IQ: 'Iraq', IE: 'Ireland', IL: 'Israel', IT: 'Italy', JM: 'Jamaica',
+  JP: 'Japan', JO: 'Jordan', KZ: 'Kazakhstan', KE: 'Kenya', KW: 'Kuwait',
+  KG: 'Kyrgyzstan', LA: 'Laos', LV: 'Latvia', LB: 'Lebanon', LS: 'Lesotho',
+  LR: 'Liberia', LY: 'Libya', LI: 'Liechtenstein', LT: 'Lithuania', LU: 'Luxembourg',
+  MO: 'Macau', MG: 'Madagascar', MW: 'Malawi', MY: 'Malaysia', MV: 'Maldives',
+  ML: 'Mali', MT: 'Malta', MR: 'Mauritania', MU: 'Mauritius', MX: 'Mexico',
+  MD: 'Moldova', MC: 'Monaco', MN: 'Mongolia', ME: 'Montenegro', MA: 'Morocco',
+  MZ: 'Mozambique', MM: 'Myanmar', NA: 'Namibia', NP: 'Nepal', NL: 'Netherlands',
+  NZ: 'New Zealand', NI: 'Nicaragua', NE: 'Niger', NG: 'Nigeria', MK: 'North Macedonia',
+  NO: 'Norway', OM: 'Oman', PK: 'Pakistan', PA: 'Panama', PG: 'Papua New Guinea',
+  PY: 'Paraguay', PE: 'Peru', PH: 'Philippines', PL: 'Poland', PT: 'Portugal',
+  PR: 'Puerto Rico', QA: 'Qatar', RO: 'Romania', RU: 'Russia', RW: 'Rwanda',
+  SA: 'Saudi Arabia', SN: 'Senegal', RS: 'Serbia', SG: 'Singapore', SK: 'Slovakia',
+  SI: 'Slovenia', SO: 'Somalia', ZA: 'South Africa', KR: 'South Korea', SS: 'South Sudan',
+  ES: 'Spain', LK: 'Sri Lanka', SD: 'Sudan', SR: 'Suriname', SE: 'Sweden',
+  CH: 'Switzerland', SY: 'Syria', TW: 'Taiwan', TJ: 'Tajikistan', TZ: 'Tanzania',
+  TH: 'Thailand', TL: 'Timor-Leste', TG: 'Togo', TN: 'Tunisia', TR: 'Turkey',
+  TM: 'Turkmenistan', UG: 'Uganda', UA: 'Ukraine', AE: 'United Arab Emirates', GB: 'United Kingdom',
+  US: 'United States', UY: 'Uruguay', UZ: 'Uzbekistan', VE: 'Venezuela', VN: 'Vietnam',
+  YE: 'Yemen', ZM: 'Zambia', ZW: 'Zimbabwe',
+};
 
 interface FormData {
   companyName: string;
   contactName: string;
   email: string;
   phone: string;
-  numberOfCustomers: string;
+  country: string;
+  countryCode: string;
+  poNumber: string;
   acceptedTerms: boolean;
 }
 
@@ -27,7 +70,7 @@ interface FormErrors {
   companyName?: string;
   contactName?: string;
   email?: string;
-  numberOfCustomers?: string;
+  phone?: string;
   acceptedTerms?: string;
 }
 
@@ -37,7 +80,9 @@ export default function TrialSignupForm() {
     contactName: '',
     email: '',
     phone: '',
-    numberOfCustomers: '',
+    country: '',
+    countryCode: '',
+    poNumber: '',
     acceptedTerms: false,
   });
 
@@ -45,6 +90,39 @@ export default function TrialSignupForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [defaultCountry, setDefaultCountry] = useState<CountryCode>('US');
+
+  // Detect user's country from IP on mount
+  useEffect(() => {
+    const detectCountry = async () => {
+      try {
+        // Using ipapi.co free tier for IP geolocation
+        const response = await fetch('https://ipapi.co/json/');
+        const data = await response.json();
+
+        if (data.country_code) {
+          const countryCode = data.country_code as CountryCode;
+          setDefaultCountry(countryCode);
+          setFormData(prev => ({
+            ...prev,
+            countryCode: countryCode,
+            country: countryNames[countryCode] || countryCode,
+          }));
+        }
+      } catch (error) {
+        console.error('Could not detect country:', error);
+        // Default to Norway if detection fails
+        setDefaultCountry('NO');
+        setFormData(prev => ({
+          ...prev,
+          countryCode: 'NO',
+          country: 'Norway',
+        }));
+      }
+    };
+
+    detectCountry();
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -63,8 +141,10 @@ export default function TrialSignupForm() {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!formData.numberOfCustomers) {
-      newErrors.numberOfCustomers = 'Please select the number of customers';
+    if (!formData.phone) {
+      newErrors.phone = 'Phone number is required';
+    } else if (!isValidPhoneNumber(formData.phone)) {
+      newErrors.phone = 'Please enter a valid phone number';
     }
 
     if (!formData.acceptedTerms) {
@@ -84,26 +164,28 @@ export default function TrialSignupForm() {
     setErrorMessage('');
 
     try {
-      if (!db) {
-        throw new Error('Firebase not configured');
-      }
-
-      const now = Timestamp.now();
-      const trialEndsAt = Timestamp.fromDate(
-        new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
-      );
-
-      await addDoc(collection(db, 'trial_signups'), {
-        companyName: formData.companyName.trim(),
-        contactName: formData.contactName.trim(),
-        email: formData.email.trim().toLowerCase(),
-        phone: formData.phone.trim() || null,
-        numberOfCustomers: parseInt(formData.numberOfCustomers),
-        acceptedTerms: formData.acceptedTerms,
-        createdAt: now,
-        status: 'pending',
-        trialEndsAt: trialEndsAt,
+      const response = await fetch('/api/submit-trial', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyName: formData.companyName.trim(),
+          contactName: formData.contactName.trim(),
+          email: formData.email.trim().toLowerCase(),
+          phone: formData.phone || null,
+          country: formData.country || null,
+          countryCode: formData.countryCode || null,
+          poNumber: formData.poNumber.trim() || null,
+          acceptedTerms: formData.acceptedTerms,
+        }),
       });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit');
+      }
 
       setSubmitStatus('success');
       setFormData({
@@ -111,7 +193,9 @@ export default function TrialSignupForm() {
         contactName: '',
         email: '',
         phone: '',
-        numberOfCustomers: '',
+        country: formData.country, // Keep detected country
+        countryCode: formData.countryCode,
+        poNumber: '',
         acceptedTerms: false,
       });
     } catch (error) {
@@ -137,6 +221,28 @@ export default function TrialSignupForm() {
     // Clear error when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const handlePhoneChange = (value: string | undefined) => {
+    setFormData(prev => ({
+      ...prev,
+      phone: value || '',
+    }));
+
+    // Clear phone error
+    if (errors.phone) {
+      setErrors(prev => ({ ...prev, phone: undefined }));
+    }
+  };
+
+  const handleCountryChange = (country: CountryCode | undefined) => {
+    if (country) {
+      setFormData(prev => ({
+        ...prev,
+        countryCode: country,
+        country: countryNames[country] || country,
+      }));
     }
   };
 
@@ -302,54 +408,78 @@ export default function TrialSignupForm() {
                     )}
                   </div>
 
-                  {/* Phone (Optional) */}
+                  {/* Phone with Country Flag */}
                   <div>
                     <label htmlFor="phone" className="form-label">
                       <span className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
-                        Phone Number (Optional)
+                        Phone Number *
                       </span>
                     </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
+                    <PhoneInput
+                      international
+                      countryCallingCodeEditable={false}
+                      defaultCountry={defaultCountry}
                       value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+1 (555) 000-0000"
-                      className="form-input"
+                      onChange={handlePhoneChange}
+                      onCountryChange={handleCountryChange}
+                      className={`form-input-phone ${
+                        errors.phone ? 'border-red-500' : ''
+                      }`}
                     />
+                    {errors.phone && (
+                      <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                    )}
                   </div>
 
-                  {/* Number of Customers */}
+                  {/* Country (Auto-populated from phone, but editable) */}
                   <div>
-                    <label htmlFor="numberOfCustomers" className="form-label">
+                    <label htmlFor="country" className="form-label">
                       <span className="flex items-center gap-2">
-                        <Users className="w-4 h-4" />
-                        Number of Customers *
+                        <Globe className="w-4 h-4" />
+                        Country
                       </span>
                     </label>
                     <select
-                      id="numberOfCustomers"
-                      name="numberOfCustomers"
-                      value={formData.numberOfCustomers}
-                      onChange={handleChange}
-                      className={`form-input ${
-                        errors.numberOfCustomers ? 'border-red-500' : ''
-                      }`}
+                      id="country"
+                      name="country"
+                      value={formData.countryCode}
+                      onChange={(e) => {
+                        const code = e.target.value;
+                        setFormData(prev => ({
+                          ...prev,
+                          countryCode: code,
+                          country: countryNames[code] || code,
+                        }));
+                      }}
+                      className="form-input"
                     >
-                      <option value="">Select range</option>
-                      <option value="10">1-10 customers</option>
-                      <option value="25">11-25 customers</option>
-                      <option value="50">26-50 customers</option>
-                      <option value="100">51-100 customers</option>
-                      <option value="200">100+ customers</option>
+                      {Object.entries(countryNames).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => (
+                        <option key={code} value={code}>{name}</option>
+                      ))}
                     </select>
-                    {errors.numberOfCustomers && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.numberOfCustomers}
-                      </p>
-                    )}
+                    <p className="text-xs text-gray-500 mt-1">
+                      Auto-detected from phone, but you can change it
+                    </p>
+                  </div>
+
+                  {/* PO Number (Optional) */}
+                  <div>
+                    <label htmlFor="poNumber" className="form-label">
+                      <span className="flex items-center gap-2">
+                        <FileText className="w-4 h-4" />
+                        PO Number (Optional)
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      id="poNumber"
+                      name="poNumber"
+                      value={formData.poNumber}
+                      onChange={handleChange}
+                      placeholder="Purchase order reference"
+                      className="form-input"
+                    />
                   </div>
 
                   {/* Terms Acceptance */}
@@ -430,6 +560,49 @@ export default function TrialSignupForm() {
           </div>
         </motion.div>
       </div>
+
+      {/* Custom styles for phone input */}
+      <style>{`
+        .form-input-phone {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .form-input-phone .PhoneInputCountry {
+          display: flex;
+          align-items: center;
+          padding: 0.5rem;
+          background: #f9fafb;
+          border-radius: 0.5rem 0 0 0.5rem;
+          border: 1px solid #e5e7eb;
+          border-right: none;
+        }
+        .form-input-phone .PhoneInputCountryIcon {
+          width: 1.5rem;
+          height: 1rem;
+          border-radius: 2px;
+        }
+        .form-input-phone .PhoneInputCountrySelectArrow {
+          margin-left: 0.25rem;
+          color: #6b7280;
+        }
+        .form-input-phone input {
+          flex: 1;
+          padding: 0.75rem 1rem;
+          border: 1px solid #e5e7eb;
+          border-radius: 0 0.5rem 0.5rem 0;
+          font-size: 1rem;
+          transition: all 0.2s;
+        }
+        .form-input-phone input:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        .form-input-phone.border-red-500 input {
+          border-color: #ef4444;
+        }
+      `}</style>
     </section>
   );
 }

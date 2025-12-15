@@ -25,7 +25,8 @@ let db: Firestore | null = null;
 if (isFirebaseConfigured) {
   try {
     app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
+    // Use the cloudepulse-native database (not the default)
+    db = getFirestore(app, 'cloudepulse-native');
   } catch (error) {
     console.error('Failed to initialize Firebase:', error);
   }

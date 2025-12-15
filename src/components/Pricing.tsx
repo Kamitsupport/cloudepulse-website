@@ -1,66 +1,44 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles, Mail } from 'lucide-react';
 
 const plans = [
   {
-    name: 'Starter',
-    description: 'Perfect for small MSPs getting started',
-    monthlyPrice: 49,
-    annualPrice: 39,
-    features: [
-      'Up to 10 customers',
-      'Up to 50 backup systems',
-      'In-app push notifications',
-      'Basic reports',
-      'Email support',
-      '7-day data retention',
-    ],
-    cta: 'Start Free Trial',
-    popular: false,
-  },
-  {
     name: 'Professional',
-    description: 'For growing MSPs who need more power',
-    monthlyPrice: 149,
-    annualPrice: 119,
+    description: 'Everything you need to monitor your MSP',
+    price: 50,
     features: [
       'Up to 50 customers',
-      'Up to 250 backup systems',
+      'Up to 100 backup systems',
+      'All monitoring features',
+      'FileMon & Backup agents',
       'In-app push notifications',
-      'Advanced reports & analytics',
-      'Priority support',
+      'Dashboard & analytics',
+      'Email support',
       '30-day data retention',
-      'Custom branding',
-      'API access',
     ],
     cta: 'Start Free Trial',
     popular: true,
   },
   {
     name: 'Enterprise',
-    description: 'For large MSPs with custom needs',
-    monthlyPrice: 399,
-    annualPrice: 319,
+    description: 'For larger MSPs with more clients',
+    price: 100,
     features: [
-      'Unlimited customers',
-      'Unlimited backup systems',
+      'Up to 100 customers',
+      'Up to 500 backup systems',
+      'All monitoring features',
+      'FileMon & Backup agents',
       'In-app push notifications',
-      'White-label solution',
-      'Dedicated support',
+      'Dashboard & analytics',
+      'Priority support',
       '90-day data retention',
-      'Custom integrations',
-      'SLA guarantee',
-      'On-premise option',
     ],
-    cta: 'Contact Sales',
+    cta: 'Start Free Trial',
     popular: false,
   },
 ];
 
 export default function Pricing() {
-  const [isAnnual, setIsAnnual] = useState(true);
-
   return (
     <section
       id="pricing"
@@ -89,58 +67,17 @@ export default function Pricing() {
             Simple Pricing
           </motion.span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Choose Your{' '}
-            <span className="gradient-text">Perfect Plan</span>
+            Two Plans.{' '}
+            <span className="gradient-text">No Surprises.</span>
           </h2>
           <p className="text-lg text-gray-600">
-            Start with a 30-day free trial on any plan. No credit card required.
+            Start with a 30-day free trial. No credit card required.
             Cancel anytime.
           </p>
         </motion.div>
 
-        {/* Billing Toggle */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex items-center justify-center gap-4 mb-12"
-        >
-          <span
-            className={`text-sm font-medium ${
-              !isAnnual ? 'text-gray-900' : 'text-gray-500'
-            }`}
-          >
-            Monthly
-          </span>
-          <button
-            onClick={() => setIsAnnual(!isAnnual)}
-            className={`relative w-14 h-7 rounded-full transition-colors ${
-              isAnnual ? 'bg-primary-500' : 'bg-gray-300'
-            }`}
-          >
-            <motion.div
-              className="absolute top-1 w-5 h-5 bg-white rounded-full shadow"
-              animate={{ left: isAnnual ? '30px' : '4px' }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-            />
-          </button>
-          <span
-            className={`text-sm font-medium ${
-              isAnnual ? 'text-gray-900' : 'text-gray-500'
-            }`}
-          >
-            Annual
-          </span>
-          {isAnnual && (
-            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full">
-              Save 20%
-            </span>
-          )}
-        </motion.div>
-
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -150,7 +87,7 @@ export default function Pricing() {
               transition={{ delay: index * 0.1, duration: 0.5 }}
               className={`relative bg-white rounded-3xl p-8 border ${
                 plan.popular
-                  ? 'border-primary-500 shadow-xl shadow-primary-500/20 scale-105'
+                  ? 'border-primary-500 shadow-xl shadow-primary-500/20'
                   : 'border-gray-200 shadow-lg'
               }`}
             >
@@ -174,15 +111,10 @@ export default function Pricing() {
               <div className="text-center mb-6">
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-4xl font-bold text-gray-900">
-                    ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
+                    ${plan.price}
                   </span>
                   <span className="text-gray-500">/month</span>
                 </div>
-                {isAnnual && (
-                  <p className="text-sm text-gray-500 mt-1">
-                    Billed annually (${plan.annualPrice * 12}/year)
-                  </p>
-                )}
               </div>
 
               {/* Features */}
@@ -218,13 +150,38 @@ export default function Pricing() {
           ))}
         </div>
 
-        {/* Money Back Guarantee */}
+        {/* Need More? Contact Us */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
-          className="text-center mt-12"
+          className="mt-12 max-w-2xl mx-auto"
+        >
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-center">
+            <h3 className="text-xl font-bold text-white mb-2">
+              Need More Than 100 Customers?
+            </h3>
+            <p className="text-gray-400 mb-4">
+              We offer custom plans for larger MSPs. Get in touch and we'll find the right solution for you.
+            </p>
+            <a
+              href="mailto:support@kamit.no"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              <Mail className="w-5 h-5" />
+              Contact support@kamit.no
+            </a>
+          </div>
+        </motion.div>
+
+        {/* Money Back Guarantee */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+          className="text-center mt-8"
         >
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-green-50 rounded-full">
             <Check className="w-5 h-5 text-green-600" />
