@@ -56,9 +56,23 @@ export default function Footer() {
               className="flex items-center gap-2 mb-4"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center">
+              <motion.div
+                className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center"
+                animate={{
+                  boxShadow: [
+                    '0 10px 15px -3px rgba(14, 165, 233, 0.3)',
+                    '0 10px 25px -3px rgba(14, 165, 233, 0.5)',
+                    '0 10px 15px -3px rgba(14, 165, 233, 0.3)',
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+              >
                 <Activity className="w-6 h-6 text-white" />
-              </div>
+              </motion.div>
               <span className="text-xl font-bold text-white">CloudePulse</span>
             </motion.a>
             <p className="text-gray-400 text-sm mb-6 max-w-xs">

@@ -60,9 +60,23 @@ export default function Navbar() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30">
+                <motion.div
+                  className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30"
+                  animate={{
+                    boxShadow: [
+                      '0 10px 15px -3px rgba(14, 165, 233, 0.3)',
+                      '0 10px 25px -3px rgba(14, 165, 233, 0.5)',
+                      '0 10px 15px -3px rgba(14, 165, 233, 0.3)',
+                    ],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
                   <Activity className="w-6 h-6 text-white" />
-                </div>
+                </motion.div>
                 <span className="text-xl font-bold gradient-text hidden sm:block">
                   CloudePulse
                 </span>
