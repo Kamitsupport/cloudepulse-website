@@ -98,8 +98,10 @@ export default function AboutUs() {
                 <div className="prose prose-lg max-w-none text-gray-600">
                   <p>
                     Picture this: It's 2 AM. A backup failed at a client site, but you don't know yet because
-                    the email got buried in your inbox. Your expensive RMM tool has "backup monitoring," but
-                    it doesn't support half your clients' backup solutions. Sound familiar?
+                    the email got buried in your inbox. Or worse - the backup email never came at all because
+                    Veeam or Synology is locked up on the backup machine and sending no reports. Your expensive
+                    RMM tool has "backup monitoring," but it doesn't support half your clients' backup solutions.
+                    Sound familiar?
                   </p>
                   <p className="mt-4">
                     We've been running an MSP for over 25 years. We've tried every tool out there - the big
