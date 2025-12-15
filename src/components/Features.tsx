@@ -40,8 +40,8 @@ const featureCategories = [
       },
       {
         icon: AlertTriangle,
-        title: 'Missing Backup Alerts',
-        description: 'CloudePulse knows when to expect reports. If a scheduled backup doesn\'t report on time, you get alerted immediately.',
+        title: 'Silence Detection',
+        description: 'Most tools alert when backups fail. We alert when they go silent. If your backup server crashes and sends nothing, we notice.',
       },
       {
         icon: Globe,
