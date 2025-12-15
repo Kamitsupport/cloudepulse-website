@@ -585,7 +585,6 @@ export default function Features() {
                   'Script Library',
                   'Newsletters',
                   'Reminders',
-                  'Customer Portal',
                   'API Access',
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-gray-300">
