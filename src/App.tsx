@@ -10,7 +10,7 @@ import {
   TrialSignupForm,
   Footer,
 } from './components';
-import { PrivacyPolicy, TermsOfService, CookiePolicy, GDPR, Transparency, AboutUs } from './pages';
+import { PrivacyPolicy, TermsOfService, Transparency, AboutUs } from './pages';
 
 function HomePage() {
   return (
@@ -51,8 +51,6 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsOfService />} />
-      <Route path="/cookies" element={<CookiePolicy />} />
-      <Route path="/gdpr" element={<GDPR />} />
       <Route path="/transparency" element={<Transparency />} />
       <Route path="/about" element={<AboutUs />} />
     </Routes>

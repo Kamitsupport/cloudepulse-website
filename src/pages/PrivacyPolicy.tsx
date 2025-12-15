@@ -108,21 +108,40 @@ export default function PrivacyPolicy() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Your Rights</h2>
-                <p>Under GDPR and applicable privacy laws, you have the right to:</p>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Cookies and Analytics</h2>
+                <p>
+                  We use <a href="https://plausible.io/about" target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:text-primary-700">Plausible Analytics</a> for website analytics. Plausible is a privacy-friendly analytics tool that:
+                </p>
                 <ul className="list-disc pl-6 space-y-2 mt-4">
-                  <li>Access your personal data</li>
-                  <li>Rectify inaccurate data</li>
-                  <li>Request deletion of your data</li>
-                  <li>Restrict processing of your data</li>
-                  <li>Data portability</li>
-                  <li>Object to processing</li>
-                  <li>Withdraw consent at any time</li>
+                  <li>Does not use cookies</li>
+                  <li>Does not collect personal data</li>
+                  <li>Does not track users across websites</li>
+                  <li>Is fully GDPR, CCPA, and PECR compliant</li>
                 </ul>
+                <p className="mt-4">
+                  This means we do not require a cookie consent banner on our website.
+                </p>
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Contact Us</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Your Rights Under GDPR</h2>
+                <p>As a Norwegian company, we comply with the EU General Data Protection Regulation (GDPR). You have the right to:</p>
+                <ul className="list-disc pl-6 space-y-2 mt-4">
+                  <li><strong>Access:</strong> Request a copy of your personal data</li>
+                  <li><strong>Rectification:</strong> Correct inaccurate or incomplete data</li>
+                  <li><strong>Erasure:</strong> Request deletion of your data ("right to be forgotten")</li>
+                  <li><strong>Restriction:</strong> Limit how we process your data</li>
+                  <li><strong>Portability:</strong> Receive your data in a portable format</li>
+                  <li><strong>Object:</strong> Object to processing based on legitimate interests</li>
+                  <li><strong>Withdraw Consent:</strong> Withdraw consent at any time where processing is based on consent</li>
+                </ul>
+                <p className="mt-4">
+                  To exercise any of these rights, contact us at <a href="mailto:support@cloudepulse.com" className="text-primary-600 hover:text-primary-700">support@cloudepulse.com</a>. We will respond within 30 days.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Contact Us</h2>
                 <p>
                   For any questions about this Privacy Policy or to exercise your rights, please contact us at:
                 </p>
@@ -133,7 +152,7 @@ export default function PrivacyPolicy() {
               </section>
 
               <section className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. Changes to This Policy</h2>
+                <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Changes to This Policy</h2>
                 <p>
                   We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the "Last updated" date.
                 </p>
