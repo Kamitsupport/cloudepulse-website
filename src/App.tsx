@@ -18,9 +18,9 @@ function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        <WhyWeBuiltThis />
         <Features />
         <HowItWorks />
-        <WhyWeBuiltThis />
         <Pricing />
         <TrialSignupForm />
       </main>
