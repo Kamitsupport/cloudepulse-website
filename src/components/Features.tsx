@@ -36,7 +36,7 @@ const featureCategories = [
       {
         icon: HardDrive,
         title: 'Backup Monitoring',
-        description: 'Forward backup emails and let our intelligent parser detect success, warnings, and failures. Supports Veeam, Synology, Ahsay, Atera RMM, and custom scripts.',
+        description: 'Forward backup emails and let our intelligent parser detect success, warnings, and failures. Supports all major backup applications - and we add new ones regularly.',
       },
       {
         icon: AlertTriangle,
