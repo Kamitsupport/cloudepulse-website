@@ -66,7 +66,7 @@ const featureCategories = [
       {
         icon: FileWarning,
         title: 'FileMon Ransomware Agent',
-        description: 'Deploy canary files on Windows endpoints. If ransomware triggers them, the agent can activate Windows Firewall to block all network traffic.',
+        description: 'Entropy-based detection that only triggers on actual encryption - zero false positives. Includes honeypot folders and ProcessWatcher early warning.',
       },
       {
         icon: Webhook,
@@ -101,7 +101,7 @@ const featureCategories = [
       {
         icon: FileWarning,
         title: 'FileMon Agent',
-        description: 'Ransomware canary system with automatic firewall lockdown. Creates hidden canary files and monitors them 24/7.',
+        description: 'Ransomware detection using entropy analysis. Deploys canary files and honeypot folders, detects encryption in under 60 seconds.',
       },
     ],
   },
