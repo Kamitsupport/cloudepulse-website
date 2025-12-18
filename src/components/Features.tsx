@@ -13,7 +13,6 @@ import {
   Download,
   FileWarning,
   Activity,
-  Mail,
   Check,
   ChevronRight,
   CalendarClock,
@@ -21,6 +20,9 @@ import {
   CreditCard,
   Code,
   Newspaper,
+  Cloud,
+  KeyRound,
+  MapPin,
 } from 'lucide-react';
 
 // Feature categories with their features
@@ -71,7 +73,12 @@ const featureCategories = [
       {
         icon: Webhook,
         title: 'Log Center',
-        description: 'Create webhook endpoints to receive logs from firewalls and NAS devices. Filter by keywords and severity levels.',
+        description: 'Create webhook endpoints to receive logs from firewalls and NAS devices. Click any IP address to see geolocation, ISP, and threat intelligence links.',
+      },
+      {
+        icon: MapPin,
+        title: 'IP Threat Lookup',
+        description: 'Click any IP address in logs to instantly see location on map, country, ISP, and links to AbuseIPDB, VirusTotal, and Shodan for threat analysis.',
       },
       {
         icon: ShieldAlert,
@@ -109,24 +116,29 @@ const featureCategories = [
     id: 'management',
     name: 'Customer Management',
     tagline: 'Everything in One Place',
-    description: 'Customer management, notifications, and analytics - all the tools MSPs need to run efficiently.',
+    description: 'Customer management, Microsoft 365 integration, notifications, and analytics - all the tools MSPs need to run efficiently.',
     color: 'green',
     gradient: 'from-green-500 to-teal-500',
     features: [
+      {
+        icon: Cloud,
+        title: 'Microsoft 365 Integration',
+        description: 'Connect customer tenants with one click. See all licenses, users, mailbox sizes, and MFA status. Track available vs consumed licenses across all customers.',
+      },
       {
         icon: Users,
         title: 'Customer Database',
         description: 'Manage all MSP customers with custom fields, notification contacts, billing settings, and service levels.',
       },
       {
-        icon: Mail,
-        title: 'Customer Announcements',
-        description: 'Send branded emails via your own SMTP server. Use templates with dynamic variables for maintenance windows and updates.',
+        icon: KeyRound,
+        title: 'MFA & Security Status',
+        description: 'See which users have MFA enabled, what methods they use, and mailbox storage consumption at a glance.',
       },
       {
         icon: Activity,
         title: 'Dashboard & Analytics',
-        description: 'Real-time overview of backup success rates, website uptime, active alerts, and 7-day trends.',
+        description: 'Real-time overview of backup success rates, website uptime, license utilization, and 7-day trends.',
       },
       {
         icon: Bell,
@@ -581,11 +593,12 @@ export default function Features() {
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {[
+                  'M365 Licenses',
+                  'IP Geolocation',
                   'Time Tracking',
                   'Script Library',
                   'Newsletters',
                   'Reminders',
-                  'API Access',
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-gray-300">
                     <Check className="w-4 h-4 text-green-500" />
