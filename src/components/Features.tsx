@@ -78,7 +78,12 @@ const featureCategories = [
       {
         icon: MapPin,
         title: 'IP Threat Lookup',
-        description: 'Click any IP address in logs to instantly see location on map, country, ISP, and links to AbuseIPDB, VirusTotal, and Shodan for threat analysis.',
+        description: 'Click any IP address to see geolocation on map, ISP info, and quick links to AbuseIPDB, VirusTotal, GreyNoise, and Cisco Talos for threat analysis.',
+      },
+      {
+        icon: Users,
+        title: 'Cross-Customer Threat Analysis',
+        description: 'Automatically detect IPs attacking multiple customers. Identify coordinated scanning campaigns and see which customers are affected by the same threat actors.',
       },
       {
         icon: ShieldAlert,
