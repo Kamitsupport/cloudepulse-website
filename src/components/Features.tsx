@@ -673,8 +673,8 @@ export default function Features() {
             Powerful Features
           </motion.span>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Everything You Need to{' '}
-            <span className="gradient-text">Manage IT</span>
+            What Your RMM{' '}
+            <span className="gradient-text">Forgot to Build</span>
           </h2>
           <p className="text-lg text-gray-600">
             One platform to monitor, manage, and report on all your IT services.
