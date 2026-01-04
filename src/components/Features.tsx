@@ -804,8 +804,10 @@ export default function Features() {
                   'IP Geolocation',
                   'Time Tracking',
                   'Script Library',
+                  'Newsletters',
+                  'Reminders',
                   'Customer Portals',
-                  'Onboarding Workspaces',
+                  'Onboarding',
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-gray-300">
                     <Check className="w-4 h-4 text-green-500" />
