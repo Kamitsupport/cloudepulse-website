@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
 import { Activity } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const footerLinks = {
   product: [
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'How It Works', href: '#how-it-works' },
+    { name: 'Features', href: '/#features' },
+    { name: 'Pricing', href: '/#pricing' },
+    { name: 'How It Works', href: '/#how-it-works' },
   ],
   company: [
     { name: 'About Us', href: '/about' },
@@ -22,13 +22,22 @@ const footerLinks = {
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const scrollToSection = (href: string) => {
-    if (href.startsWith('#')) {
-      const element = document.querySelector(href);
+  const handleProductLink = (href: string) => {
+    // Extract the hash from href like '/#features' -> '#features'
+    const hash = href.startsWith('/') ? href.substring(1) : href;
+
+    if (location.pathname === '/') {
+      // Already on homepage, just scroll
+      const element = document.querySelector(hash);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else {
+      // Navigate to homepage, scroll will happen via useEffect in target component
+      navigate(href);
     }
   };
 
@@ -91,8 +100,8 @@ export default function Footer() {
               {footerLinks.product.map((link) => (
                 <li key={link.name}>
                   <button
-                    onClick={() => scrollToSection(link.href)}
-                    className="text-sm text-gray-400 hover:text-primary-400 transition-colors"
+                    onClick={() => handleProductLink(link.href)}
+                    className="text-sm text-gray-400 hover:text-primary-400 transition-colors cursor-pointer"
                   >
                     {link.name}
                   </button>
