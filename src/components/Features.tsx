@@ -23,6 +23,12 @@ import {
   Cloud,
   KeyRound,
   MapPin,
+  Building2,
+  ClipboardCheck,
+  FileSignature,
+  Lock,
+  Fingerprint,
+  Share2,
 } from 'lucide-react';
 
 // Feature categories with their features
@@ -184,6 +190,46 @@ const featureCategories = [
         icon: Newspaper,
         title: 'Newsletters',
         description: 'Subscribe to IT news and security bulletins. Curated feeds in one place with RSS integration.',
+      },
+    ],
+  },
+  {
+    id: 'portals',
+    name: 'Customer & Onboarding Portals',
+    tagline: 'White-Labeled. Secure. Professional.',
+    description: 'Give your customers a branded experience with secure portals for service access and seamless onboarding with transparent handover from outgoing providers.',
+    color: 'cyan',
+    gradient: 'from-cyan-500 to-blue-500',
+    features: [
+      {
+        icon: Building2,
+        title: 'Branded Customer Portal',
+        description: 'Your logo, your colors, your custom domain. Customers see YOUR brand, not ours. Full white-label experience at customer.yourdomain.com.',
+      },
+      {
+        icon: ClipboardCheck,
+        title: 'Onboarding Workspace',
+        description: 'Collaborative workspace for customer onboarding. MSP, customer, outgoing provider, and vendors all work together with full visibility into tasks and deadlines.',
+      },
+      {
+        icon: Share2,
+        title: 'Transparent Handover',
+        description: 'Everyone sees all tasks. No hidden agendas. Outgoing MSP, incoming MSP, and customer all have visibility into the transition progress and responsibilities.',
+      },
+      {
+        icon: FileSignature,
+        title: 'Documents & Signatures',
+        description: 'Upload documents, collect e-signatures, and share files securely. All parties can contribute and sign off on deliverables.',
+      },
+      {
+        icon: Lock,
+        title: 'Secure Credential Handover',
+        description: 'Transfer passwords, API keys, and sensitive information through encrypted channels. No more passwords in emails or sticky notes.',
+      },
+      {
+        icon: Fingerprint,
+        title: 'Bank-Grade Security',
+        description: 'Token-based authentication, email verification with OTP, and optional passkey login. Every access is logged and audited. Zero-trust architecture.',
       },
     ],
   },
@@ -434,12 +480,168 @@ const ProductivityIllustration = () => (
   </svg>
 );
 
+const PortalsIllustration = () => (
+  <svg viewBox="0 0 400 300" className="w-full h-full">
+    <defs>
+      <linearGradient id="portalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#06b6d4" />
+        <stop offset="100%" stopColor="#3b82f6" />
+      </linearGradient>
+      <linearGradient id="portalGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#22c55e" />
+        <stop offset="100%" stopColor="#06b6d4" />
+      </linearGradient>
+    </defs>
+    {/* Main Workspace Board */}
+    <rect x="60" y="40" width="280" height="200" rx="16" fill="#1e293b" />
+    <rect x="70" y="50" width="260" height="180" rx="12" fill="#0f172a" />
+
+    {/* Header with Brand Accent */}
+    <rect x="70" y="50" width="260" height="35" rx="12" fill="url(#portalGrad)" />
+    <rect x="70" y="70" width="260" height="15" fill="url(#portalGrad)" />
+    <circle cx="90" cy="67" r="8" fill="white" opacity="0.9" />
+    <rect x="105" y="62" width="80" height="10" rx="3" fill="white" opacity="0.7" />
+
+    {/* Task Columns */}
+    {/* Column 1 - To Do */}
+    <rect x="80" y="95" width="75" height="125" rx="8" fill="#1e293b" />
+    <rect x="85" y="100" width="65" height="8" rx="2" fill="#475569" />
+
+    {/* Task Cards Column 1 */}
+    <g transform="translate(85, 115)">
+      <rect x="0" y="0" width="65" height="30" rx="4" fill="#334155" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#f59e0b" opacity="0.6" />
+      <rect x="17" y="7" width="40" height="6" rx="2" fill="#64748b" />
+      <rect x="5" y="18" width="50" height="4" rx="1" fill="#475569" />
+    </g>
+    <g transform="translate(85, 150)">
+      <rect x="0" y="0" width="65" height="30" rx="4" fill="#334155" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#ef4444" opacity="0.6" />
+      <rect x="17" y="7" width="35" height="6" rx="2" fill="#64748b" />
+      <rect x="5" y="18" width="45" height="4" rx="1" fill="#475569" />
+    </g>
+
+    {/* Column 2 - In Progress */}
+    <rect x="162" y="95" width="75" height="125" rx="8" fill="#1e293b" />
+    <rect x="167" y="100" width="65" height="8" rx="2" fill="url(#portalGrad)" />
+
+    {/* Task Cards Column 2 */}
+    <g transform="translate(167, 115)">
+      <rect x="0" y="0" width="65" height="35" rx="4" fill="#334155" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#3b82f6" opacity="0.6" />
+      <rect x="17" y="7" width="42" height="6" rx="2" fill="#64748b" />
+      <rect x="5" y="18" width="55" height="4" rx="1" fill="#475569" />
+      <rect x="5" y="25" width="35" height="4" rx="1" fill="#475569" />
+    </g>
+    <g transform="translate(167, 155)">
+      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#8b5cf6" opacity="0.6" />
+      <rect x="17" y="7" width="38" height="6" rx="2" fill="#64748b" />
+      <rect x="5" y="18" width="48" height="4" rx="1" fill="#475569" />
+    </g>
+
+    {/* Column 3 - Done */}
+    <rect x="244" y="95" width="75" height="125" rx="8" fill="#1e293b" />
+    <rect x="249" y="100" width="65" height="8" rx="2" fill="#22c55e" />
+
+    {/* Task Cards Column 3 - Completed */}
+    <g transform="translate(249, 115)">
+      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" opacity="0.7" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#22c55e" />
+      <path d="M7 10 L9 12 L13 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="17" y="7" width="40" height="6" rx="2" fill="#64748b" opacity="0.6" />
+      <rect x="5" y="18" width="50" height="4" rx="1" fill="#475569" opacity="0.6" />
+    </g>
+    <g transform="translate(249, 148)">
+      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" opacity="0.7" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#22c55e" />
+      <path d="M7 10 L9 12 L13 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="17" y="7" width="35" height="6" rx="2" fill="#64748b" opacity="0.6" />
+      <rect x="5" y="18" width="45" height="4" rx="1" fill="#475569" opacity="0.6" />
+    </g>
+    <g transform="translate(249, 181)">
+      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" opacity="0.7" />
+      <rect x="5" y="6" width="8" height="8" rx="2" fill="#22c55e" />
+      <path d="M7 10 L9 12 L13 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="17" y="7" width="42" height="6" rx="2" fill="#64748b" opacity="0.6" />
+      <rect x="5" y="18" width="38" height="4" rx="1" fill="#475569" opacity="0.6" />
+    </g>
+
+    {/* Participant Avatars - Bottom left */}
+    <g transform="translate(30, 255)">
+      {/* MSP Avatar */}
+      <circle cx="0" cy="0" r="18" fill="#1e293b" />
+      <circle cx="0" cy="0" r="15" fill="url(#portalGrad)" />
+      <text x="0" y="5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">M</text>
+      <circle cx="12" cy="12" r="5" fill="#22c55e" />
+    </g>
+    <g transform="translate(60, 255)">
+      {/* Customer Avatar */}
+      <circle cx="0" cy="0" r="18" fill="#1e293b" />
+      <circle cx="0" cy="0" r="15" fill="#f59e0b" />
+      <text x="0" y="5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">C</text>
+      <circle cx="12" cy="12" r="5" fill="#22c55e" />
+    </g>
+    <g transform="translate(90, 255)">
+      {/* Outgoing MSP Avatar */}
+      <circle cx="0" cy="0" r="18" fill="#1e293b" />
+      <circle cx="0" cy="0" r="15" fill="#8b5cf6" />
+      <text x="0" y="5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">O</text>
+      <circle cx="12" cy="12" r="5" fill="#94a3b8" />
+    </g>
+
+    {/* Security Lock Icon - Floating */}
+    <g transform="translate(350, 30)">
+      <rect x="0" y="0" width="40" height="45" rx="8" fill="url(#portalGrad2)" />
+      <rect x="10" y="18" width="20" height="16" rx="3" fill="white" opacity="0.9" />
+      <path d="M15 18 L15 14 Q15 8 20 8 Q25 8 25 14 L25 18" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
+      <circle cx="20" cy="26" r="2" fill="url(#portalGrad)" />
+    </g>
+
+    {/* Document Icon - Floating */}
+    <g transform="translate(0, 60)">
+      <rect x="0" y="0" width="45" height="55" rx="6" fill="#1e293b" />
+      <rect x="5" y="5" width="35" height="45" rx="4" fill="#334155" />
+      <rect x="10" y="12" width="25" height="4" rx="1" fill="url(#portalGrad)" />
+      <rect x="10" y="20" width="20" height="3" rx="1" fill="#475569" />
+      <rect x="10" y="26" width="22" height="3" rx="1" fill="#475569" />
+      <rect x="10" y="32" width="18" height="3" rx="1" fill="#475569" />
+      {/* Signature line */}
+      <path d="M10 42 Q15 38 20 42 Q25 46 30 42" fill="none" stroke="url(#portalGrad)" strokeWidth="2" strokeLinecap="round" />
+    </g>
+
+    {/* Progress Indicator - Top right */}
+    <g transform="translate(350, 110)">
+      <circle cx="20" cy="20" r="25" fill="#1e293b" />
+      <circle cx="20" cy="20" r="20" fill="none" stroke="#334155" strokeWidth="4" />
+      <circle cx="20" cy="20" r="20" fill="none" stroke="url(#portalGrad2)" strokeWidth="4" strokeDasharray="94" strokeDashoffset="25" strokeLinecap="round" transform="rotate(-90 20 20)">
+        <animate attributeName="stroke-dashoffset" values="94;25" dur="1.5s" fill="freeze" />
+      </circle>
+      <text x="20" y="24" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">73%</text>
+    </g>
+
+    {/* Connection Lines */}
+    <line x1="45" y1="85" x2="60" y2="95" stroke="#475569" strokeWidth="1.5" strokeDasharray="3" opacity="0.5" />
+    <line x1="350" y1="75" x2="340" y2="95" stroke="#475569" strokeWidth="1.5" strokeDasharray="3" opacity="0.5" />
+    <line x1="350" y1="155" x2="340" y2="160" stroke="#475569" strokeWidth="1.5" strokeDasharray="3" opacity="0.5" />
+
+    {/* Animated dots on tasks */}
+    <circle cx="310" cy="129" r="3" fill="#22c55e">
+      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="228" cy="132" r="3" fill="url(#portalGrad)">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+    </circle>
+  </svg>
+);
+
 const illustrations: Record<string, React.FC> = {
   monitoring: MonitoringIllustration,
   security: SecurityIllustration,
   agents: AgentsIllustration,
   management: ManagementIllustration,
   productivity: ProductivityIllustration,
+  portals: PortalsIllustration,
 };
 
 export default function Features() {
@@ -602,8 +804,8 @@ export default function Features() {
                   'IP Geolocation',
                   'Time Tracking',
                   'Script Library',
-                  'Newsletters',
-                  'Reminders',
+                  'Customer Portals',
+                  'Onboarding Workspaces',
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-gray-300">
                     <Check className="w-4 h-4 text-green-500" />
