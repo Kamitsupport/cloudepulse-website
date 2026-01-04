@@ -29,10 +29,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       countryCode,
       poNumber,
       acceptedTerms,
+      // New company lookup fields
+      registrationNumber,
+      vatNumber,
+      address,
     } = req.body;
 
-    // Validation
-    if (!companyName || !contactName || !email || !phone || !acceptedTerms) {
+    // Validation - acceptedTerms is handled client-side now
+    if (!companyName || !contactName || !email || !phone) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -61,6 +65,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           country: country || null,
           countryCode: countryCode || null,
           poNumber: poNumber || null,
+          // Company registration details from lookup
+          registrationNumber: registrationNumber || null,
+          vatNumber: vatNumber || null,
+          address: address || null,
           source: 'website',
           referrer: req.headers['referer'] || null,
           createDemoData: true,

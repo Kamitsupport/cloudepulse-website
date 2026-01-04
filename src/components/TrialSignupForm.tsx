@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Send,
   CheckCircle,
   AlertCircle,
   Building2,
@@ -11,57 +10,89 @@ import {
   Loader2,
   Globe,
   FileText,
+  Search,
+  MapPin,
+  ChevronDown,
+  Sparkles,
+  ArrowRight,
+  X,
 } from 'lucide-react';
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import type { CountryCode } from 'libphonenumber-js';
 import 'react-phone-number-input/style.css';
 
-// Country names mapping
-const countryNames: Record<string, string> = {
-  AF: 'Afghanistan', AL: 'Albania', DZ: 'Algeria', AD: 'Andorra', AO: 'Angola',
-  AR: 'Argentina', AM: 'Armenia', AU: 'Australia', AT: 'Austria', AZ: 'Azerbaijan',
-  BH: 'Bahrain', BD: 'Bangladesh', BY: 'Belarus', BE: 'Belgium', BZ: 'Belize',
-  BJ: 'Benin', BT: 'Bhutan', BO: 'Bolivia', BA: 'Bosnia and Herzegovina', BW: 'Botswana',
-  BR: 'Brazil', BN: 'Brunei', BG: 'Bulgaria', BF: 'Burkina Faso', BI: 'Burundi',
-  KH: 'Cambodia', CM: 'Cameroon', CA: 'Canada', CV: 'Cape Verde', CF: 'Central African Republic',
-  TD: 'Chad', CL: 'Chile', CN: 'China', CO: 'Colombia', KM: 'Comoros',
-  CG: 'Congo', CD: 'DR Congo', CR: 'Costa Rica', CI: 'Ivory Coast', HR: 'Croatia',
-  CU: 'Cuba', CY: 'Cyprus', CZ: 'Czech Republic', DK: 'Denmark', DJ: 'Djibouti',
-  DO: 'Dominican Republic', EC: 'Ecuador', EG: 'Egypt', SV: 'El Salvador', GQ: 'Equatorial Guinea',
-  ER: 'Eritrea', EE: 'Estonia', SZ: 'Eswatini', ET: 'Ethiopia', FJ: 'Fiji',
-  FI: 'Finland', FR: 'France', GA: 'Gabon', GM: 'Gambia', GE: 'Georgia',
-  DE: 'Germany', GH: 'Ghana', GR: 'Greece', GT: 'Guatemala', GN: 'Guinea',
-  GW: 'Guinea-Bissau', GY: 'Guyana', HT: 'Haiti', HN: 'Honduras', HK: 'Hong Kong',
-  HU: 'Hungary', IS: 'Iceland', IN: 'India', ID: 'Indonesia', IR: 'Iran',
-  IQ: 'Iraq', IE: 'Ireland', IL: 'Israel', IT: 'Italy', JM: 'Jamaica',
-  JP: 'Japan', JO: 'Jordan', KZ: 'Kazakhstan', KE: 'Kenya', KW: 'Kuwait',
-  KG: 'Kyrgyzstan', LA: 'Laos', LV: 'Latvia', LB: 'Lebanon', LS: 'Lesotho',
-  LR: 'Liberia', LY: 'Libya', LI: 'Liechtenstein', LT: 'Lithuania', LU: 'Luxembourg',
-  MO: 'Macau', MG: 'Madagascar', MW: 'Malawi', MY: 'Malaysia', MV: 'Maldives',
-  ML: 'Mali', MT: 'Malta', MR: 'Mauritania', MU: 'Mauritius', MX: 'Mexico',
-  MD: 'Moldova', MC: 'Monaco', MN: 'Mongolia', ME: 'Montenegro', MA: 'Morocco',
-  MZ: 'Mozambique', MM: 'Myanmar', NA: 'Namibia', NP: 'Nepal', NL: 'Netherlands',
-  NZ: 'New Zealand', NI: 'Nicaragua', NE: 'Niger', NG: 'Nigeria', MK: 'North Macedonia',
-  NO: 'Norway', OM: 'Oman', PK: 'Pakistan', PA: 'Panama', PG: 'Papua New Guinea',
-  PY: 'Paraguay', PE: 'Peru', PH: 'Philippines', PL: 'Poland', PT: 'Portugal',
-  PR: 'Puerto Rico', QA: 'Qatar', RO: 'Romania', RU: 'Russia', RW: 'Rwanda',
-  SA: 'Saudi Arabia', SN: 'Senegal', RS: 'Serbia', SG: 'Singapore', SK: 'Slovakia',
-  SI: 'Slovenia', SO: 'Somalia', ZA: 'South Africa', KR: 'South Korea', SS: 'South Sudan',
-  ES: 'Spain', LK: 'Sri Lanka', SD: 'Sudan', SR: 'Suriname', SE: 'Sweden',
-  CH: 'Switzerland', SY: 'Syria', TW: 'Taiwan', TJ: 'Tajikistan', TZ: 'Tanzania',
-  TH: 'Thailand', TL: 'Timor-Leste', TG: 'Togo', TN: 'Tunisia', TR: 'Turkey',
-  TM: 'Turkmenistan', UG: 'Uganda', UA: 'Ukraine', AE: 'United Arab Emirates', GB: 'United Kingdom',
-  US: 'United States', UY: 'Uruguay', UZ: 'Uzbekistan', VE: 'Venezuela', VN: 'Vietnam',
-  YE: 'Yemen', ZM: 'Zambia', ZW: 'Zimbabwe',
-};
+// Country options - prioritized list with company registry support
+const COUNTRIES = [
+  { code: 'NO', name: 'Norway' },
+  { code: 'SE', name: 'Sweden' },
+  { code: 'DK', name: 'Denmark' },
+  { code: 'FI', name: 'Finland' },
+  { code: 'IS', name: 'Iceland' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'NL', name: 'Netherlands' },
+  { code: 'BE', name: 'Belgium' },
+  { code: 'FR', name: 'France' },
+  { code: 'ES', name: 'Spain' },
+  { code: 'IT', name: 'Italy' },
+  { code: 'AT', name: 'Austria' },
+  { code: 'CH', name: 'Switzerland' },
+  { code: 'PL', name: 'Poland' },
+  { code: 'IE', name: 'Ireland' },
+  { code: 'PT', name: 'Portugal' },
+  { code: 'GR', name: 'Greece' },
+  { code: 'CZ', name: 'Czech Republic' },
+  { code: 'RO', name: 'Romania' },
+  { code: 'HU', name: 'Hungary' },
+  { code: 'LU', name: 'Luxembourg' },
+  { code: 'US', name: 'United States' },
+  { code: 'CA', name: 'Canada' },
+  { code: 'MX', name: 'Mexico' },
+  { code: 'BR', name: 'Brazil' },
+  { code: 'AU', name: 'Australia' },
+  { code: 'NZ', name: 'New Zealand' },
+  { code: 'SG', name: 'Singapore' },
+  { code: 'HK', name: 'Hong Kong' },
+  { code: 'JP', name: 'Japan' },
+  { code: 'KR', name: 'South Korea' },
+  { code: 'CN', name: 'China' },
+  { code: 'TW', name: 'Taiwan' },
+  { code: 'IN', name: 'India' },
+  { code: 'TH', name: 'Thailand' },
+  { code: 'VN', name: 'Vietnam' },
+  { code: 'MY', name: 'Malaysia' },
+  { code: 'ID', name: 'Indonesia' },
+  { code: 'PH', name: 'Philippines' },
+  { code: 'AE', name: 'United Arab Emirates' },
+  { code: 'SA', name: 'Saudi Arabia' },
+  { code: 'IL', name: 'Israel' },
+  { code: 'ZA', name: 'South Africa' },
+  { code: 'NG', name: 'Nigeria' },
+  { code: 'EG', name: 'Egypt' },
+].sort((a, b) => a.name.localeCompare(b.name));
+
+interface CompanySearchResult {
+  registrationNumber: string;
+  companyName: string;
+  address?: {
+    street: string;
+    city: string;
+    postalCode: string;
+  };
+  companyType?: string;
+}
 
 interface FormData {
+  countryCode: string;
   companyName: string;
+  registrationNumber: string;
+  vatNumber: string;
+  addressStreet: string;
+  addressCity: string;
+  addressPostalCode: string;
   contactName: string;
   email: string;
   phone: string;
-  country: string;
-  countryCode: string;
   poNumber: string;
   acceptedTerms: boolean;
 }
@@ -76,12 +107,16 @@ interface FormErrors {
 
 export default function TrialSignupForm() {
   const [formData, setFormData] = useState<FormData>({
+    countryCode: '',
     companyName: '',
+    registrationNumber: '',
+    vatNumber: '',
+    addressStreet: '',
+    addressCity: '',
+    addressPostalCode: '',
     contactName: '',
     email: '',
     phone: '',
-    country: '',
-    countryCode: '',
     poNumber: '',
     acceptedTerms: false,
   });
@@ -92,517 +127,583 @@ export default function TrialSignupForm() {
   const [errorMessage, setErrorMessage] = useState('');
   const [defaultCountry, setDefaultCountry] = useState<CountryCode>('US');
 
-  // Detect user's country from IP on mount
+  // Company search state
+  const [companySearchQuery, setCompanySearchQuery] = useState('');
+  const [searchState, setSearchState] = useState<'idle' | 'loading' | 'results' | 'no_results'>('idle');
+  const [searchResults, setSearchResults] = useState<CompanySearchResult[]>([]);
+  const [searchSource, setSearchSource] = useState<string>('');
+  const [companySelected, setCompanySelected] = useState(false);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+
+  // Auto-detect country from IP
   useEffect(() => {
     const detectCountry = async () => {
       try {
-        // Using ipapi.co free tier for IP geolocation
         const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
-
         if (data.country_code) {
           const countryCode = data.country_code as CountryCode;
-          setDefaultCountry(countryCode);
-          setFormData(prev => ({
-            ...prev,
-            countryCode: countryCode,
-            country: countryNames[countryCode] || countryCode,
-          }));
+          if (COUNTRIES.find(c => c.code === countryCode)) {
+            setDefaultCountry(countryCode);
+            setFormData(prev => ({ ...prev, countryCode }));
+          }
         }
-      } catch (error) {
-        console.error('Could not detect country:', error);
-        // Default to Norway if detection fails
+      } catch {
         setDefaultCountry('NO');
-        setFormData(prev => ({
-          ...prev,
-          countryCode: 'NO',
-          country: 'Norway',
-        }));
+        setFormData(prev => ({ ...prev, countryCode: 'NO' }));
       }
     };
-
     detectCountry();
   }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
-
-    if (!formData.companyName.trim()) {
-      newErrors.companyName = 'Company name is required';
-    }
-
-    if (!formData.contactName.trim()) {
-      newErrors.contactName = 'Contact name is required';
-    }
-
+    if (!formData.companyName.trim()) newErrors.companyName = 'Company name is required';
+    if (!formData.contactName.trim()) newErrors.contactName = 'Contact name is required';
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address';
     }
-
     if (!formData.phone) {
       newErrors.phone = 'Phone number is required';
     } else if (!isValidPhoneNumber(formData.phone)) {
       newErrors.phone = 'Please enter a valid phone number';
     }
-
-    if (!formData.acceptedTerms) {
-      newErrors.acceptedTerms = 'You must accept the terms and conditions';
-    }
-
+    if (!formData.acceptedTerms) newErrors.acceptedTerms = 'You must accept the terms';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const handleSearchCompanies = async () => {
+    if (!formData.countryCode || companySearchQuery.trim().length < 2) return;
+
+    setSearchState('loading');
+    setSearchResults([]);
+
+    try {
+      const countryName = COUNTRIES.find(c => c.code === formData.countryCode)?.name || formData.countryCode;
+      const response = await fetch('/api/search-companies', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ country: countryName, query: companySearchQuery.trim() }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.results?.length) {
+        setSearchState('no_results');
+        return;
+      }
+
+      setSearchState('results');
+      setSearchResults(result.results);
+      setSearchSource(result.registrySource || '');
+    } catch {
+      setSearchState('no_results');
+    }
+  };
+
+  const handleSelectCompany = (company: CompanySearchResult) => {
+    setFormData(prev => ({
+      ...prev,
+      companyName: company.companyName,
+      registrationNumber: company.registrationNumber,
+      addressStreet: company.address?.street || '',
+      addressCity: company.address?.city || '',
+      addressPostalCode: company.address?.postalCode || '',
+    }));
+    setCompanySearchQuery('');
+    setSearchState('idle');
+    setSearchResults([]);
+    setCompanySelected(true);
+  };
+
+  const handleClearCompany = () => {
+    setFormData(prev => ({
+      ...prev,
+      companyName: '',
+      registrationNumber: '',
+      addressStreet: '',
+      addressCity: '',
+      addressPostalCode: '',
+    }));
+    setCompanySelected(false);
+    setSearchState('idle');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setSubmitStatus('idle');
     setErrorMessage('');
 
     try {
       const response = await fetch('/api/submit-trial', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           companyName: formData.companyName.trim(),
           contactName: formData.contactName.trim(),
           email: formData.email.trim().toLowerCase(),
-          phone: formData.phone || null,
-          country: formData.country || null,
-          countryCode: formData.countryCode || null,
-          poNumber: formData.poNumber.trim() || null,
-          acceptedTerms: formData.acceptedTerms,
+          phone: formData.phone,
+          poNumber: formData.poNumber.trim() || undefined,
+          countryCode: formData.countryCode,
+          registrationNumber: formData.registrationNumber || undefined,
+          vatNumber: formData.vatNumber || undefined,
+          address: formData.addressStreet ? {
+            street: formData.addressStreet,
+            city: formData.addressCity,
+            postalCode: formData.addressPostalCode,
+          } : undefined,
         }),
       });
 
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to submit');
+        throw new Error(result.error || 'Failed to submit trial request');
       }
 
       setSubmitStatus('success');
       setFormData({
+        countryCode: formData.countryCode,
         companyName: '',
+        registrationNumber: '',
+        vatNumber: '',
+        addressStreet: '',
+        addressCity: '',
+        addressPostalCode: '',
         contactName: '',
         email: '',
         phone: '',
-        country: formData.country, // Keep detected country
-        countryCode: formData.countryCode,
         poNumber: '',
         acceptedTerms: false,
       });
+      setCompanySelected(false);
     } catch (error) {
-      console.error('Error submitting form:', error);
       setSubmitStatus('error');
-      setErrorMessage('Something went wrong. Please try again or contact us directly.');
+      setErrorMessage(error instanceof Error ? error.message : 'Something went wrong');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
+  const selectedCountry = COUNTRIES.find(c => c.code === formData.countryCode);
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
-
-    // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const handlePhoneChange = (value: string | undefined) => {
-    setFormData(prev => ({
-      ...prev,
-      phone: value || '',
-    }));
-
-    // Clear phone error
-    if (errors.phone) {
-      setErrors(prev => ({ ...prev, phone: undefined }));
-    }
-  };
-
-  const handleCountryChange = (country: CountryCode | undefined) => {
-    if (country) {
-      setFormData(prev => ({
-        ...prev,
-        countryCode: country,
-        country: countryNames[country] || country,
-      }));
-    }
-  };
+  if (submitStatus === 'success') {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 text-center border border-green-200"
+      >
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', delay: 0.2 }}
+          className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30"
+        >
+          <CheckCircle className="w-10 h-10 text-white" />
+        </motion.div>
+        <h3 className="text-2xl font-bold text-gray-900 mb-3">Welcome aboard!</h3>
+        <p className="text-gray-600 mb-6 max-w-md mx-auto">
+          Your 14-day free trial is being set up. Check your email for login credentials
+          and get started in minutes.
+        </p>
+        <div className="flex items-center justify-center gap-2 text-sm text-green-700 bg-green-100 rounded-full py-2 px-4 mx-auto w-fit">
+          <Sparkles className="w-4 h-4" />
+          <span>No credit card required</span>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
-    <section
-      id="trial"
-      className="section-padding bg-gradient-to-b from-white to-primary-50 relative overflow-hidden"
+    <motion.form
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      onSubmit={handleSubmit}
+      className="space-y-6"
     >
-      {/* Background Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary-100 rounded-full blur-3xl opacity-30" />
-
-      <div className="container-custom relative">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-12"
-        >
-          <motion.span
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="inline-block px-4 py-2 bg-primary-100 text-primary-700 text-sm font-semibold rounded-full mb-4"
+      {/* Country Selection */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <Globe className="w-4 h-4 inline mr-2" />
+          Country
+        </label>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+            className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl text-left flex items-center justify-between hover:border-primary-300 focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
           >
-            Start Your Journey
-          </motion.span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Start Your{' '}
-            <span className="gradient-text">30-Day Free Trial</span>
-          </h2>
-          <p className="text-lg text-gray-600">
-            No credit card required. Get full access to all features.
-            We'll help you get started.
-          </p>
-        </motion.div>
+            <span className={selectedCountry ? 'text-gray-900' : 'text-gray-400'}>
+              {selectedCountry ? selectedCountry.name : 'Select your country'}
+            </span>
+            <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showCountryDropdown ? 'rotate-180' : ''}`} />
+          </button>
 
-        {/* Form Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="max-w-2xl mx-auto"
-        >
-          <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 p-8 md:p-12 border border-gray-100">
-            <AnimatePresence mode="wait">
-              {submitStatus === 'success' ? (
-                <motion.div
-                  key="success"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="text-center py-12"
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', delay: 0.2 }}
-                    className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
-                  >
-                    <CheckCircle className="w-10 h-10 text-green-600" />
-                  </motion.div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Welcome to CloudePulse!
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    We've received your trial request. Check your email for
-                    login instructions. We'll be in touch within 24 hours to
-                    help you get started.
-                  </p>
+          <AnimatePresence>
+            {showCountryDropdown && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-xl max-h-60 overflow-y-auto"
+              >
+                {COUNTRIES.map(country => (
                   <button
-                    onClick={() => setSubmitStatus('idle')}
-                    className="text-primary-600 font-semibold hover:text-primary-700"
+                    key={country.code}
+                    type="button"
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, countryCode: country.code }));
+                      setShowCountryDropdown(false);
+                      // Reset company selection when country changes
+                      if (companySelected) {
+                        handleClearCompany();
+                      }
+                    }}
+                    className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
+                      formData.countryCode === country.code ? 'bg-primary-50 text-primary-700' : 'text-gray-700'
+                    }`}
                   >
-                    Submit another request
+                    {country.name}
                   </button>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+
+      {/* Company Search */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <Building2 className="w-4 h-4 inline mr-2" />
+          Company
+        </label>
+
+        {companySelected ? (
+          // Selected company card
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gradient-to-br from-primary-50 to-blue-50 border border-primary-200 rounded-xl p-4"
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900">{formData.companyName}</h4>
+                {formData.registrationNumber && (
+                  <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                    <FileText className="w-3.5 h-3.5" />
+                    {formData.registrationNumber}
+                  </p>
+                )}
+                {formData.addressStreet && (
+                  <p className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                    <MapPin className="w-3.5 h-3.5" />
+                    {formData.addressStreet}, {formData.addressPostalCode} {formData.addressCity}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={handleClearCompany}
+                className="text-gray-400 hover:text-gray-600 p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        ) : (
+          // Company search input
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={companySearchQuery}
+                  onChange={(e) => setCompanySearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleSearchCompanies();
+                    }
+                  }}
+                  placeholder={formData.countryCode ? "Search for your company..." : "Select a country first"}
+                  disabled={!formData.countryCode}
+                  className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all disabled:bg-gray-50 disabled:text-gray-400"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={handleSearchCompanies}
+                disabled={!formData.countryCode || companySearchQuery.trim().length < 2 || searchState === 'loading'}
+                className="px-5 py-3.5 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-medium hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+              >
+                {searchState === 'loading' ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : (
+                  <Search className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+
+            {/* Search Results */}
+            <AnimatePresence>
+              {searchState === 'results' && searchResults.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden"
+                >
+                  {searchSource && (
+                    <div className="px-4 py-2 bg-gray-50 border-b border-gray-100 text-xs text-gray-500">
+                      Results from {searchSource}
+                    </div>
+                  )}
+                  <div className="max-h-64 overflow-y-auto">
+                    {searchResults.map((company, idx) => (
+                      <button
+                        key={`${company.registrationNumber}-${idx}`}
+                        type="button"
+                        onClick={() => handleSelectCompany(company)}
+                        className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                      >
+                        <div className="font-medium text-gray-900">{company.companyName}</div>
+                        <div className="text-sm text-gray-500 flex items-center gap-3 mt-0.5">
+                          <span className="flex items-center gap-1">
+                            <FileText className="w-3.5 h-3.5" />
+                            {company.registrationNumber}
+                          </span>
+                          {company.address && (
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-3.5 h-3.5" />
+                              {company.address.city}
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </motion.div>
-              ) : (
-                <motion.form
-                  key="form"
+              )}
+
+              {searchState === 'no_results' && (
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  onSubmit={handleSubmit}
-                  className="space-y-6"
+                  className="text-sm text-gray-500 text-center py-3"
                 >
-                  {/* Company Name */}
-                  <div>
-                    <label htmlFor="companyName" className="form-label">
-                      <span className="flex items-center gap-2">
-                        <Building2 className="w-4 h-4" />
-                        Company Name *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      id="companyName"
-                      name="companyName"
-                      value={formData.companyName}
-                      onChange={handleChange}
-                      placeholder="Your MSP company name"
-                      className={`form-input ${
-                        errors.companyName ? 'border-red-500' : ''
-                      }`}
-                    />
-                    {errors.companyName && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.companyName}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Contact Name */}
-                  <div>
-                    <label htmlFor="contactName" className="form-label">
-                      <span className="flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        Contact Name *
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      id="contactName"
-                      name="contactName"
-                      value={formData.contactName}
-                      onChange={handleChange}
-                      placeholder="Your full name"
-                      className={`form-input ${
-                        errors.contactName ? 'border-red-500' : ''
-                      }`}
-                    />
-                    {errors.contactName && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.contactName}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Email */}
-                  <div>
-                    <label htmlFor="email" className="form-label">
-                      <span className="flex items-center gap-2">
-                        <Mail className="w-4 h-4" />
-                        Email Address *
-                      </span>
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="you@company.com"
-                      className={`form-input ${
-                        errors.email ? 'border-red-500' : ''
-                      }`}
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-                    )}
-                  </div>
-
-                  {/* Phone with Country Flag */}
-                  <div>
-                    <label htmlFor="phone" className="form-label">
-                      <span className="flex items-center gap-2">
-                        <Phone className="w-4 h-4" />
-                        Phone Number *
-                      </span>
-                    </label>
-                    <PhoneInput
-                      international
-                      countryCallingCodeEditable={false}
-                      defaultCountry={defaultCountry}
-                      value={formData.phone}
-                      onChange={handlePhoneChange}
-                      onCountryChange={handleCountryChange}
-                      className={`form-input-phone ${
-                        errors.phone ? 'border-red-500' : ''
-                      }`}
-                    />
-                    {errors.phone && (
-                      <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-                    )}
-                  </div>
-
-                  {/* Country (Auto-populated from phone, but editable) */}
-                  <div>
-                    <label htmlFor="country" className="form-label">
-                      <span className="flex items-center gap-2">
-                        <Globe className="w-4 h-4" />
-                        Country
-                      </span>
-                    </label>
-                    <select
-                      id="country"
-                      name="country"
-                      value={formData.countryCode}
-                      onChange={(e) => {
-                        const code = e.target.value;
-                        setFormData(prev => ({
-                          ...prev,
-                          countryCode: code,
-                          country: countryNames[code] || code,
-                        }));
-                      }}
-                      className="form-input"
-                    >
-                      {Object.entries(countryNames).sort((a, b) => a[1].localeCompare(b[1])).map(([code, name]) => (
-                        <option key={code} value={code}>{name}</option>
-                      ))}
-                    </select>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Auto-detected from phone, but you can change it
-                    </p>
-                  </div>
-
-                  {/* PO Number (Optional) */}
-                  <div>
-                    <label htmlFor="poNumber" className="form-label">
-                      <span className="flex items-center gap-2">
-                        <FileText className="w-4 h-4" />
-                        PO Number (Optional)
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      id="poNumber"
-                      name="poNumber"
-                      value={formData.poNumber}
-                      onChange={handleChange}
-                      placeholder="Purchase order reference"
-                      className="form-input"
-                    />
-                  </div>
-
-                  {/* Terms Acceptance */}
-                  <div>
-                    <label className="flex items-start gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        name="acceptedTerms"
-                        checked={formData.acceptedTerms}
-                        onChange={handleChange}
-                        className="mt-1 w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
-                      />
-                      <span className="text-sm text-gray-600">
-                        I agree to the{' '}
-                        <a
-                          href="/terms"
-                          className="text-primary-600 hover:text-primary-700 font-medium"
-                        >
-                          Terms of Service
-                        </a>{' '}
-                        and{' '}
-                        <a
-                          href="/privacy"
-                          className="text-primary-600 hover:text-primary-700 font-medium"
-                        >
-                          Privacy Policy
-                        </a>
-                        . *
-                      </span>
-                    </label>
-                    {errors.acceptedTerms && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {errors.acceptedTerms}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Error Message */}
-                  {submitStatus === 'error' && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-2 p-4 bg-red-50 text-red-700 rounded-xl"
-                    >
-                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                      <span className="text-sm">{errorMessage}</span>
-                    </motion.div>
-                  )}
-
-                  {/* Submit Button */}
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full py-4 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-semibold rounded-xl shadow-lg shadow-primary-500/30 btn-hover-effect flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-                    whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
-                    whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        Submitting...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5" />
-                        Start Free Trial
-                      </>
-                    )}
-                  </motion.button>
-
-                  {/* Additional Info */}
-                  <p className="text-center text-sm text-gray-500">
-                    No credit card required. Your trial starts immediately after signup.
-                  </p>
-                </motion.form>
+                  No companies found. You can enter details manually below.
+                </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Manual entry option */}
+            {!companySelected && searchState !== 'loading' && (
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setCompanySelected(false)}
+                  className="text-sm text-gray-500 hover:text-primary-600 transition-colors"
+                >
+                  Or enter company details manually
+                </button>
+              </div>
+            )}
           </div>
-        </motion.div>
+        )}
+        {errors.companyName && (
+          <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+            <AlertCircle className="w-4 h-4" />
+            {errors.companyName}
+          </p>
+        )}
       </div>
 
-      {/* Custom styles for phone input */}
-      <style>{`
-        .form-input-phone {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-        .form-input-phone .PhoneInputCountry {
-          display: flex;
-          align-items: center;
-          padding: 0.5rem;
-          background: #f9fafb;
-          border-radius: 0.5rem 0 0 0.5rem;
-          border: 1px solid #e5e7eb;
-          border-right: none;
-        }
-        .form-input-phone .PhoneInputCountryIcon {
-          width: 1.5rem;
-          height: 1rem;
-          border-radius: 2px;
-        }
-        .form-input-phone .PhoneInputCountrySelectArrow {
-          margin-left: 0.25rem;
-          color: #6b7280;
-        }
-        .form-input-phone input {
-          flex: 1;
-          padding: 0.75rem 1rem;
-          border: 1px solid #e5e7eb;
-          border-radius: 0 0.5rem 0.5rem 0;
-          font-size: 1rem;
-          transition: all 0.2s;
-        }
-        .form-input-phone input:focus {
-          outline: none;
-          border-color: #3b82f6;
-          box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        .form-input-phone.border-red-500 input {
-          border-color: #ef4444;
-        }
-      `}</style>
-    </section>
+      {/* Manual company name (shown when not selected from search) */}
+      {!companySelected && (
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Company Name (manual entry)
+          </label>
+          <input
+            type="text"
+            value={formData.companyName}
+            onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
+            placeholder="Enter company name"
+            className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+          />
+        </div>
+      )}
+
+      {/* Contact Name */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <User className="w-4 h-4 inline mr-2" />
+          Your Name
+        </label>
+        <input
+          type="text"
+          value={formData.contactName}
+          onChange={(e) => setFormData(prev => ({ ...prev, contactName: e.target.value }))}
+          placeholder="Enter your full name"
+          className={`w-full px-4 py-3.5 bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all ${
+            errors.contactName ? 'border-red-300' : 'border-gray-200'
+          }`}
+        />
+        {errors.contactName && (
+          <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+            <AlertCircle className="w-4 h-4" />
+            {errors.contactName}
+          </p>
+        )}
+      </div>
+
+      {/* Email */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <Mail className="w-4 h-4 inline mr-2" />
+          Work Email
+        </label>
+        <input
+          type="email"
+          value={formData.email}
+          onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+          placeholder="name@company.com"
+          className={`w-full px-4 py-3.5 bg-white border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all ${
+            errors.email ? 'border-red-300' : 'border-gray-200'
+          }`}
+        />
+        {errors.email && (
+          <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+            <AlertCircle className="w-4 h-4" />
+            {errors.email}
+          </p>
+        )}
+      </div>
+
+      {/* Phone */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <Phone className="w-4 h-4 inline mr-2" />
+          Phone Number
+        </label>
+        <PhoneInput
+          international
+          countryCallingCodeEditable={false}
+          defaultCountry={defaultCountry}
+          value={formData.phone}
+          onChange={(value) => setFormData(prev => ({ ...prev, phone: value || '' }))}
+          className={`phone-input-container ${errors.phone ? 'has-error' : ''}`}
+        />
+        {errors.phone && (
+          <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+            <AlertCircle className="w-4 h-4" />
+            {errors.phone}
+          </p>
+        )}
+      </div>
+
+      {/* PO Number (Optional) */}
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">
+          <FileText className="w-4 h-4 inline mr-2" />
+          PO Number <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="text"
+          value={formData.poNumber}
+          onChange={(e) => setFormData(prev => ({ ...prev, poNumber: e.target.value }))}
+          placeholder="Your reference number"
+          className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+        />
+      </div>
+
+      {/* Terms Checkbox */}
+      <div className="flex items-start gap-3">
+        <input
+          type="checkbox"
+          id="terms"
+          checked={formData.acceptedTerms}
+          onChange={(e) => setFormData(prev => ({ ...prev, acceptedTerms: e.target.checked }))}
+          className="mt-1 w-5 h-5 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+        />
+        <label htmlFor="terms" className="text-sm text-gray-600">
+          I agree to the{' '}
+          <a href="/terms" target="_blank" className="text-primary-600 hover:underline">
+            Terms of Service
+          </a>{' '}
+          and{' '}
+          <a href="/privacy" target="_blank" className="text-primary-600 hover:underline">
+            Privacy Policy
+          </a>
+        </label>
+      </div>
+      {errors.acceptedTerms && (
+        <p className="text-sm text-red-500 flex items-center gap-1 -mt-3">
+          <AlertCircle className="w-4 h-4" />
+          {errors.acceptedTerms}
+        </p>
+      )}
+
+      {/* Error Message */}
+      <AnimatePresence>
+        {submitStatus === 'error' && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3"
+          >
+            <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-medium text-red-800">Something went wrong</p>
+              <p className="text-sm text-red-600">{errorMessage}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Submit Button */}
+      <motion.button
+        type="submit"
+        disabled={isSubmitting}
+        whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+        whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+        className="w-full py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold hover:from-primary-600 hover:to-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500/20 disabled:opacity-70 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30"
+      >
+        {isSubmitting ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Processing...
+          </>
+        ) : (
+          <>
+            Start Free Trial
+            <ArrowRight className="w-5 h-5" />
+          </>
+        )}
+      </motion.button>
+
+      {/* Trust badges */}
+      <div className="flex items-center justify-center gap-6 pt-4 text-sm text-gray-500">
+        <span className="flex items-center gap-1">
+          <CheckCircle className="w-4 h-4 text-green-500" />
+          14-day free trial
+        </span>
+        <span className="flex items-center gap-1">
+          <CheckCircle className="w-4 h-4 text-green-500" />
+          No credit card
+        </span>
+      </div>
+    </motion.form>
   );
 }
