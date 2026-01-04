@@ -295,40 +295,50 @@ export default function TrialSignupForm() {
 
   if (submitStatus === 'success') {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 text-center border border-green-200"
-      >
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', delay: 0.2 }}
-          className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30"
-        >
-          <CheckCircle className="w-10 h-10 text-white" />
-        </motion.div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-3">Welcome aboard!</h3>
-        <p className="text-gray-600 mb-6 max-w-md mx-auto">
-          Your 14-day free trial is being set up. Check your email for login credentials
-          and get started in minutes.
-        </p>
-        <div className="flex items-center justify-center gap-2 text-sm text-green-700 bg-green-100 rounded-full py-2 px-4 mx-auto w-fit">
-          <Sparkles className="w-4 h-4" />
-          <span>No credit card required</span>
+      <section id="trial-signup" className="py-16 bg-gray-50">
+        <div className="max-w-xl mx-auto px-4 sm:px-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 text-center border border-green-200"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', delay: 0.2 }}
+              className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-500/30"
+            >
+              <CheckCircle className="w-10 h-10 text-white" />
+            </motion.div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Welcome aboard!</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+              Your 14-day free trial is being set up. Check your email for login credentials
+              and get started in minutes.
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm text-green-700 bg-green-100 rounded-full py-2 px-4 mx-auto w-fit">
+              <Sparkles className="w-4 h-4" />
+              <span>No credit card required</span>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </section>
     );
   }
 
   return (
-    <motion.form
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      onSubmit={handleSubmit}
-      className="space-y-6"
-    >
+    <section id="trial-signup" className="py-16 bg-gray-50">
+      <div className="max-w-xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-3">Start Your Free Trial</h2>
+          <p className="text-gray-600">Get started in minutes. No credit card required.</p>
+        </div>
+        <motion.form
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          onSubmit={handleSubmit}
+          className="space-y-6 bg-white rounded-2xl p-6 sm:p-8 shadow-lg border border-gray-100"
+        >
       {/* Country Selection */}
       <div>
         <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -528,20 +538,53 @@ export default function TrialSignupForm() {
         )}
       </div>
 
-      {/* Manual company name (shown when not selected from search) */}
+      {/* Manual company name and address (shown when not selected from search) */}
       {!companySelected && (
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Company Name (manual entry)
-          </label>
-          <input
-            type="text"
-            value={formData.companyName}
-            onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
-            placeholder="Enter company name"
-            className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
-          />
-        </div>
+        <>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Company Name (manual entry)
+            </label>
+            <input
+              type="text"
+              value={formData.companyName}
+              onChange={(e) => setFormData(prev => ({ ...prev, companyName: e.target.value }))}
+              placeholder="Enter company name"
+              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+            />
+          </div>
+
+          {/* Address fields for manual entry */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              <MapPin className="w-4 h-4 inline mr-2" />
+              Business Address <span className="text-gray-400 font-normal">(optional)</span>
+            </label>
+            <input
+              type="text"
+              value={formData.addressStreet}
+              onChange={(e) => setFormData(prev => ({ ...prev, addressStreet: e.target.value }))}
+              placeholder="Street address"
+              className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all mb-3"
+            />
+            <div className="grid grid-cols-2 gap-3">
+              <input
+                type="text"
+                value={formData.addressPostalCode}
+                onChange={(e) => setFormData(prev => ({ ...prev, addressPostalCode: e.target.value }))}
+                placeholder="Postal code"
+                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+              />
+              <input
+                type="text"
+                value={formData.addressCity}
+                onChange={(e) => setFormData(prev => ({ ...prev, addressCity: e.target.value }))}
+                placeholder="City"
+                className="w-full px-4 py-3.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all"
+              />
+            </div>
+          </div>
+        </>
       )}
 
       {/* Contact Name */}
@@ -704,6 +747,8 @@ export default function TrialSignupForm() {
           No credit card
         </span>
       </div>
-    </motion.form>
+        </motion.form>
+      </div>
+    </section>
   );
 }
