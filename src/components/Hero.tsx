@@ -75,11 +75,11 @@ const featureHighlights = [
 export default function Hero() {
   const [activeFeature, setActiveFeature] = useState(0);
 
-  // Auto-rotate features
+  // Auto-rotate features - 8 seconds so customers can read content
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveFeature((prev) => (prev + 1) % featureHighlights.length);
-    }, 4000);
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
 

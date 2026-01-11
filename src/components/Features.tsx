@@ -22,11 +22,13 @@ import {
   Activity,
   KeyRound,
   Clock,
-  Code,
   Building2,
-  ClipboardCheck,
-  Lock,
   Fingerprint,
+  TrendingUp,
+  Mail,
+  Shield,
+  XCircle,
+  Archive,
 } from 'lucide-react';
 
 // Feature data organized by category for the carousel
@@ -103,17 +105,17 @@ const features = [
     id: 'portals',
     category: 'CLIENT EXPERIENCE',
     title: 'Customer Portals',
-    tagline: 'White-Labeled & Professional',
-    description: 'Give your customers a branded experience with secure portals for service access and seamless onboarding with transparent handover.',
+    tagline: 'Real-Time Visibility for Your Customers',
+    description: 'Give customers a branded dashboard showing live backup status, M365 licenses, mailbox sizes, security logs, and more. They see everything in real-time without calling you.',
     gradient: 'from-sky-400 via-blue-500 to-violet-600',
     glowColor: 'rgba(56, 189, 248, 0.5)',
     features: [
-      { icon: Building2, label: 'Branded Portal', desc: 'Your domain, your logo' },
-      { icon: ClipboardCheck, label: 'Onboarding', desc: 'Collaborative workspace' },
-      { icon: Code, label: 'API Access', desc: 'Full integration support' },
-      { icon: Lock, label: 'Secure Handover', desc: 'Encrypted credentials' },
-      { icon: Fingerprint, label: 'Bank-Grade Auth', desc: 'Passkeys & OTP' },
-      { icon: Users, label: 'Multi-Party', desc: 'MSP, customer, vendor' },
+      { icon: HardDrive, label: 'Live Backup Status', desc: 'Real-time success/failure' },
+      { icon: Cloud, label: 'M365 Dashboard', desc: 'Licenses & mailbox sizes' },
+      { icon: Shield, label: 'Security Logs', desc: 'Firewall & NAS events' },
+      { icon: Activity, label: 'Real-Time Monitor', desc: 'All services at a glance' },
+      { icon: Building2, label: 'White-Label', desc: 'Your brand, your domain' },
+      { icon: Fingerprint, label: 'Bank-Grade Auth', desc: 'Passkeys & OTP login' },
     ],
   },
 ];
@@ -231,234 +233,292 @@ const PhishingDashboard = () => (
 );
 
 const MonitoringDashboard = () => (
-  <div className="relative w-full h-full">
-    {/* Server status grid */}
+  <div className="relative w-full h-full p-4">
+    {/* Backup Status Header - matches PortalBackupStatistics */}
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="absolute top-4 left-4 right-4 grid grid-cols-4 gap-2"
+      className="bg-slate-800/80 backdrop-blur rounded-2xl border border-slate-700/50 overflow-hidden"
+    >
+      {/* Card Header */}
+      <div className="px-4 py-3 border-b border-slate-700/50">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-sm font-semibold text-white">Backup Status</h3>
+            <p className="text-[10px] text-slate-400">Yesterday vs Today</p>
+          </div>
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium bg-emerald-500/20 text-emerald-400"
+          >
+            <TrendingUp className="w-3 h-3" />
+            +4.2%
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Donut Charts */}
+      <div className="flex items-center justify-center gap-4 py-4 px-2">
+        {/* Yesterday */}
+        <div className="flex flex-col items-center">
+          <p className="text-[10px] font-semibold text-slate-400 mb-2 uppercase tracking-wide">Yesterday</p>
+          <div className="relative w-20 h-20">
+            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+              <circle cx="18" cy="18" r="14" fill="none" stroke="#1e293b" strokeWidth="4" />
+              <motion.circle
+                cx="18" cy="18" r="14"
+                fill="none"
+                stroke="#10B981"
+                strokeWidth="4"
+                strokeDasharray="88"
+                initial={{ strokeDashoffset: 88 }}
+                animate={{ strokeDashoffset: 8.8 }}
+                transition={{ delay: 0.4, duration: 1 }}
+              />
+              <motion.circle
+                cx="18" cy="18" r="14"
+                fill="none"
+                stroke="#F59E0B"
+                strokeWidth="4"
+                strokeDasharray="88"
+                strokeDashoffset="-79.2"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              />
+              <motion.circle
+                cx="18" cy="18" r="14"
+                fill="none"
+                stroke="#EF4444"
+                strokeWidth="4"
+                strokeDasharray="88"
+                strokeDashoffset="-83.6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-lg font-bold text-white">142</span>
+              <span className="text-[8px] text-slate-500 uppercase">Jobs</span>
+            </div>
+          </div>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 }}
+            className="mt-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-400"
+          >
+            90% Success
+          </motion.span>
+        </div>
+
+        {/* Divider */}
+        <div className="w-px h-20 bg-gradient-to-b from-transparent via-slate-700 to-transparent" />
+
+        {/* Today */}
+        <div className="flex flex-col items-center">
+          <p className="text-[10px] font-semibold text-slate-400 mb-2 uppercase tracking-wide">Today</p>
+          <div className="relative w-20 h-20">
+            <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+              <circle cx="18" cy="18" r="14" fill="none" stroke="#1e293b" strokeWidth="4" />
+              <motion.circle
+                cx="18" cy="18" r="14"
+                fill="none"
+                stroke="#10B981"
+                strokeWidth="4"
+                strokeDasharray="88"
+                initial={{ strokeDashoffset: 88 }}
+                animate={{ strokeDashoffset: 5.3 }}
+                transition={{ delay: 0.5, duration: 1 }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className="text-lg font-bold text-white">156</span>
+              <span className="text-[8px] text-slate-500 uppercase">Jobs</span>
+            </div>
+          </div>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-400"
+          >
+            94% Success
+          </motion.span>
+        </div>
+      </div>
+
+      {/* Legend */}
+      <div className="px-4 py-2 bg-slate-900/30 border-t border-slate-700/50">
+        <div className="flex items-center justify-center gap-4">
+          {[
+            { color: '#10B981', label: 'Success', value: 147 },
+            { color: '#F59E0B', label: 'Warning', value: 6 },
+            { color: '#EF4444', label: 'Failed', value: 3 },
+          ].map((item, i) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.1 + i * 0.1 }}
+              className="flex items-center gap-1.5"
+            >
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+              <span className="text-[10px] text-slate-400">{item.label}</span>
+              <span className="text-[10px] font-semibold text-white">{item.value}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Summary Cards - matches PortalSummaryCards */}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8 }}
+      className="mt-3 space-y-2"
     >
       {[
-        { status: 'ok', name: 'DC-01' },
-        { status: 'ok', name: 'WEB-01' },
-        { status: 'warning', name: 'SQL-01' },
-        { status: 'ok', name: 'MAIL-01' },
-        { status: 'ok', name: 'FS-01' },
-        { status: 'ok', name: 'AD-01' },
-        { status: 'ok', name: 'VPN-01' },
-        { status: 'critical', name: 'BKP-01' },
-      ].map((server, i) => (
+        { icon: HardDrive, label: 'MONITORED', value: '48', status: 'success', badge: 'All OK' },
+        { icon: AlertTriangle, label: 'ALERTS', value: '3', status: 'warning', badge: 'Action needed' },
+      ].map((card, i) => (
         <motion.div
-          key={server.name}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.3 + i * 0.05 }}
-          className={`bg-slate-800/80 backdrop-blur rounded-lg p-2 border ${
-            server.status === 'ok' ? 'border-emerald-500/30' :
-            server.status === 'warning' ? 'border-amber-500/30' : 'border-red-500/30'
-          }`}
+          key={card.label}
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 1 + i * 0.15 }}
+          className="relative bg-slate-800/80 rounded-lg border border-slate-700/50 overflow-hidden"
         >
-          <div className={`w-2 h-2 rounded-full mb-1 ${
-            server.status === 'ok' ? 'bg-emerald-400 shadow-emerald-400/50' :
-            server.status === 'warning' ? 'bg-amber-400 shadow-amber-400/50 animate-pulse' :
-            'bg-red-500 shadow-red-500/50 animate-pulse'
-          } shadow-lg`} />
-          <div className="text-[10px] text-slate-400 truncate">{server.name}</div>
+          <div className={`absolute left-0 top-0 bottom-0 w-1 ${
+            card.status === 'success' ? 'bg-emerald-500' : 'bg-amber-500'
+          }`} />
+          <div className="flex items-center gap-3 pl-4 pr-4 py-2.5">
+            <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+              card.status === 'success' ? 'bg-emerald-500/10' : 'bg-amber-500/10'
+            }`}>
+              <card.icon className={`w-4 h-4 ${
+                card.status === 'success' ? 'text-emerald-400' : 'text-amber-400'
+              }`} />
+            </div>
+            <div className="flex-1">
+              <p className="text-[9px] font-medium uppercase tracking-wider text-slate-500">{card.label}</p>
+              <p className="text-lg font-semibold text-white">{card.value}</p>
+            </div>
+            <span className={`px-2 py-1 rounded text-[9px] font-medium ${
+              card.status === 'success' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-amber-500/15 text-amber-400'
+            }`}>
+              {card.badge}
+            </span>
+          </div>
         </motion.div>
       ))}
-    </motion.div>
-
-    {/* Live chart */}
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.5 }}
-      className="absolute top-32 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
-    >
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-xs text-slate-400">Uptime (7 days)</span>
-        <span className="text-xs font-bold text-emerald-400">99.97%</span>
-      </div>
-      <svg viewBox="0 0 200 60" className="w-full h-16">
-        <defs>
-          <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <motion.path
-          d="M0,50 Q25,45 50,35 T100,25 T150,30 T200,20"
-          fill="none"
-          stroke="#06b6d4"
-          strokeWidth="2"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ delay: 0.7, duration: 1.5 }}
-        />
-        <motion.path
-          d="M0,50 Q25,45 50,35 T100,25 T150,30 T200,20 V60 H0 Z"
-          fill="url(#chartGrad)"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-        />
-      </svg>
-    </motion.div>
-
-    {/* Alert feed */}
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.7 }}
-      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
-    >
-      <div className="text-xs text-slate-400 mb-2">Recent Alerts</div>
-      <div className="space-y-2">
-        {[
-          { type: 'success', msg: 'Backup completed - FS-01', time: '2m' },
-          { type: 'warning', msg: 'SSL expires in 14 days', time: '15m' },
-          { type: 'error', msg: 'BKP-01 unreachable', time: '23m' },
-        ].map((alert, i) => (
-          <motion.div
-            key={i}
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.9 + i * 0.1 }}
-            className="flex items-center gap-2 text-[10px]"
-          >
-            <div className={`w-1.5 h-1.5 rounded-full ${
-              alert.type === 'success' ? 'bg-emerald-400' :
-              alert.type === 'warning' ? 'bg-amber-400' : 'bg-red-500'
-            }`} />
-            <span className="text-slate-300 flex-1 truncate">{alert.msg}</span>
-            <span className="text-slate-500">{alert.time}</span>
-          </motion.div>
-        ))}
-      </div>
     </motion.div>
   </div>
 );
 
 const SecurityDashboard = () => (
-  <div className="relative w-full h-full">
-    {/* Threat map */}
+  <div className="relative w-full h-full p-4">
+    {/* Security Logs Header - matches PortalSecurityLogs */}
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="absolute top-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+      className="bg-slate-800/80 backdrop-blur rounded-2xl border border-slate-700/50 overflow-hidden"
     >
-      <div className="flex justify-between items-center mb-2">
-        <span className="text-xs text-slate-400">Threat Origins (24h)</span>
-        <span className="text-xs text-red-400 font-medium">127 blocked</span>
-      </div>
-      <div className="relative h-24 rounded-lg overflow-hidden bg-slate-900/50">
-        {/* Simplified world map */}
-        <svg viewBox="0 0 200 80" className="w-full h-full opacity-20">
-          <ellipse cx="100" cy="40" rx="95" ry="35" fill="none" stroke="#475569" strokeWidth="0.5" />
-          <ellipse cx="100" cy="40" rx="65" ry="25" fill="none" stroke="#475569" strokeWidth="0.5" />
-          <ellipse cx="100" cy="40" rx="35" ry="15" fill="none" stroke="#475569" strokeWidth="0.5" />
-        </svg>
-        {/* Threat dots */}
-        {[
-          { x: 30, y: 25 },
-          { x: 75, y: 35 },
-          { x: 120, y: 20 },
-          { x: 160, y: 45 },
-          { x: 45, y: 55 },
-        ].map((pos, i) => (
-          <motion.div
-            key={i}
-            initial={{ scale: 0 }}
-            animate={{ scale: [0, 1.5, 1] }}
-            transition={{ delay: 0.5 + i * 0.2, duration: 0.5 }}
-            className="absolute w-2 h-2"
-            style={{ left: `${pos.x / 2}%`, top: `${pos.y}%` }}
-          >
-            <div className="w-full h-full bg-red-500 rounded-full animate-ping opacity-75" />
-            <div className="absolute inset-0 w-full h-full bg-red-500 rounded-full" />
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
-
-    {/* File integrity */}
-    <motion.div
-      initial={{ x: -20, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: 0.6 }}
-      className="absolute top-40 left-4 right-[52%] bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
-    >
-      <div className="text-xs text-slate-400 mb-2">FileMon Status</div>
-      <div className="flex items-center gap-2">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-          <FileWarning className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <div className="text-sm font-bold text-emerald-400">SECURE</div>
-          <div className="text-[10px] text-slate-500">24 agents active</div>
+      {/* Card Header */}
+      <div className="px-4 py-3 border-b border-slate-700/50">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+            <Shield className="w-5 h-5 text-purple-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-white">Security Logs</h3>
+            <p className="text-[10px] text-slate-400">Last 24 hours</p>
+          </div>
         </div>
       </div>
-    </motion.div>
 
-    {/* Recent threats */}
-    <motion.div
-      initial={{ x: 20, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ delay: 0.6 }}
-      className="absolute top-40 right-4 left-[52%] bg-slate-800/80 backdrop-blur rounded-xl border border-red-500/20 p-3"
-    >
-      <div className="text-xs text-slate-400 mb-2">Blocked IPs</div>
-      <div className="space-y-1">
-        {['185.x.x.42', '91.x.x.156', '45.x.x.78'].map((ip, i) => (
-          <motion.div
-            key={ip}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 + i * 0.1 }}
-            className="flex items-center gap-2 text-[10px]"
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
-            <span className="text-slate-400 font-mono">{ip}</span>
-          </motion.div>
-        ))}
+      {/* Severity Summary - matches PortalSecurityLogs */}
+      <div className="p-4">
+        <div className="grid grid-cols-3 gap-2 mb-4">
+          {[
+            { severity: 'critical', count: 3, icon: XCircle, bg: 'bg-red-500', bgLight: 'bg-red-500/10', text: 'text-red-400' },
+            { severity: 'warning', count: 12, icon: AlertTriangle, bg: 'bg-amber-500', bgLight: 'bg-amber-500/10', text: 'text-amber-400' },
+            { severity: 'info', count: 47, icon: Bell, bg: 'bg-blue-500', bgLight: 'bg-blue-500/10', text: 'text-blue-400' },
+          ].map((item, i) => (
+            <motion.div
+              key={item.severity}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4 + i * 0.1 }}
+              className={`flex items-center gap-2 px-3 py-2 rounded-xl ${item.bgLight}`}
+            >
+              <div className={`w-7 h-7 rounded-lg ${item.bg} flex items-center justify-center`}>
+                <item.icon className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div>
+                <p className="text-lg font-bold text-white">{item.count}</p>
+                <p className={`text-[9px] font-medium ${item.text} capitalize`}>{item.severity}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Recent Events */}
+        <h4 className="text-[10px] font-semibold text-slate-400 mb-2 uppercase tracking-wider">Recent Events</h4>
+        <div className="space-y-2">
+          {[
+            { severity: 'critical', icon: XCircle, bg: 'bg-red-500', bgLight: 'bg-red-500/10', subject: 'Failed SSH login from 185.x.x.42', time: '2m ago' },
+            { severity: 'warning', icon: AlertTriangle, bg: 'bg-amber-500', bgLight: 'bg-amber-500/10', subject: 'SSL certificate expires in 7 days', time: '15m ago' },
+            { severity: 'info', icon: Bell, bg: 'bg-blue-500', bgLight: 'bg-blue-500/10', subject: 'Firewall rule updated by admin', time: '1h ago' },
+          ].map((entry, i) => (
+            <motion.div
+              key={i}
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.7 + i * 0.1 }}
+              className={`flex items-start gap-2 p-2.5 rounded-xl ${entry.bgLight}`}
+            >
+              <div className={`flex-shrink-0 w-6 h-6 rounded-lg ${entry.bg} flex items-center justify-center`}>
+                <entry.icon className="w-3 h-3 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-[10px] font-medium text-white truncate">{entry.subject}</p>
+                  <span className="flex-shrink-0 text-[9px] text-slate-500">{entry.time}</span>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </motion.div>
 
-    {/* Security score */}
+    {/* FileMon Status Card */}
     <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.8 }}
-      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.9 }}
+      className="mt-3 bg-slate-800/80 backdrop-blur rounded-xl border border-emerald-500/30 p-3"
     >
       <div className="flex items-center justify-between">
-        <div>
-          <div className="text-xs text-slate-400 mb-1">Security Score</div>
-          <div className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">94/100</div>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+            <FileWarning className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <div className="text-sm font-bold text-emerald-400">ALL SECURE</div>
+            <div className="text-[10px] text-slate-500">FileMon - 24 agents active</div>
+          </div>
         </div>
-        <div className="w-16 h-16 relative">
-          <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
-            <circle cx="18" cy="18" r="16" fill="none" stroke="#1e293b" strokeWidth="3" />
-            <motion.circle
-              cx="18" cy="18" r="16"
-              fill="none"
-              stroke="url(#scoreGrad)"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeDasharray="100"
-              initial={{ strokeDashoffset: 100 }}
-              animate={{ strokeDashoffset: 6 }}
-              transition={{ delay: 1, duration: 1.5, ease: 'easeOut' }}
-            />
-            <defs>
-              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#10b981" />
-                <stop offset="100%" stopColor="#06b6d4" />
-              </linearGradient>
-            </defs>
-          </svg>
+        <div className="text-right">
+          <div className="text-lg font-bold text-white">0</div>
+          <div className="text-[9px] text-slate-500">Threats detected</div>
         </div>
       </div>
     </motion.div>
@@ -466,67 +526,61 @@ const SecurityDashboard = () => (
 );
 
 const ManagementDashboard = () => (
-  <div className="relative w-full h-full">
-    {/* Customer cards */}
+  <div className="relative w-full h-full p-4">
+    {/* M365 Summary Header - matches PortalM365Summary */}
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="absolute top-4 left-4 right-4 flex gap-2"
+      className="bg-slate-800/80 backdrop-blur rounded-2xl border border-slate-700/50 overflow-hidden"
     >
-      {[
-        { name: 'Acme Corp', users: 45, color: 'from-blue-500 to-cyan-500' },
-        { name: 'TechStart', users: 12, color: 'from-violet-500 to-purple-500' },
-        { name: 'GlobalTech', users: 89, color: 'from-emerald-500 to-teal-500' },
-      ].map((customer, i) => (
-        <motion.div
-          key={customer.name}
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 + i * 0.1 }}
-          className="flex-1 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
-        >
-          <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${customer.color} flex items-center justify-center mb-2`}>
-            <span className="text-white text-xs font-bold">{customer.name[0]}</span>
+      {/* Tenant Header */}
+      <div className="px-4 py-3 border-b border-slate-700/50">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+            <Cloud className="w-5 h-5 text-white" />
           </div>
-          <div className="text-xs text-slate-300 font-medium truncate">{customer.name}</div>
-          <div className="text-[10px] text-slate-500">{customer.users} users</div>
-        </motion.div>
-      ))}
-    </motion.div>
-
-    {/* M365 status */}
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.5 }}
-      className="absolute top-32 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
-    >
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs text-slate-400">M365 Licenses</span>
-        <Cloud className="w-4 h-4 text-blue-400" />
+          <div className="flex-1">
+            <h3 className="text-sm font-semibold text-white">Acme Corporation</h3>
+            <p className="text-[10px] text-slate-400">acmecorp.onmicrosoft.com</p>
+          </div>
+          <div className="flex gap-3 text-center">
+            <div>
+              <div className="text-lg font-bold text-white">156</div>
+              <div className="text-[9px] text-slate-500">Users</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-emerald-400">89%</div>
+              <div className="text-[9px] text-slate-500">MFA</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+
+      {/* License Progress Bars */}
+      <div className="p-4 space-y-3">
+        <div className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mb-2">License Usage</div>
         {[
-          { label: 'Business Basic', used: 67, total: 100 },
-          { label: 'Business Premium', used: 23, total: 50 },
-          { label: 'E3', used: 12, total: 15 },
+          { name: 'Microsoft 365 Business Basic', used: 67, total: 100, color: 'from-blue-500 to-blue-400' },
+          { name: 'Microsoft 365 Business Premium', used: 45, total: 50, color: 'from-violet-500 to-purple-400' },
+          { name: 'Exchange Online Plan 1', used: 23, total: 30, color: 'from-cyan-500 to-teal-400' },
         ].map((license, i) => (
           <motion.div
-            key={license.label}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.7 + i * 0.1 }}
-            className="text-center"
+            key={license.name}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 + i * 0.1 }}
           >
-            <div className="text-sm font-bold text-slate-200">{license.used}<span className="text-slate-500">/{license.total}</span></div>
-            <div className="text-[9px] text-slate-500 truncate">{license.label}</div>
-            <div className="h-1 bg-slate-700 rounded-full mt-1 overflow-hidden">
+            <div className="flex justify-between items-center mb-1">
+              <span className="text-[10px] text-slate-300 truncate flex-1">{license.name}</span>
+              <span className="text-[10px] font-semibold text-white ml-2">{license.used}/{license.total}</span>
+            </div>
+            <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+                className={`h-full bg-gradient-to-r ${license.color} rounded-full`}
                 initial={{ width: 0 }}
                 animate={{ width: `${(license.used / license.total) * 100}%` }}
-                transition={{ delay: 0.9 + i * 0.1, duration: 0.5 }}
+                transition={{ delay: 0.6 + i * 0.1, duration: 0.8, ease: 'easeOut' }}
               />
             </div>
           </motion.div>
@@ -534,31 +588,56 @@ const ManagementDashboard = () => (
       </div>
     </motion.div>
 
-    {/* Activity feed */}
+    {/* User List with Mailbox Sizes - matches PortalM365Summary users section */}
     <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.8 }}
-      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.7 }}
+      className="mt-3 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 overflow-hidden"
     >
-      <div className="text-xs text-slate-400 mb-2">Recent Activity</div>
-      <div className="space-y-2">
+      <div className="px-3 py-2 border-b border-slate-700/50 flex items-center justify-between">
+        <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Users</span>
+        <span className="text-[10px] text-slate-500">Mailbox / Archive</span>
+      </div>
+      <div className="divide-y divide-slate-700/30">
         {[
-          { action: 'MFA enabled', user: 'john@acme.com', time: '5m' },
-          { action: 'New user added', user: 'sarah@tech.io', time: '12m' },
-          { action: 'License assigned', user: 'mike@global.co', time: '1h' },
-        ].map((activity, i) => (
+          { name: 'John Smith', email: 'john@acme.com', mfa: true, mailbox: 4.2, archive: 12.5 },
+          { name: 'Sarah Johnson', email: 'sarah@acme.com', mfa: true, mailbox: 2.8, archive: 8.3 },
+          { name: 'Mike Wilson', email: 'mike@acme.com', mfa: false, mailbox: 6.1, archive: null },
+        ].map((user, i) => (
           <motion.div
-            key={i}
-            initial={{ x: -10, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 1 + i * 0.1 }}
-            className="flex items-center gap-2 text-[10px]"
+            key={user.email}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9 + i * 0.1 }}
+            className="px-3 py-2 flex items-center gap-2"
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span className="text-slate-300">{activity.action}</span>
-            <span className="text-slate-500 truncate flex-1">{activity.user}</span>
-            <span className="text-slate-600">{activity.time}</span>
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center">
+              <span className="text-[9px] font-bold text-white">{user.name.split(' ').map(n => n[0]).join('')}</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-medium text-white truncate">{user.name}</span>
+                {user.mfa ? (
+                  <Shield className="w-3 h-3 text-emerald-400" />
+                ) : (
+                  <AlertTriangle className="w-3 h-3 text-amber-400" />
+                )}
+              </div>
+              <span className="text-[9px] text-slate-500 truncate block">{user.email}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <Mail className="w-3 h-3 text-blue-400" />
+                <span className="text-[9px] text-slate-300">{user.mailbox} GB</span>
+              </div>
+              {user.archive && (
+                <div className="flex items-center gap-1">
+                  <Archive className="w-3 h-3 text-violet-400" />
+                  <span className="text-[9px] text-slate-300">{user.archive} GB</span>
+                </div>
+              )}
+            </div>
           </motion.div>
         ))}
       </div>
@@ -567,111 +646,122 @@ const ManagementDashboard = () => (
 );
 
 const PortalsDashboard = () => (
-  <div className="relative w-full h-full">
-    {/* Portal preview */}
+  <div className="relative w-full h-full p-4">
+    {/* Customer Portal Dashboard - shows real-time visibility */}
     <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="absolute top-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 overflow-hidden"
+      className="bg-slate-800/80 backdrop-blur rounded-2xl border border-slate-700/50 overflow-hidden"
     >
-      {/* Browser chrome */}
-      <div className="flex items-center gap-2 px-3 py-2 bg-slate-900/50 border-b border-slate-700/50">
-        <div className="flex gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
-        </div>
-        <div className="flex-1 bg-slate-800 rounded px-2 py-0.5 text-[9px] text-slate-400 font-mono">
-          portal.yourmsp.com
+      {/* Portal Header with Branding */}
+      <div className="px-4 py-3 border-b border-slate-700/50 bg-gradient-to-r from-sky-600/20 to-blue-600/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center">
+              <Building2 className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white">Acme IT Services</h3>
+              <p className="text-[10px] text-slate-400">Customer Portal</p>
+            </div>
+          </div>
+          <div className="flex gap-1">
+            {['Dashboard', 'Backups', 'M365', 'Security'].map((tab, i) => (
+              <motion.div
+                key={tab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 + i * 0.05 }}
+                className={`px-2 py-1 rounded text-[9px] font-medium ${
+                  i === 0 ? 'bg-sky-500/20 text-sky-400' : 'text-slate-500'
+                }`}
+              >
+                {tab}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-      {/* Portal content */}
-      <div className="p-3">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center">
-            <span className="text-white text-xs font-bold">Y</span>
-          </div>
-          <div>
-            <div className="text-xs font-semibold text-slate-200">Your MSP</div>
-            <div className="text-[9px] text-slate-500">Customer Portal</div>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {['Services', 'Tickets', 'Invoices', 'Documents'].map((item, i) => (
+
+      {/* Portal Dashboard Content */}
+      <div className="p-4">
+        {/* Status Summary Cards */}
+        <div className="grid grid-cols-4 gap-2 mb-3">
+          {[
+            { label: 'Backups', value: '156', status: 'success', icon: HardDrive },
+            { label: 'Users', value: '89', status: 'success', icon: Users },
+            { label: 'Monitors', value: '24', status: 'success', icon: Activity },
+            { label: 'Alerts', value: '2', status: 'warning', icon: Bell },
+          ].map((card, i) => (
             <motion.div
-              key={item}
-              initial={{ y: 10, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4 + i * 0.1 }}
+              key={card.label}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.4 + i * 0.08 }}
               className="bg-slate-900/50 rounded-lg p-2 text-center"
             >
-              <div className="text-[10px] text-slate-400">{item}</div>
+              <card.icon className={`w-4 h-4 mx-auto mb-1 ${
+                card.status === 'success' ? 'text-emerald-400' : 'text-amber-400'
+              }`} />
+              <div className="text-sm font-bold text-white">{card.value}</div>
+              <div className="text-[8px] text-slate-500">{card.label}</div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Live Service Status */}
+        <div className="text-[10px] text-slate-400 font-medium uppercase tracking-wider mb-2">Live Status</div>
+        <div className="space-y-1.5">
+          {[
+            { name: 'Veeam Backup - All servers', status: 'success', detail: 'Last: 2 hours ago' },
+            { name: 'M365 Secure Score', status: 'success', detail: '78/100' },
+            { name: 'SSL Certificates', status: 'warning', detail: '1 expires in 14 days' },
+            { name: 'Endpoint Protection', status: 'success', detail: '100% coverage' },
+          ].map((service, i) => (
+            <motion.div
+              key={service.name}
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.6 + i * 0.1 }}
+              className="flex items-center justify-between p-2 bg-slate-900/30 rounded-lg"
+            >
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${
+                  service.status === 'success' ? 'bg-emerald-400' : 'bg-amber-400'
+                }`} />
+                <span className="text-[10px] text-slate-300">{service.name}</span>
+              </div>
+              <span className="text-[9px] text-slate-500">{service.detail}</span>
             </motion.div>
           ))}
         </div>
       </div>
     </motion.div>
 
-    {/* Onboarding progress */}
+    {/* Feature highlights */}
     <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.6 }}
-      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.9 }}
+      className="mt-3 flex gap-2"
     >
-      <div className="flex justify-between items-center mb-3">
-        <span className="text-xs text-slate-400">Onboarding Progress</span>
-        <span className="text-xs font-bold text-emerald-400">73%</span>
-      </div>
-      <div className="space-y-2">
-        {[
-          { task: 'Credentials received', done: true },
-          { task: 'DNS transferred', done: true },
-          { task: 'M365 connected', done: true },
-          { task: 'Final review', done: false },
-        ].map((task, i) => (
-          <motion.div
-            key={task.task}
-            initial={{ x: -10, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.8 + i * 0.1 }}
-            className="flex items-center gap-2"
-          >
-            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-              task.done ? 'border-emerald-500 bg-emerald-500/20' : 'border-slate-600'
-            }`}>
-              {task.done && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="w-2 h-2 bg-emerald-400 rounded-full"
-                />
-              )}
-            </div>
-            <span className={`text-[10px] ${task.done ? 'text-slate-400' : 'text-slate-500'}`}>
-              {task.task}
-            </span>
-          </motion.div>
-        ))}
-      </div>
-      {/* Participant avatars */}
-      <div className="flex items-center gap-1 mt-3 pt-3 border-t border-slate-700/50">
-        <span className="text-[9px] text-slate-500 mr-2">Team:</span>
-        {['M', 'C', 'V'].map((initial, i) => (
-          <motion.div
-            key={initial}
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 1.2 + i * 0.1 }}
-            className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-white ${
-              i === 0 ? 'bg-blue-500' : i === 1 ? 'bg-amber-500' : 'bg-purple-500'
-            }`}
-          >
-            {initial}
-          </motion.div>
-        ))}
-      </div>
+      {[
+        { icon: Fingerprint, label: 'Bank-Grade Auth' },
+        { icon: Building2, label: 'White-Label' },
+        { icon: Activity, label: 'Real-Time' },
+      ].map((feature, i) => (
+        <motion.div
+          key={feature.label}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 1 + i * 0.1 }}
+          className="flex-1 bg-slate-800/80 rounded-lg border border-slate-700/50 p-2 text-center"
+        >
+          <feature.icon className="w-4 h-4 text-sky-400 mx-auto mb-1" />
+          <div className="text-[9px] text-slate-400">{feature.label}</div>
+        </motion.div>
+      ))}
     </motion.div>
   </div>
 );
@@ -704,10 +794,10 @@ export default function Features() {
     setActiveIndex((prev) => (prev - 1 + features.length) % features.length);
   }, []);
 
-  // Auto-advance carousel
+  // Auto-advance carousel - 12 seconds so customers can read content
   useEffect(() => {
     if (isPaused) return;
-    const timer = setInterval(nextSlide, 6000);
+    const timer = setInterval(nextSlide, 12000);
     return () => clearInterval(timer);
   }, [isPaused, nextSlide]);
 
@@ -762,24 +852,24 @@ export default function Features() {
 
         {/* Main carousel container */}
         <div
-          className="relative"
+          className="relative px-4 lg:px-20"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Navigation arrows */}
+          {/* Navigation arrows - positioned outside content */}
           <button
             onClick={prevSlide}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/80 transition-all hover:scale-110"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-slate-800/90 backdrop-blur border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-all hover:scale-110 shadow-xl"
             aria-label="Previous feature"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-7 h-7" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/80 transition-all hover:scale-110"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-slate-800/90 backdrop-blur border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 transition-all hover:scale-110 shadow-xl"
             aria-label="Next feature"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-7 h-7" />
           </button>
 
           {/* Carousel content */}
@@ -927,7 +1017,7 @@ export default function Features() {
                       style={{ background: 'rgba(255,255,255,0.3)' }}
                       initial={{ scaleX: 0, transformOrigin: 'left' }}
                       animate={{ scaleX: 1 }}
-                      transition={{ duration: 6, ease: 'linear' }}
+                      transition={{ duration: 12, ease: 'linear' }}
                     />
                   )}
                 </button>
