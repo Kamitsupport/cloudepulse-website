@@ -29,6 +29,12 @@ import {
   Lock,
   Fingerprint,
   Share2,
+  Target,
+  BarChart3,
+  GraduationCap,
+  MousePointerClick,
+  Layout,
+  Sparkles,
 } from 'lucide-react';
 
 // Feature categories with their features
@@ -104,6 +110,46 @@ const featureCategories = [
     ],
   },
   {
+    id: 'phishing',
+    name: 'Phishing Simulator',
+    tagline: 'Turn Employees Into Your First Line of Defense',
+    description: 'Launch realistic phishing simulations powered by Claude AI. Generate convincing emails and landing pages in seconds, track every click, and deliver instant branded security training when employees fail.',
+    color: 'violet',
+    gradient: 'from-violet-500 to-purple-600',
+    features: [
+      {
+        icon: Sparkles,
+        title: 'AI-Generated Email Templates',
+        description: 'Create convincing phishing emails in seconds using AI. Generate contextual templates based on company info, recent events, or specific attack scenarios.',
+      },
+      {
+        icon: Layout,
+        title: 'Landing Page Cloning',
+        description: 'Clone any login page with one click. Customize fake Microsoft 365, Google Workspace, or banking pages to test employee vigilance.',
+      },
+      {
+        icon: Target,
+        title: 'Campaign Management',
+        description: 'Create targeted campaigns by department, role, or custom groups. Schedule sends, stagger delivery, and track progress in real-time.',
+      },
+      {
+        icon: MousePointerClick,
+        title: 'Click & Credential Tracking',
+        description: "See exactly who clicked, who entered credentials, and when. Detailed timeline of each recipient's interaction with the phishing email.",
+      },
+      {
+        icon: GraduationCap,
+        title: 'AI-Powered Awareness Pages',
+        description: 'Generate custom security awareness training pages with Claude AI. Automatically show branded training when users fail - with interactive demos, quizzes, and real-world examples.',
+      },
+      {
+        icon: BarChart3,
+        title: 'Real-Time Analytics',
+        description: 'Track open rates, click rates, and credential submission rates. Compare results across departments and over time to measure security improvement.',
+      },
+    ],
+  },
+  {
     id: 'agents',
     name: 'Windows Agents',
     tagline: 'Lightweight. Powerful. Silent.',
@@ -173,7 +219,7 @@ const featureCategories = [
       },
       {
         icon: CalendarClock,
-        title: 'Reminders',
+        title: 'Security Training',
         description: 'Never miss a thing. Set one-time or recurring reminders for contract renewals, maintenance tasks, follow-ups, and more.',
       },
       {
@@ -188,7 +234,7 @@ const featureCategories = [
       },
       {
         icon: Newspaper,
-        title: 'Newsletters',
+        title: 'Phishing Simulator',
         description: 'Subscribe to IT news and security bulletins. Curated feeds in one place with RSS integration.',
       },
     ],
@@ -315,6 +361,76 @@ const SecurityIllustration = () => (
     <line x1="100" y1="100" x2="140" y2="95" stroke="#475569" strokeWidth="2" strokeDasharray="4" />
     <line x1="300" y1="120" x2="260" y2="120" stroke="#475569" strokeWidth="2" strokeDasharray="4" />
     <line x1="120" y1="210" x2="145" y2="180" stroke="#475569" strokeWidth="2" strokeDasharray="4" />
+  </svg>
+);
+
+const PhishingIllustration = () => (
+  <svg viewBox="0 0 400 300" className="w-full h-full">
+    <defs>
+      <linearGradient id="phishGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#8b5cf6" />
+        <stop offset="100%" stopColor="#a855f7" />
+      </linearGradient>
+      <linearGradient id="phishGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#22c55e" />
+        <stop offset="100%" stopColor="#10b981" />
+      </linearGradient>
+    </defs>
+    {/* Main Email Card */}
+    <rect x="80" y="50" width="240" height="160" rx="12" fill="#1e293b" />
+    <rect x="80" y="50" width="240" height="35" rx="12" fill="url(#phishGrad)" />
+    <rect x="80" y="73" width="240" height="12" fill="url(#phishGrad)" />
+    {/* Email Header */}
+    <circle cx="105" cy="67" r="10" fill="white" opacity="0.9" />
+    <rect x="125" y="62" width="80" height="8" rx="2" fill="white" opacity="0.7" />
+    {/* Email Body */}
+    <rect x="95" y="100" width="180" height="8" rx="2" fill="#475569" />
+    <rect x="95" y="115" width="160" height="8" rx="2" fill="#475569" />
+    <rect x="95" y="130" width="140" height="8" rx="2" fill="#475569" />
+    {/* Fake Login Button */}
+    <rect x="95" y="155" width="100" height="30" rx="6" fill="#ef4444" />
+    <rect x="115" y="165" width="60" height="8" rx="2" fill="white" opacity="0.9" />
+    {/* Warning Icon */}
+    <g transform="translate(290, 30)">
+      <circle cx="25" cy="25" r="25" fill="#fef3c7" />
+      <path d="M25 15 L25 30" stroke="#f59e0b" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="25" cy="38" r="3" fill="#f59e0b" />
+    </g>
+    {/* AI Sparkle */}
+    <g transform="translate(30, 60)">
+      <rect x="0" y="0" width="40" height="40" rx="8" fill="#1e293b" />
+      <path d="M20 8 L22 16 L30 18 L22 20 L20 28 L18 20 L10 18 L18 16 Z" fill="url(#phishGrad)" />
+    </g>
+    {/* Training Result Card */}
+    <g transform="translate(100, 220)">
+      <rect x="0" y="0" width="200" height="60" rx="10" fill="#1e293b" />
+      <rect x="15" y="12" width="170" height="8" rx="2" fill="#475569" />
+      <rect x="15" y="30" width="170" height="12" rx="4" fill="#334155" />
+      <rect x="15" y="30" width="120" height="12" rx="4" fill="url(#phishGrad2)" />
+      <text x="150" y="54" fill="#22c55e" fontSize="12" fontWeight="bold">71%</text>
+      <text x="105" y="54" fill="#94a3b8" fontSize="10">Passed Training</text>
+    </g>
+    {/* Click Indicators */}
+    <g transform="translate(330, 130)">
+      <circle cx="20" cy="20" r="18" fill="#1e293b" />
+      <circle cx="20" cy="20" r="12" fill="url(#phishGrad)" opacity="0.3" />
+      <circle cx="20" cy="20" r="6" fill="url(#phishGrad)" />
+      <circle cx="20" cy="20" r="3" fill="white" />
+    </g>
+    {/* Target Recipients */}
+    <g transform="translate(20, 150)">
+      <circle cx="20" cy="0" r="12" fill="#3b82f6" />
+      <circle cx="35" cy="0" r="12" fill="#8b5cf6" />
+      <circle cx="50" cy="0" r="12" fill="#06b6d4" />
+      <text x="35" y="5" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">+5</text>
+    </g>
+    {/* Animated dots */}
+    <circle cx="195" cy="170" r="4" fill="#ef4444">
+      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="350" cy="150" r="4" fill="url(#phishGrad)">
+      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" />
+    </circle>
   </svg>
 );
 
@@ -642,6 +758,7 @@ const illustrations: Record<string, React.FC> = {
   management: ManagementIllustration,
   productivity: ProductivityIllustration,
   portals: PortalsIllustration,
+  phishing: PhishingIllustration,
 };
 
 export default function Features() {
@@ -804,8 +921,8 @@ export default function Features() {
                   'IP Geolocation',
                   'Time Tracking',
                   'Script Library',
-                  'Newsletters',
-                  'Reminders',
+                  'Phishing Simulator',
+                  'Security Training',
                   'Customer Portals',
                   'Onboarding',
                 ].map((item) => (
@@ -821,7 +938,7 @@ export default function Features() {
                 Lightweight alternative to expensive enterprise tools
               </p>
               <div className="flex flex-wrap justify-center md:justify-end gap-2">
-                {['BackupRadar', 'Huntress', 'UptimeRobot', 'Pingdom'].map((tool) => (
+                {['BackupRadar', 'Huntress', 'KnowBe4', 'Pingdom'].map((tool) => (
                   <span key={tool} className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-full">
                     {tool}
                   </span>
