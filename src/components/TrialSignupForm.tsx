@@ -296,7 +296,7 @@ export default function TrialSignupForm() {
   if (submitStatus === 'success') {
     return (
       <section id="trial-signup" className="py-16 bg-gray-50">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -327,7 +327,7 @@ export default function TrialSignupForm() {
 
   return (
     <section id="trial-signup" className="py-16 bg-gray-50">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-900 mb-3">Start Your Free Trial</h2>
           <p className="text-gray-600">Get started in minutes. No credit card required.</p>
