@@ -1,961 +1,962 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
 import {
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Layout,
+  Target,
+  MousePointerClick,
+  GraduationCap,
+  BarChart3,
   HardDrive,
   ShieldAlert,
   Network,
-  Bug,
-  Users,
-  Globe,
-  Webhook,
-  Bell,
   AlertTriangle,
-  Download,
+  Globe,
   FileWarning,
-  Activity,
-  Check,
-  ChevronRight,
-  CalendarClock,
-  Clock,
-  CreditCard,
-  Code,
-  Newspaper,
+  Webhook,
+  Users,
   Cloud,
+  Bell,
+  Activity,
   KeyRound,
-  MapPin,
+  Clock,
+  Code,
   Building2,
   ClipboardCheck,
-  FileSignature,
   Lock,
   Fingerprint,
-  Share2,
-  Target,
-  BarChart3,
-  GraduationCap,
-  MousePointerClick,
-  Layout,
-  Sparkles,
 } from 'lucide-react';
 
-// Feature categories with their features
-const featureCategories = [
+// Feature data organized by category for the carousel
+const features = [
+  {
+    id: 'phishing',
+    category: 'SECURITY TRAINING',
+    title: 'Phishing Simulator',
+    tagline: 'Turn Employees Into Your First Line of Defense',
+    description: 'Launch realistic phishing simulations powered by Claude AI. Generate convincing emails and landing pages in seconds, track every click, and deliver instant branded security training.',
+    gradient: 'from-violet-500 via-purple-500 to-fuchsia-500',
+    glowColor: 'rgba(139, 92, 246, 0.5)',
+    features: [
+      { icon: Sparkles, label: 'AI-Generated Templates', desc: 'Create convincing emails in seconds' },
+      { icon: Layout, label: 'Landing Page Cloning', desc: 'Clone any login page instantly' },
+      { icon: Target, label: 'Campaign Management', desc: 'Target by department or role' },
+      { icon: MousePointerClick, label: 'Click Tracking', desc: 'See who clicked and when' },
+      { icon: GraduationCap, label: 'Awareness Training', desc: 'Auto-show training on failure' },
+      { icon: BarChart3, label: 'Real-Time Analytics', desc: 'Track improvement over time' },
+    ],
+  },
   {
     id: 'monitoring',
-    name: 'Monitoring',
+    category: 'INFRASTRUCTURE',
+    title: 'Proactive Monitoring',
     tagline: 'Know Before Your Customers Do',
-    description: 'Proactive monitoring across all critical systems. Get alerted the moment something goes wrong - or fails to report at all.',
-    color: 'blue',
-    gradient: 'from-blue-500 to-cyan-500',
+    description: 'Comprehensive monitoring across all critical systems. Get alerted the moment something goes wrong - or when systems go suspiciously silent.',
+    gradient: 'from-cyan-400 via-blue-500 to-indigo-600',
+    glowColor: 'rgba(6, 182, 212, 0.5)',
     features: [
-      {
-        icon: HardDrive,
-        title: 'Backup Monitoring',
-        description: 'Forward backup emails and let our intelligent parser detect success, warnings, and failures. Supports all major backup applications - and we add new ones regularly.',
-      },
-      {
-        icon: AlertTriangle,
-        title: 'Silence Detection',
-        description: 'Most tools alert when backups fail. We alert when they go silent. If your backup server crashes and sends nothing, we notice.',
-      },
-      {
-        icon: Globe,
-        title: 'Website Monitoring',
-        description: 'Monitor uptime, SSL expiration, and keyword presence. Built-in alternative to UptimeRobot and Pingdom.',
-      },
-      {
-        icon: Network,
-        title: 'Port & TCP Monitoring',
-        description: 'Scan networks for open ports and track changes. Get alerted when unauthorized ports open or services become unreachable.',
-      },
+      { icon: HardDrive, label: 'Backup Monitoring', desc: 'AI-powered email parsing' },
+      { icon: AlertTriangle, label: 'Silence Detection', desc: 'Alert when backups go quiet' },
+      { icon: Globe, label: 'Website Uptime', desc: 'SSL & keyword monitoring' },
+      { icon: Network, label: 'Port Scanning', desc: 'Track network changes' },
+      { icon: Activity, label: 'Real-Time Dashboard', desc: '7-day trend analysis' },
+      { icon: Bell, label: 'Smart Alerts', desc: 'Per-customer preferences' },
     ],
   },
   {
     id: 'security',
-    name: 'Security & Ransomware Defense',
+    category: 'THREAT DEFENSE',
+    title: 'Ransomware Protection',
     tagline: 'Detect Threats Before They Spread',
-    description: 'Multi-layered security monitoring with ransomware canary agents, firewall integration, and real-time threat detection.',
-    color: 'red',
-    gradient: 'from-red-500 to-orange-500',
+    description: 'Multi-layered security with ransomware canary agents, firewall integration, and real-time threat intelligence across all your customers.',
+    gradient: 'from-red-500 via-orange-500 to-amber-500',
+    glowColor: 'rgba(239, 68, 68, 0.5)',
     features: [
-      {
-        icon: FileWarning,
-        title: 'FileMon Ransomware Agent',
-        description: 'Entropy-based detection that only triggers on actual encryption - zero false positives. Includes honeypot folders and ProcessWatcher early warning.',
-      },
-      {
-        icon: Webhook,
-        title: 'Log Center',
-        description: 'Create webhook endpoints to receive logs from firewalls and NAS devices. Click any IP address to see geolocation, ISP, and threat intelligence links.',
-      },
-      {
-        icon: MapPin,
-        title: 'IP Threat Lookup',
-        description: 'Click any IP address to see geolocation on map, ISP info, and quick links to AbuseIPDB, VirusTotal, GreyNoise, and Cisco Talos for threat analysis.',
-      },
-      {
-        icon: Users,
-        title: 'Cross-Customer Threat Analysis',
-        description: 'Automatically detect IPs attacking multiple customers. Identify coordinated scanning campaigns and see which customers are affected by the same threat actors.',
-      },
-      {
-        icon: ShieldAlert,
-        title: 'Firewall Events',
-        description: 'Configure UniFi, Fortinet, pfSense to send webhooks. Filter security events, brute force alerts, and VPN logs.',
-      },
-      {
-        icon: Bug,
-        title: 'Early Warning System',
-        description: 'Combine FileMon canaries, Log Center events, and backup monitoring into comprehensive ransomware defense.',
-      },
-    ],
-  },
-  {
-    id: 'phishing',
-    name: 'Phishing Simulator',
-    tagline: 'Turn Employees Into Your First Line of Defense',
-    description: 'Launch realistic phishing simulations powered by Claude AI. Generate convincing emails and landing pages in seconds, track every click, and deliver instant branded security training when employees fail.',
-    color: 'violet',
-    gradient: 'from-violet-500 to-purple-600',
-    features: [
-      {
-        icon: Sparkles,
-        title: 'AI-Generated Email Templates',
-        description: 'Create convincing phishing emails in seconds using AI. Generate contextual templates based on company info, recent events, or specific attack scenarios.',
-      },
-      {
-        icon: Layout,
-        title: 'Landing Page Cloning',
-        description: 'Clone any login page with one click. Customize fake Microsoft 365, Google Workspace, or banking pages to test employee vigilance.',
-      },
-      {
-        icon: Target,
-        title: 'Campaign Management',
-        description: 'Create targeted campaigns by department, role, or custom groups. Schedule sends, stagger delivery, and track progress in real-time.',
-      },
-      {
-        icon: MousePointerClick,
-        title: 'Click & Credential Tracking',
-        description: "See exactly who clicked, who entered credentials, and when. Detailed timeline of each recipient's interaction with the phishing email.",
-      },
-      {
-        icon: GraduationCap,
-        title: 'AI-Powered Awareness Pages',
-        description: 'Generate custom security awareness training pages with Claude AI. Automatically show branded training when users fail - with interactive demos, quizzes, and real-world examples.',
-      },
-      {
-        icon: BarChart3,
-        title: 'Real-Time Analytics',
-        description: 'Track open rates, click rates, and credential submission rates. Compare results across departments and over time to measure security improvement.',
-      },
-    ],
-  },
-  {
-    id: 'agents',
-    name: 'Windows Agents',
-    tagline: 'Lightweight. Powerful. Silent.',
-    description: 'Deploy our MSI agents in minutes. They run as Windows services, report to CloudePulse, and require zero maintenance.',
-    color: 'purple',
-    gradient: 'from-purple-500 to-indigo-500',
-    features: [
-      {
-        icon: Download,
-        title: 'Backup Agent',
-        description: 'Monitor Windows Scheduled Task backups that don\'t send email reports. Watches backup folders and reports completion status automatically.',
-      },
-      {
-        icon: FileWarning,
-        title: 'FileMon Agent',
-        description: 'Ransomware detection using entropy analysis. Deploys canary files and honeypot folders, detects encryption in under 60 seconds.',
-      },
+      { icon: FileWarning, label: 'FileMon Agent', desc: 'Entropy-based detection' },
+      { icon: Webhook, label: 'Log Center', desc: 'Firewall & NAS webhooks' },
+      { icon: ShieldAlert, label: 'Threat Analysis', desc: 'Cross-customer intelligence' },
+      { icon: Users, label: 'Attack Correlation', desc: 'Find coordinated threats' },
+      { icon: Globe, label: 'IP Geolocation', desc: 'Map threat origins' },
+      { icon: AlertTriangle, label: 'Early Warning', desc: 'Combined threat signals' },
     ],
   },
   {
     id: 'management',
-    name: 'Customer Management',
+    category: 'OPERATIONS',
+    title: 'Customer Management',
     tagline: 'Everything in One Place',
-    description: 'Customer management, Microsoft 365 integration, notifications, and analytics - all the tools MSPs need to run efficiently.',
-    color: 'green',
-    gradient: 'from-green-500 to-teal-500',
+    description: 'Microsoft 365 integration, customer database, notifications, and analytics - all the tools MSPs need to run efficiently.',
+    gradient: 'from-emerald-400 via-teal-500 to-cyan-600',
+    glowColor: 'rgba(16, 185, 129, 0.5)',
     features: [
-      {
-        icon: Cloud,
-        title: 'Microsoft 365 Integration',
-        description: 'Connect customer tenants with one click. See all licenses, users, mailbox sizes, and MFA status. Track available vs consumed licenses across all customers.',
-      },
-      {
-        icon: Users,
-        title: 'Customer Database',
-        description: 'Manage all MSP customers with custom fields, notification contacts, billing settings, and service levels.',
-      },
-      {
-        icon: KeyRound,
-        title: 'MFA & Security Status',
-        description: 'See which users have MFA enabled, what methods they use, and mailbox storage consumption at a glance.',
-      },
-      {
-        icon: Activity,
-        title: 'Dashboard & Analytics',
-        description: 'Real-time overview of backup success rates, website uptime, license utilization, and 7-day trends.',
-      },
-      {
-        icon: Bell,
-        title: 'Smart Notifications',
-        description: 'Per-customer notification preferences, severity thresholds, and instant in-app push notifications.',
-      },
-    ],
-  },
-  {
-    id: 'productivity',
-    name: 'Productivity Tools',
-    tagline: 'Work Smarter Every Day',
-    description: 'Time tracking, reminders, credit cards, scripts, and newsletters - everything you need to stay organized and efficient.',
-    color: 'amber',
-    gradient: 'from-amber-500 to-yellow-500',
-    features: [
-      {
-        icon: Clock,
-        title: 'Time Tracking',
-        description: 'Track billable hours with tasks and projects. Log time per customer, generate reports, and export for invoicing.',
-      },
-      {
-        icon: CalendarClock,
-        title: 'Security Training',
-        description: 'Never miss a thing. Set one-time or recurring reminders for contract renewals, maintenance tasks, follow-ups, and more.',
-      },
-      {
-        icon: CreditCard,
-        title: 'Credit Card Tracking',
-        description: 'Track credit card expiration dates and which services each card is used for. Get alerts before cards expire.',
-      },
-      {
-        icon: Code,
-        title: 'Script Library',
-        description: 'Store and organize your PowerShell, Bash, and batch scripts. Quick access to frequently used scripts with syntax highlighting.',
-      },
-      {
-        icon: Newspaper,
-        title: 'Phishing Simulator',
-        description: 'Subscribe to IT news and security bulletins. Curated feeds in one place with RSS integration.',
-      },
+      { icon: Cloud, label: 'M365 Integration', desc: 'One-click tenant connect' },
+      { icon: Users, label: 'Customer Database', desc: 'Full CRM capabilities' },
+      { icon: KeyRound, label: 'MFA Status', desc: 'Security at a glance' },
+      { icon: Activity, label: 'Dashboard', desc: 'Real-time overview' },
+      { icon: Bell, label: 'Notifications', desc: 'Smart alert routing' },
+      { icon: Clock, label: 'Time Tracking', desc: 'Billable hour logging' },
     ],
   },
   {
     id: 'portals',
-    name: 'Customer & Onboarding Portals',
-    tagline: 'White-Labeled. Secure. Professional.',
-    description: 'Give your customers a branded experience with secure portals for service access and seamless onboarding with transparent handover from outgoing providers.',
-    color: 'cyan',
-    gradient: 'from-cyan-500 to-blue-500',
+    category: 'CLIENT EXPERIENCE',
+    title: 'Customer Portals',
+    tagline: 'White-Labeled & Professional',
+    description: 'Give your customers a branded experience with secure portals for service access and seamless onboarding with transparent handover.',
+    gradient: 'from-sky-400 via-blue-500 to-violet-600',
+    glowColor: 'rgba(56, 189, 248, 0.5)',
     features: [
-      {
-        icon: Building2,
-        title: 'Branded Customer Portal',
-        description: 'Your logo, your colors, your custom domain. Customers see YOUR brand, not ours. Full white-label experience at customer.yourdomain.com.',
-      },
-      {
-        icon: ClipboardCheck,
-        title: 'Onboarding Workspace',
-        description: 'Collaborative workspace for customer onboarding. MSP, customer, outgoing provider, and vendors all work together with full visibility into tasks and deadlines.',
-      },
-      {
-        icon: Share2,
-        title: 'Transparent Handover',
-        description: 'Everyone sees all tasks. No hidden agendas. Outgoing MSP, incoming MSP, and customer all have visibility into the transition progress and responsibilities.',
-      },
-      {
-        icon: FileSignature,
-        title: 'Documents & Signatures',
-        description: 'Upload documents, collect e-signatures, and share files securely. All parties can contribute and sign off on deliverables.',
-      },
-      {
-        icon: Lock,
-        title: 'Secure Credential Handover',
-        description: 'Transfer passwords, API keys, and sensitive information through encrypted channels. No more passwords in emails or sticky notes.',
-      },
-      {
-        icon: Fingerprint,
-        title: 'Bank-Grade Security',
-        description: 'Token-based authentication, email verification with OTP, and optional passkey login. Every access is logged and audited. Zero-trust architecture.',
-      },
+      { icon: Building2, label: 'Branded Portal', desc: 'Your domain, your logo' },
+      { icon: ClipboardCheck, label: 'Onboarding', desc: 'Collaborative workspace' },
+      { icon: Code, label: 'API Access', desc: 'Full integration support' },
+      { icon: Lock, label: 'Secure Handover', desc: 'Encrypted credentials' },
+      { icon: Fingerprint, label: 'Bank-Grade Auth', desc: 'Passkeys & OTP' },
+      { icon: Users, label: 'Multi-Party', desc: 'MSP, customer, vendor' },
     ],
   },
 ];
 
-// SVG Illustration Components
-const MonitoringIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="monitorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#3b82f6" />
-        <stop offset="100%" stopColor="#06b6d4" />
-      </linearGradient>
-    </defs>
-    {/* Monitor Screen */}
-    <rect x="50" y="40" width="300" height="180" rx="12" fill="#1e293b" />
-    <rect x="60" y="50" width="280" height="160" rx="8" fill="#0f172a" />
-    {/* Dashboard Elements */}
-    <rect x="75" y="65" width="120" height="60" rx="6" fill="#1e3a5f" />
-    <rect x="205" y="65" width="120" height="60" rx="6" fill="#1e3a5f" />
-    <rect x="75" y="135" width="250" height="60" rx="6" fill="#1e3a5f" />
-    {/* Status Indicators */}
-    <circle cx="95" cy="85" r="8" fill="#22c55e" />
-    <circle cx="225" cy="85" r="8" fill="#22c55e" />
-    <circle cx="95" cy="155" r="8" fill="#f59e0b" />
-    {/* Lines */}
-    <rect x="115" y="80" width="60" height="6" rx="3" fill="#334155" />
-    <rect x="245" y="80" width="60" height="6" rx="3" fill="#334155" />
-    <rect x="115" y="150" width="80" height="6" rx="3" fill="#334155" />
-    {/* Monitor Stand */}
-    <rect x="175" y="220" width="50" height="20" fill="#475569" />
-    <rect x="140" y="240" width="120" height="10" rx="5" fill="#475569" />
-    {/* Floating Alert */}
-    <g transform="translate(320, 30)">
-      <rect x="0" y="0" width="60" height="40" rx="8" fill="url(#monitorGrad)" />
-      <circle cx="20" cy="20" r="6" fill="white" />
-      <rect x="32" y="15" width="20" height="4" rx="2" fill="white" opacity="0.8" />
-      <rect x="32" y="22" width="15" height="4" rx="2" fill="white" opacity="0.6" />
-    </g>
-  </svg>
+// Animated Dashboard Visualizations
+const PhishingDashboard = () => (
+  <div className="relative w-full h-full">
+    {/* Email card */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.2 }}
+      className="absolute top-4 left-4 right-[45%] bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4 shadow-2xl"
+    >
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+          <span className="text-white text-xs font-bold">M</span>
+        </div>
+        <div className="flex-1">
+          <div className="h-2.5 bg-slate-600 rounded w-24 mb-1.5" />
+          <div className="h-2 bg-slate-700 rounded w-32" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-2 bg-slate-700 rounded w-full" />
+        <div className="h-2 bg-slate-700 rounded w-4/5" />
+        <div className="h-2 bg-slate-700 rounded w-3/5" />
+      </div>
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="mt-4"
+      >
+        <div className="bg-gradient-to-r from-red-500 to-orange-500 rounded-lg px-4 py-2 text-white text-xs font-semibold text-center">
+          Click Here to Verify
+        </div>
+      </motion.div>
+    </motion.div>
+
+    {/* Stats panel */}
+    <motion.div
+      initial={{ x: 20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.4 }}
+      className="absolute top-4 right-4 left-[58%] bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="text-xs text-slate-400 mb-2 font-medium">Campaign Stats</div>
+      <div className="grid grid-cols-2 gap-2">
+        {[
+          { label: 'Sent', value: '247', color: 'text-blue-400' },
+          { label: 'Opened', value: '189', color: 'text-cyan-400' },
+          { label: 'Clicked', value: '43', color: 'text-amber-400' },
+          { label: 'Reported', value: '156', color: 'text-emerald-400' },
+        ].map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.6 + i * 0.1 }}
+            className="bg-slate-900/50 rounded-lg p-2 text-center"
+          >
+            <div className={`text-lg font-bold ${stat.color}`}>{stat.value}</div>
+            <div className="text-[10px] text-slate-500">{stat.label}</div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* Progress chart */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.6 }}
+      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-xs text-slate-400">Training Completion</span>
+        <span className="text-sm font-bold text-emerald-400">78%</span>
+      </div>
+      <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: '78%' }}
+          transition={{ delay: 0.8, duration: 1, ease: 'easeOut' }}
+          className="h-full bg-gradient-to-r from-emerald-400 to-cyan-400 rounded-full"
+        />
+      </div>
+      <div className="flex justify-between mt-2">
+        {['Week 1', 'Week 2', 'Week 3', 'Week 4'].map((week, i) => (
+          <motion.div
+            key={week}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 + i * 0.1 }}
+            className="flex flex-col items-center"
+          >
+            <div className={`w-2 h-2 rounded-full ${i < 3 ? 'bg-emerald-400' : 'bg-slate-600'}`} />
+            <span className="text-[9px] text-slate-500 mt-1">{week}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* Floating warning badge */}
+    <motion.div
+      initial={{ scale: 0, rotate: -10 }}
+      animate={{ scale: 1, rotate: 0 }}
+      transition={{ delay: 0.3, type: 'spring' }}
+      className="absolute top-2 right-2 bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-lg shadow-amber-500/30"
+    >
+      ⚠️ PHISHING TEST
+    </motion.div>
+  </div>
 );
 
-const SecurityIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#ef4444" />
-        <stop offset="100%" stopColor="#f97316" />
-      </linearGradient>
-    </defs>
-    {/* Main Shield */}
-    <path
-      d="M200 30 L300 70 L300 150 C300 220 200 270 200 270 C200 270 100 220 100 150 L100 70 Z"
-      fill="url(#shieldGrad)"
-      opacity="0.2"
-    />
-    <path
-      d="M200 50 L280 82 L280 145 C280 200 200 240 200 240 C200 240 120 200 120 145 L120 82 Z"
-      fill="url(#shieldGrad)"
-      opacity="0.4"
-    />
-    <path
-      d="M200 70 L260 95 L260 140 C260 180 200 210 200 210 C200 210 140 180 140 140 L140 95 Z"
-      fill="url(#shieldGrad)"
-    />
-    {/* Checkmark */}
-    <path
-      d="M170 135 L190 155 L235 110"
-      fill="none"
-      stroke="white"
-      strokeWidth="8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    {/* Orbiting Elements */}
-    <circle cx="80" cy="100" r="20" fill="#1e293b" />
-    <circle cx="80" cy="100" r="8" fill="#22c55e" />
-    <circle cx="320" cy="120" r="20" fill="#1e293b" />
-    <circle cx="320" cy="120" r="8" fill="#22c55e" />
-    <circle cx="100" cy="220" r="20" fill="#1e293b" />
-    <circle cx="100" cy="220" r="8" fill="#f59e0b" />
-    {/* Connection Lines */}
-    <line x1="100" y1="100" x2="140" y2="95" stroke="#475569" strokeWidth="2" strokeDasharray="4" />
-    <line x1="300" y1="120" x2="260" y2="120" stroke="#475569" strokeWidth="2" strokeDasharray="4" />
-    <line x1="120" y1="210" x2="145" y2="180" stroke="#475569" strokeWidth="2" strokeDasharray="4" />
-  </svg>
+const MonitoringDashboard = () => (
+  <div className="relative w-full h-full">
+    {/* Server status grid */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2 }}
+      className="absolute top-4 left-4 right-4 grid grid-cols-4 gap-2"
+    >
+      {[
+        { status: 'ok', name: 'DC-01' },
+        { status: 'ok', name: 'WEB-01' },
+        { status: 'warning', name: 'SQL-01' },
+        { status: 'ok', name: 'MAIL-01' },
+        { status: 'ok', name: 'FS-01' },
+        { status: 'ok', name: 'AD-01' },
+        { status: 'ok', name: 'VPN-01' },
+        { status: 'critical', name: 'BKP-01' },
+      ].map((server, i) => (
+        <motion.div
+          key={server.name}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.3 + i * 0.05 }}
+          className={`bg-slate-800/80 backdrop-blur rounded-lg p-2 border ${
+            server.status === 'ok' ? 'border-emerald-500/30' :
+            server.status === 'warning' ? 'border-amber-500/30' : 'border-red-500/30'
+          }`}
+        >
+          <div className={`w-2 h-2 rounded-full mb-1 ${
+            server.status === 'ok' ? 'bg-emerald-400 shadow-emerald-400/50' :
+            server.status === 'warning' ? 'bg-amber-400 shadow-amber-400/50 animate-pulse' :
+            'bg-red-500 shadow-red-500/50 animate-pulse'
+          } shadow-lg`} />
+          <div className="text-[10px] text-slate-400 truncate">{server.name}</div>
+        </motion.div>
+      ))}
+    </motion.div>
+
+    {/* Live chart */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className="absolute top-32 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-xs text-slate-400">Uptime (7 days)</span>
+        <span className="text-xs font-bold text-emerald-400">99.97%</span>
+      </div>
+      <svg viewBox="0 0 200 60" className="w-full h-16">
+        <defs>
+          <linearGradient id="chartGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <motion.path
+          d="M0,50 Q25,45 50,35 T100,25 T150,30 T200,20"
+          fill="none"
+          stroke="#06b6d4"
+          strokeWidth="2"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ delay: 0.7, duration: 1.5 }}
+        />
+        <motion.path
+          d="M0,50 Q25,45 50,35 T100,25 T150,30 T200,20 V60 H0 Z"
+          fill="url(#chartGrad)"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+        />
+      </svg>
+    </motion.div>
+
+    {/* Alert feed */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.7 }}
+      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
+    >
+      <div className="text-xs text-slate-400 mb-2">Recent Alerts</div>
+      <div className="space-y-2">
+        {[
+          { type: 'success', msg: 'Backup completed - FS-01', time: '2m' },
+          { type: 'warning', msg: 'SSL expires in 14 days', time: '15m' },
+          { type: 'error', msg: 'BKP-01 unreachable', time: '23m' },
+        ].map((alert, i) => (
+          <motion.div
+            key={i}
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.9 + i * 0.1 }}
+            className="flex items-center gap-2 text-[10px]"
+          >
+            <div className={`w-1.5 h-1.5 rounded-full ${
+              alert.type === 'success' ? 'bg-emerald-400' :
+              alert.type === 'warning' ? 'bg-amber-400' : 'bg-red-500'
+            }`} />
+            <span className="text-slate-300 flex-1 truncate">{alert.msg}</span>
+            <span className="text-slate-500">{alert.time}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  </div>
 );
 
-const PhishingIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="phishGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#8b5cf6" />
-        <stop offset="100%" stopColor="#a855f7" />
-      </linearGradient>
-      <linearGradient id="phishGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#22c55e" />
-        <stop offset="100%" stopColor="#10b981" />
-      </linearGradient>
-    </defs>
-    {/* Main Email Card */}
-    <rect x="80" y="50" width="240" height="160" rx="12" fill="#1e293b" />
-    <rect x="80" y="50" width="240" height="35" rx="12" fill="url(#phishGrad)" />
-    <rect x="80" y="73" width="240" height="12" fill="url(#phishGrad)" />
-    {/* Email Header */}
-    <circle cx="105" cy="67" r="10" fill="white" opacity="0.9" />
-    <rect x="125" y="62" width="80" height="8" rx="2" fill="white" opacity="0.7" />
-    {/* Email Body */}
-    <rect x="95" y="100" width="180" height="8" rx="2" fill="#475569" />
-    <rect x="95" y="115" width="160" height="8" rx="2" fill="#475569" />
-    <rect x="95" y="130" width="140" height="8" rx="2" fill="#475569" />
-    {/* Fake Login Button */}
-    <rect x="95" y="155" width="100" height="30" rx="6" fill="#ef4444" />
-    <rect x="115" y="165" width="60" height="8" rx="2" fill="white" opacity="0.9" />
-    {/* Warning Icon */}
-    <g transform="translate(290, 30)">
-      <circle cx="25" cy="25" r="25" fill="#fef3c7" />
-      <path d="M25 15 L25 30" stroke="#f59e0b" strokeWidth="4" strokeLinecap="round" />
-      <circle cx="25" cy="38" r="3" fill="#f59e0b" />
-    </g>
-    {/* AI Sparkle */}
-    <g transform="translate(30, 60)">
-      <rect x="0" y="0" width="40" height="40" rx="8" fill="#1e293b" />
-      <path d="M20 8 L22 16 L30 18 L22 20 L20 28 L18 20 L10 18 L18 16 Z" fill="url(#phishGrad)" />
-    </g>
-    {/* Training Result Card */}
-    <g transform="translate(100, 220)">
-      <rect x="0" y="0" width="200" height="60" rx="10" fill="#1e293b" />
-      <rect x="15" y="12" width="170" height="8" rx="2" fill="#475569" />
-      <rect x="15" y="30" width="170" height="12" rx="4" fill="#334155" />
-      <rect x="15" y="30" width="120" height="12" rx="4" fill="url(#phishGrad2)" />
-      <text x="150" y="54" fill="#22c55e" fontSize="12" fontWeight="bold">71%</text>
-      <text x="105" y="54" fill="#94a3b8" fontSize="10">Passed Training</text>
-    </g>
-    {/* Click Indicators */}
-    <g transform="translate(330, 130)">
-      <circle cx="20" cy="20" r="18" fill="#1e293b" />
-      <circle cx="20" cy="20" r="12" fill="url(#phishGrad)" opacity="0.3" />
-      <circle cx="20" cy="20" r="6" fill="url(#phishGrad)" />
-      <circle cx="20" cy="20" r="3" fill="white" />
-    </g>
-    {/* Target Recipients */}
-    <g transform="translate(20, 150)">
-      <circle cx="20" cy="0" r="12" fill="#3b82f6" />
-      <circle cx="35" cy="0" r="12" fill="#8b5cf6" />
-      <circle cx="50" cy="0" r="12" fill="#06b6d4" />
-      <text x="35" y="5" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">+5</text>
-    </g>
-    {/* Animated dots */}
-    <circle cx="195" cy="170" r="4" fill="#ef4444">
-      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="350" cy="150" r="4" fill="url(#phishGrad)">
-      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" />
-    </circle>
-  </svg>
+const SecurityDashboard = () => (
+  <div className="relative w-full h-full">
+    {/* Threat map */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2 }}
+      className="absolute top-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-xs text-slate-400">Threat Origins (24h)</span>
+        <span className="text-xs text-red-400 font-medium">127 blocked</span>
+      </div>
+      <div className="relative h-24 rounded-lg overflow-hidden bg-slate-900/50">
+        {/* Simplified world map */}
+        <svg viewBox="0 0 200 80" className="w-full h-full opacity-20">
+          <ellipse cx="100" cy="40" rx="95" ry="35" fill="none" stroke="#475569" strokeWidth="0.5" />
+          <ellipse cx="100" cy="40" rx="65" ry="25" fill="none" stroke="#475569" strokeWidth="0.5" />
+          <ellipse cx="100" cy="40" rx="35" ry="15" fill="none" stroke="#475569" strokeWidth="0.5" />
+        </svg>
+        {/* Threat dots */}
+        {[
+          { x: 30, y: 25 },
+          { x: 75, y: 35 },
+          { x: 120, y: 20 },
+          { x: 160, y: 45 },
+          { x: 45, y: 55 },
+        ].map((pos, i) => (
+          <motion.div
+            key={i}
+            initial={{ scale: 0 }}
+            animate={{ scale: [0, 1.5, 1] }}
+            transition={{ delay: 0.5 + i * 0.2, duration: 0.5 }}
+            className="absolute w-2 h-2"
+            style={{ left: `${pos.x / 2}%`, top: `${pos.y}%` }}
+          >
+            <div className="w-full h-full bg-red-500 rounded-full animate-ping opacity-75" />
+            <div className="absolute inset-0 w-full h-full bg-red-500 rounded-full" />
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* File integrity */}
+    <motion.div
+      initial={{ x: -20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.6 }}
+      className="absolute top-40 left-4 right-[52%] bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
+    >
+      <div className="text-xs text-slate-400 mb-2">FileMon Status</div>
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+          <FileWarning className="w-5 h-5 text-white" />
+        </div>
+        <div>
+          <div className="text-sm font-bold text-emerald-400">SECURE</div>
+          <div className="text-[10px] text-slate-500">24 agents active</div>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Recent threats */}
+    <motion.div
+      initial={{ x: 20, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.6 }}
+      className="absolute top-40 right-4 left-[52%] bg-slate-800/80 backdrop-blur rounded-xl border border-red-500/20 p-3"
+    >
+      <div className="text-xs text-slate-400 mb-2">Blocked IPs</div>
+      <div className="space-y-1">
+        {['185.x.x.42', '91.x.x.156', '45.x.x.78'].map((ip, i) => (
+          <motion.div
+            key={ip}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 + i * 0.1 }}
+            className="flex items-center gap-2 text-[10px]"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+            <span className="text-slate-400 font-mono">{ip}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* Security score */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.8 }}
+      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-xs text-slate-400 mb-1">Security Score</div>
+          <div className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">94/100</div>
+        </div>
+        <div className="w-16 h-16 relative">
+          <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+            <circle cx="18" cy="18" r="16" fill="none" stroke="#1e293b" strokeWidth="3" />
+            <motion.circle
+              cx="18" cy="18" r="16"
+              fill="none"
+              stroke="url(#scoreGrad)"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeDasharray="100"
+              initial={{ strokeDashoffset: 100 }}
+              animate={{ strokeDashoffset: 6 }}
+              transition={{ delay: 1, duration: 1.5, ease: 'easeOut' }}
+            />
+            <defs>
+              <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#06b6d4" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+      </div>
+    </motion.div>
+  </div>
 );
 
-const AgentsIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="agentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#8b5cf6" />
-        <stop offset="100%" stopColor="#6366f1" />
-      </linearGradient>
-    </defs>
-    {/* Central Server */}
-    <rect x="150" y="100" width="100" height="120" rx="8" fill="#1e293b" />
-    <rect x="160" y="115" width="80" height="10" rx="2" fill="url(#agentGrad)" />
-    <rect x="160" y="135" width="80" height="10" rx="2" fill="url(#agentGrad)" opacity="0.7" />
-    <rect x="160" y="155" width="80" height="10" rx="2" fill="url(#agentGrad)" opacity="0.5" />
-    <circle cx="175" cy="195" r="6" fill="#22c55e" />
-    <circle cx="200" cy="195" r="6" fill="#22c55e" />
-    <circle cx="225" cy="195" r="6" fill="#f59e0b" />
-    {/* Agent 1 */}
-    <g transform="translate(30, 50)">
-      <rect x="0" y="0" width="70" height="50" rx="6" fill="#1e293b" />
-      <rect x="10" y="10" width="50" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="24" width="35" height="8" rx="2" fill="#475569" />
-      <circle cx="55" cy="38" r="5" fill="#22c55e" />
-    </g>
-    {/* Agent 2 */}
-    <g transform="translate(300, 50)">
-      <rect x="0" y="0" width="70" height="50" rx="6" fill="#1e293b" />
-      <rect x="10" y="10" width="50" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="24" width="35" height="8" rx="2" fill="#475569" />
-      <circle cx="55" cy="38" r="5" fill="#22c55e" />
-    </g>
-    {/* Agent 3 */}
-    <g transform="translate(30, 200)">
-      <rect x="0" y="0" width="70" height="50" rx="6" fill="#1e293b" />
-      <rect x="10" y="10" width="50" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="24" width="35" height="8" rx="2" fill="#475569" />
-      <circle cx="55" cy="38" r="5" fill="#22c55e" />
-    </g>
-    {/* Agent 4 */}
-    <g transform="translate(300, 200)">
-      <rect x="0" y="0" width="70" height="50" rx="6" fill="#1e293b" />
-      <rect x="10" y="10" width="50" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="24" width="35" height="8" rx="2" fill="#475569" />
-      <circle cx="55" cy="38" r="5" fill="#22c55e" />
-    </g>
-    {/* Connection Lines */}
-    <line x1="100" y1="75" x2="150" y2="130" stroke="url(#agentGrad)" strokeWidth="2" />
-    <line x1="300" y1="75" x2="250" y2="130" stroke="url(#agentGrad)" strokeWidth="2" />
-    <line x1="100" y1="225" x2="150" y2="180" stroke="url(#agentGrad)" strokeWidth="2" />
-    <line x1="300" y1="225" x2="250" y2="180" stroke="url(#agentGrad)" strokeWidth="2" />
-    {/* Data Flow Dots */}
-    <circle cx="125" cy="102" r="4" fill="url(#agentGrad)">
-      <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="275" cy="102" r="4" fill="url(#agentGrad)">
-      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite" />
-    </circle>
-  </svg>
+const ManagementDashboard = () => (
+  <div className="relative w-full h-full">
+    {/* Customer cards */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2 }}
+      className="absolute top-4 left-4 right-4 flex gap-2"
+    >
+      {[
+        { name: 'Acme Corp', users: 45, color: 'from-blue-500 to-cyan-500' },
+        { name: 'TechStart', users: 12, color: 'from-violet-500 to-purple-500' },
+        { name: 'GlobalTech', users: 89, color: 'from-emerald-500 to-teal-500' },
+      ].map((customer, i) => (
+        <motion.div
+          key={customer.name}
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3 + i * 0.1 }}
+          className="flex-1 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
+        >
+          <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${customer.color} flex items-center justify-center mb-2`}>
+            <span className="text-white text-xs font-bold">{customer.name[0]}</span>
+          </div>
+          <div className="text-xs text-slate-300 font-medium truncate">{customer.name}</div>
+          <div className="text-[10px] text-slate-500">{customer.users} users</div>
+        </motion.div>
+      ))}
+    </motion.div>
+
+    {/* M365 status */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className="absolute top-32 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="flex items-center justify-between mb-3">
+        <span className="text-xs text-slate-400">M365 Licenses</span>
+        <Cloud className="w-4 h-4 text-blue-400" />
+      </div>
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          { label: 'Business Basic', used: 67, total: 100 },
+          { label: 'Business Premium', used: 23, total: 50 },
+          { label: 'E3', used: 12, total: 15 },
+        ].map((license, i) => (
+          <motion.div
+            key={license.label}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.7 + i * 0.1 }}
+            className="text-center"
+          >
+            <div className="text-sm font-bold text-slate-200">{license.used}<span className="text-slate-500">/{license.total}</span></div>
+            <div className="text-[9px] text-slate-500 truncate">{license.label}</div>
+            <div className="h-1 bg-slate-700 rounded-full mt-1 overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${(license.used / license.total) * 100}%` }}
+                transition={{ delay: 0.9 + i * 0.1, duration: 0.5 }}
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+
+    {/* Activity feed */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.8 }}
+      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-3"
+    >
+      <div className="text-xs text-slate-400 mb-2">Recent Activity</div>
+      <div className="space-y-2">
+        {[
+          { action: 'MFA enabled', user: 'john@acme.com', time: '5m' },
+          { action: 'New user added', user: 'sarah@tech.io', time: '12m' },
+          { action: 'License assigned', user: 'mike@global.co', time: '1h' },
+        ].map((activity, i) => (
+          <motion.div
+            key={i}
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 1 + i * 0.1 }}
+            className="flex items-center gap-2 text-[10px]"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="text-slate-300">{activity.action}</span>
+            <span className="text-slate-500 truncate flex-1">{activity.user}</span>
+            <span className="text-slate-600">{activity.time}</span>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  </div>
 );
 
-const ManagementIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="mgmtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#22c55e" />
-        <stop offset="100%" stopColor="#14b8a6" />
-      </linearGradient>
-    </defs>
-    {/* Main Card Stack */}
-    <rect x="100" y="80" width="200" height="140" rx="12" fill="#1e293b" transform="rotate(-3 200 150)" />
-    <rect x="100" y="80" width="200" height="140" rx="12" fill="#334155" transform="rotate(1 200 150)" />
-    <rect x="100" y="80" width="200" height="140" rx="12" fill="#475569" />
-    {/* Card Content */}
-    <circle cx="140" cy="120" r="20" fill="url(#mgmtGrad)" />
-    <text x="140" y="126" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">JS</text>
-    <rect x="175" y="108" width="100" height="10" rx="3" fill="#64748b" />
-    <rect x="175" y="124" width="70" height="8" rx="3" fill="#94a3b8" />
-    {/* Stats */}
-    <rect x="120" y="155" width="160" height="50" rx="6" fill="#1e293b" />
-    <rect x="130" y="165" width="40" height="30" rx="4" fill="#22c55e" opacity="0.3" />
-    <rect x="180" y="165" width="40" height="30" rx="4" fill="#3b82f6" opacity="0.3" />
-    <rect x="230" y="165" width="40" height="30" rx="4" fill="#f59e0b" opacity="0.3" />
-    <rect x="130" y="175" width="40" height="10" rx="2" fill="#22c55e" />
-    <rect x="180" y="180" width="40" height="5" rx="2" fill="#3b82f6" />
-    <rect x="230" y="170" width="40" height="15" rx="2" fill="#f59e0b" />
-    {/* Floating Elements */}
-    <g transform="translate(320, 60)">
-      <rect x="0" y="0" width="50" height="35" rx="6" fill="url(#mgmtGrad)" />
-      <path d="M15 17 L22 24 L35 11" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
-    </g>
-    <g transform="translate(30, 140)">
-      <rect x="0" y="0" width="50" height="35" rx="6" fill="#1e293b" />
-      <circle cx="25" cy="17" r="10" fill="url(#mgmtGrad)" opacity="0.5" />
-      <circle cx="25" cy="17" r="5" fill="url(#mgmtGrad)" />
-    </g>
-  </svg>
+const PortalsDashboard = () => (
+  <div className="relative w-full h-full">
+    {/* Portal preview */}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.2 }}
+      className="absolute top-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 overflow-hidden"
+    >
+      {/* Browser chrome */}
+      <div className="flex items-center gap-2 px-3 py-2 bg-slate-900/50 border-b border-slate-700/50">
+        <div className="flex gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
+          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/60" />
+        </div>
+        <div className="flex-1 bg-slate-800 rounded px-2 py-0.5 text-[9px] text-slate-400 font-mono">
+          portal.yourmsp.com
+        </div>
+      </div>
+      {/* Portal content */}
+      <div className="p-3">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center">
+            <span className="text-white text-xs font-bold">Y</span>
+          </div>
+          <div>
+            <div className="text-xs font-semibold text-slate-200">Your MSP</div>
+            <div className="text-[9px] text-slate-500">Customer Portal</div>
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {['Services', 'Tickets', 'Invoices', 'Documents'].map((item, i) => (
+            <motion.div
+              key={item}
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 + i * 0.1 }}
+              className="bg-slate-900/50 rounded-lg p-2 text-center"
+            >
+              <div className="text-[10px] text-slate-400">{item}</div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Onboarding progress */}
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.6 }}
+      className="absolute bottom-4 left-4 right-4 bg-slate-800/80 backdrop-blur rounded-xl border border-slate-700/50 p-4"
+    >
+      <div className="flex justify-between items-center mb-3">
+        <span className="text-xs text-slate-400">Onboarding Progress</span>
+        <span className="text-xs font-bold text-emerald-400">73%</span>
+      </div>
+      <div className="space-y-2">
+        {[
+          { task: 'Credentials received', done: true },
+          { task: 'DNS transferred', done: true },
+          { task: 'M365 connected', done: true },
+          { task: 'Final review', done: false },
+        ].map((task, i) => (
+          <motion.div
+            key={task.task}
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.8 + i * 0.1 }}
+            className="flex items-center gap-2"
+          >
+            <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+              task.done ? 'border-emerald-500 bg-emerald-500/20' : 'border-slate-600'
+            }`}>
+              {task.done && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="w-2 h-2 bg-emerald-400 rounded-full"
+                />
+              )}
+            </div>
+            <span className={`text-[10px] ${task.done ? 'text-slate-400' : 'text-slate-500'}`}>
+              {task.task}
+            </span>
+          </motion.div>
+        ))}
+      </div>
+      {/* Participant avatars */}
+      <div className="flex items-center gap-1 mt-3 pt-3 border-t border-slate-700/50">
+        <span className="text-[9px] text-slate-500 mr-2">Team:</span>
+        {['M', 'C', 'V'].map((initial, i) => (
+          <motion.div
+            key={initial}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 1.2 + i * 0.1 }}
+            className={`w-5 h-5 rounded-full flex items-center justify-center text-[8px] font-bold text-white ${
+              i === 0 ? 'bg-blue-500' : i === 1 ? 'bg-amber-500' : 'bg-purple-500'
+            }`}
+          >
+            {initial}
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  </div>
 );
 
-const ProductivityIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="prodGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#f59e0b" />
-        <stop offset="100%" stopColor="#eab308" />
-      </linearGradient>
-    </defs>
-    {/* Clock */}
-    <circle cx="200" cy="130" r="80" fill="#1e293b" />
-    <circle cx="200" cy="130" r="70" fill="#0f172a" />
-    <circle cx="200" cy="130" r="65" fill="none" stroke="url(#prodGrad)" strokeWidth="4" />
-    {/* Clock hands */}
-    <line x1="200" y1="130" x2="200" y2="80" stroke="url(#prodGrad)" strokeWidth="4" strokeLinecap="round" />
-    <line x1="200" y1="130" x2="240" y2="130" stroke="#94a3b8" strokeWidth="3" strokeLinecap="round" />
-    <circle cx="200" cy="130" r="6" fill="url(#prodGrad)" />
-    {/* Hour markers */}
-    {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((angle, i) => (
-      <circle
-        key={i}
-        cx={200 + 55 * Math.cos((angle - 90) * Math.PI / 180)}
-        cy={130 + 55 * Math.sin((angle - 90) * Math.PI / 180)}
-        r="3"
-        fill="#475569"
-      />
-    ))}
-    {/* Task cards */}
-    <g transform="translate(30, 200)">
-      <rect x="0" y="0" width="100" height="60" rx="8" fill="#1e293b" />
-      <rect x="10" y="12" width="12" height="12" rx="3" fill="url(#prodGrad)" />
-      <rect x="30" y="14" width="60" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="32" width="80" height="6" rx="2" fill="#334155" />
-      <rect x="10" y="44" width="50" height="6" rx="2" fill="#334155" />
-    </g>
-    <g transform="translate(150, 220)">
-      <rect x="0" y="0" width="100" height="60" rx="8" fill="#1e293b" />
-      <rect x="10" y="12" width="12" height="12" rx="3" fill="#22c55e" />
-      <path d="M13 18 L16 21 L22 15" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      <rect x="30" y="14" width="60" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="32" width="80" height="6" rx="2" fill="#334155" />
-    </g>
-    <g transform="translate(270, 200)">
-      <rect x="0" y="0" width="100" height="60" rx="8" fill="#1e293b" />
-      <rect x="10" y="12" width="12" height="12" rx="3" fill="#3b82f6" />
-      <rect x="30" y="14" width="60" height="8" rx="2" fill="#475569" />
-      <rect x="10" y="32" width="80" height="6" rx="2" fill="#334155" />
-      <rect x="10" y="44" width="60" height="6" rx="2" fill="#334155" />
-    </g>
-    {/* Credit card floating */}
-    <g transform="translate(300, 40)">
-      <rect x="0" y="0" width="70" height="45" rx="6" fill="url(#prodGrad)" />
-      <rect x="0" y="12" width="70" height="10" fill="#1e293b" opacity="0.3" />
-      <rect x="8" y="30" width="25" height="8" rx="2" fill="#1e293b" opacity="0.3" />
-    </g>
-    {/* Calendar floating */}
-    <g transform="translate(30, 50)">
-      <rect x="0" y="0" width="60" height="50" rx="6" fill="#1e293b" />
-      <rect x="0" y="0" width="60" height="15" rx="6" fill="url(#prodGrad)" />
-      <rect x="0" y="8" width="60" height="7" fill="url(#prodGrad)" />
-      <text x="30" y="12" textAnchor="middle" fill="white" fontSize="8" fontWeight="bold">DEC</text>
-      <text x="30" y="38" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">15</text>
-    </g>
-  </svg>
-);
-
-const PortalsIllustration = () => (
-  <svg viewBox="0 0 400 300" className="w-full h-full">
-    <defs>
-      <linearGradient id="portalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#06b6d4" />
-        <stop offset="100%" stopColor="#3b82f6" />
-      </linearGradient>
-      <linearGradient id="portalGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#22c55e" />
-        <stop offset="100%" stopColor="#06b6d4" />
-      </linearGradient>
-    </defs>
-    {/* Main Workspace Board */}
-    <rect x="60" y="40" width="280" height="200" rx="16" fill="#1e293b" />
-    <rect x="70" y="50" width="260" height="180" rx="12" fill="#0f172a" />
-
-    {/* Header with Brand Accent */}
-    <rect x="70" y="50" width="260" height="35" rx="12" fill="url(#portalGrad)" />
-    <rect x="70" y="70" width="260" height="15" fill="url(#portalGrad)" />
-    <circle cx="90" cy="67" r="8" fill="white" opacity="0.9" />
-    <rect x="105" y="62" width="80" height="10" rx="3" fill="white" opacity="0.7" />
-
-    {/* Task Columns */}
-    {/* Column 1 - To Do */}
-    <rect x="80" y="95" width="75" height="125" rx="8" fill="#1e293b" />
-    <rect x="85" y="100" width="65" height="8" rx="2" fill="#475569" />
-
-    {/* Task Cards Column 1 */}
-    <g transform="translate(85, 115)">
-      <rect x="0" y="0" width="65" height="30" rx="4" fill="#334155" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#f59e0b" opacity="0.6" />
-      <rect x="17" y="7" width="40" height="6" rx="2" fill="#64748b" />
-      <rect x="5" y="18" width="50" height="4" rx="1" fill="#475569" />
-    </g>
-    <g transform="translate(85, 150)">
-      <rect x="0" y="0" width="65" height="30" rx="4" fill="#334155" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#ef4444" opacity="0.6" />
-      <rect x="17" y="7" width="35" height="6" rx="2" fill="#64748b" />
-      <rect x="5" y="18" width="45" height="4" rx="1" fill="#475569" />
-    </g>
-
-    {/* Column 2 - In Progress */}
-    <rect x="162" y="95" width="75" height="125" rx="8" fill="#1e293b" />
-    <rect x="167" y="100" width="65" height="8" rx="2" fill="url(#portalGrad)" />
-
-    {/* Task Cards Column 2 */}
-    <g transform="translate(167, 115)">
-      <rect x="0" y="0" width="65" height="35" rx="4" fill="#334155" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#3b82f6" opacity="0.6" />
-      <rect x="17" y="7" width="42" height="6" rx="2" fill="#64748b" />
-      <rect x="5" y="18" width="55" height="4" rx="1" fill="#475569" />
-      <rect x="5" y="25" width="35" height="4" rx="1" fill="#475569" />
-    </g>
-    <g transform="translate(167, 155)">
-      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#8b5cf6" opacity="0.6" />
-      <rect x="17" y="7" width="38" height="6" rx="2" fill="#64748b" />
-      <rect x="5" y="18" width="48" height="4" rx="1" fill="#475569" />
-    </g>
-
-    {/* Column 3 - Done */}
-    <rect x="244" y="95" width="75" height="125" rx="8" fill="#1e293b" />
-    <rect x="249" y="100" width="65" height="8" rx="2" fill="#22c55e" />
-
-    {/* Task Cards Column 3 - Completed */}
-    <g transform="translate(249, 115)">
-      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" opacity="0.7" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#22c55e" />
-      <path d="M7 10 L9 12 L13 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      <rect x="17" y="7" width="40" height="6" rx="2" fill="#64748b" opacity="0.6" />
-      <rect x="5" y="18" width="50" height="4" rx="1" fill="#475569" opacity="0.6" />
-    </g>
-    <g transform="translate(249, 148)">
-      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" opacity="0.7" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#22c55e" />
-      <path d="M7 10 L9 12 L13 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      <rect x="17" y="7" width="35" height="6" rx="2" fill="#64748b" opacity="0.6" />
-      <rect x="5" y="18" width="45" height="4" rx="1" fill="#475569" opacity="0.6" />
-    </g>
-    <g transform="translate(249, 181)">
-      <rect x="0" y="0" width="65" height="28" rx="4" fill="#334155" opacity="0.7" />
-      <rect x="5" y="6" width="8" height="8" rx="2" fill="#22c55e" />
-      <path d="M7 10 L9 12 L13 8" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-      <rect x="17" y="7" width="42" height="6" rx="2" fill="#64748b" opacity="0.6" />
-      <rect x="5" y="18" width="38" height="4" rx="1" fill="#475569" opacity="0.6" />
-    </g>
-
-    {/* Participant Avatars - Bottom left */}
-    <g transform="translate(30, 255)">
-      {/* MSP Avatar */}
-      <circle cx="0" cy="0" r="18" fill="#1e293b" />
-      <circle cx="0" cy="0" r="15" fill="url(#portalGrad)" />
-      <text x="0" y="5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">M</text>
-      <circle cx="12" cy="12" r="5" fill="#22c55e" />
-    </g>
-    <g transform="translate(60, 255)">
-      {/* Customer Avatar */}
-      <circle cx="0" cy="0" r="18" fill="#1e293b" />
-      <circle cx="0" cy="0" r="15" fill="#f59e0b" />
-      <text x="0" y="5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">C</text>
-      <circle cx="12" cy="12" r="5" fill="#22c55e" />
-    </g>
-    <g transform="translate(90, 255)">
-      {/* Outgoing MSP Avatar */}
-      <circle cx="0" cy="0" r="18" fill="#1e293b" />
-      <circle cx="0" cy="0" r="15" fill="#8b5cf6" />
-      <text x="0" y="5" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">O</text>
-      <circle cx="12" cy="12" r="5" fill="#94a3b8" />
-    </g>
-
-    {/* Security Lock Icon - Floating */}
-    <g transform="translate(350, 30)">
-      <rect x="0" y="0" width="40" height="45" rx="8" fill="url(#portalGrad2)" />
-      <rect x="10" y="18" width="20" height="16" rx="3" fill="white" opacity="0.9" />
-      <path d="M15 18 L15 14 Q15 8 20 8 Q25 8 25 14 L25 18" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-      <circle cx="20" cy="26" r="2" fill="url(#portalGrad)" />
-    </g>
-
-    {/* Document Icon - Floating */}
-    <g transform="translate(0, 60)">
-      <rect x="0" y="0" width="45" height="55" rx="6" fill="#1e293b" />
-      <rect x="5" y="5" width="35" height="45" rx="4" fill="#334155" />
-      <rect x="10" y="12" width="25" height="4" rx="1" fill="url(#portalGrad)" />
-      <rect x="10" y="20" width="20" height="3" rx="1" fill="#475569" />
-      <rect x="10" y="26" width="22" height="3" rx="1" fill="#475569" />
-      <rect x="10" y="32" width="18" height="3" rx="1" fill="#475569" />
-      {/* Signature line */}
-      <path d="M10 42 Q15 38 20 42 Q25 46 30 42" fill="none" stroke="url(#portalGrad)" strokeWidth="2" strokeLinecap="round" />
-    </g>
-
-    {/* Progress Indicator - Top right */}
-    <g transform="translate(350, 110)">
-      <circle cx="20" cy="20" r="25" fill="#1e293b" />
-      <circle cx="20" cy="20" r="20" fill="none" stroke="#334155" strokeWidth="4" />
-      <circle cx="20" cy="20" r="20" fill="none" stroke="url(#portalGrad2)" strokeWidth="4" strokeDasharray="94" strokeDashoffset="25" strokeLinecap="round" transform="rotate(-90 20 20)">
-        <animate attributeName="stroke-dashoffset" values="94;25" dur="1.5s" fill="freeze" />
-      </circle>
-      <text x="20" y="24" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">73%</text>
-    </g>
-
-    {/* Connection Lines */}
-    <line x1="45" y1="85" x2="60" y2="95" stroke="#475569" strokeWidth="1.5" strokeDasharray="3" opacity="0.5" />
-    <line x1="350" y1="75" x2="340" y2="95" stroke="#475569" strokeWidth="1.5" strokeDasharray="3" opacity="0.5" />
-    <line x1="350" y1="155" x2="340" y2="160" stroke="#475569" strokeWidth="1.5" strokeDasharray="3" opacity="0.5" />
-
-    {/* Animated dots on tasks */}
-    <circle cx="310" cy="129" r="3" fill="#22c55e">
-      <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="228" cy="132" r="3" fill="url(#portalGrad)">
-      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
-    </circle>
-  </svg>
-);
-
-const illustrations: Record<string, React.FC> = {
-  monitoring: MonitoringIllustration,
-  security: SecurityIllustration,
-  agents: AgentsIllustration,
-  management: ManagementIllustration,
-  productivity: ProductivityIllustration,
-  portals: PortalsIllustration,
-  phishing: PhishingIllustration,
+const dashboards: Record<string, React.FC> = {
+  phishing: PhishingDashboard,
+  monitoring: MonitoringDashboard,
+  security: SecurityDashboard,
+  management: ManagementDashboard,
+  portals: PortalsDashboard,
 };
 
 export default function Features() {
-  const [activeCategory, setActiveCategory] = useState('monitoring');
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [direction, setDirection] = useState(1);
+
+  const goToSlide = useCallback((index: number) => {
+    setDirection(index > activeIndex ? 1 : -1);
+    setActiveIndex(index);
+  }, [activeIndex]);
+
+  const nextSlide = useCallback(() => {
+    setDirection(1);
+    setActiveIndex((prev) => (prev + 1) % features.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setDirection(-1);
+    setActiveIndex((prev) => (prev - 1 + features.length) % features.length);
+  }, []);
+
+  // Auto-advance carousel
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(nextSlide, 6000);
+    return () => clearInterval(timer);
+  }, [isPaused, nextSlide]);
+
+  const activeFeature = features[activeIndex];
+  const DashboardComponent = dashboards[activeFeature.id];
 
   return (
-    <section id="features" className="section-padding bg-white relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-gray-50 to-transparent" />
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary-100 rounded-full blur-3xl opacity-50" />
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary-100 rounded-full blur-3xl opacity-50" />
+    <section id="features" className="relative py-24 lg:py-32 overflow-hidden bg-slate-950">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-[128px]" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-[128px]" />
+        {/* Grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '50px 50px',
+          }}
+        />
+      </div>
 
       <div className="container-custom relative">
-        {/* Section Header */}
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-12"
+          className="text-center max-w-3xl mx-auto mb-16"
         >
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="inline-block px-4 py-2 bg-primary-100 text-primary-700 text-sm font-semibold rounded-full mb-4"
+            className="inline-block px-4 py-1.5 bg-gradient-to-r from-cyan-500/10 to-violet-500/10 border border-cyan-500/20 text-cyan-400 text-sm font-medium rounded-full mb-6"
           >
             Powerful Features
           </motion.span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
             What Your RMM{' '}
-            <span className="gradient-text">Forgot to Build</span>
+            <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 bg-clip-text text-transparent">
+              Forgot to Build
+            </span>
           </h2>
-          <p className="text-lg text-gray-600">
-            One platform to monitor, manage, and report on all your IT services.
+          <p className="text-lg text-slate-400 leading-relaxed">
+            One platform to monitor, protect, and manage all your IT services.
             Designed specifically for MSPs who want to work smarter.
           </p>
         </motion.div>
 
-        {/* Category Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="flex flex-wrap justify-center gap-3 mb-12"
+        {/* Main carousel container */}
+        <div
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
         >
-          {featureCategories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeCategory === category.id
-                  ? `bg-gradient-to-r ${category.gradient} text-white shadow-lg`
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* Active Category Content */}
-        {featureCategories.map((category) => (
-          <motion.div
-            key={category.id}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{
-              opacity: activeCategory === category.id ? 1 : 0,
-              y: activeCategory === category.id ? 0 : 30,
-              display: activeCategory === category.id ? 'block' : 'none',
-            }}
-            transition={{ duration: 0.4 }}
+          {/* Navigation arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-12 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/80 transition-all hover:scale-110"
+            aria-label="Previous feature"
           >
-            <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-              {/* Illustration */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="order-2 lg:order-1"
-              >
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl p-8 aspect-[4/3]">
-                  {illustrations[category.id] && (() => {
-                    const IllustrationComponent = illustrations[category.id];
-                    return <IllustrationComponent />;
-                  })()}
-                </div>
-              </motion.div>
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-12 z-20 w-12 h-12 rounded-full bg-slate-800/80 backdrop-blur border border-slate-700/50 flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700/80 transition-all hover:scale-110"
+            aria-label="Next feature"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
 
-              {/* Content */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="order-1 lg:order-2"
+          {/* Carousel content */}
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+            {/* Left: Dashboard visualization */}
+            <motion.div
+              className="order-2 lg:order-1"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div
+                className="relative aspect-[4/3] rounded-2xl overflow-hidden"
+                style={{
+                  background: `linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%)`,
+                  boxShadow: `0 0 80px ${activeFeature.glowColor}, inset 0 1px 0 rgba(255,255,255,0.05)`,
+                }}
               >
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-gradient-to-r ${category.gradient} text-white`}>
-                  {category.tagline}
-                </span>
-                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-                  {category.name}
-                </h3>
-                <p className="text-gray-600 mb-8">
-                  {category.description}
-                </p>
+                {/* Glowing border */}
+                <div
+                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  style={{
+                    background: `linear-gradient(135deg, transparent 40%, ${activeFeature.glowColor} 100%)`,
+                    padding: '1px',
+                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                    maskComposite: 'xor',
+                    WebkitMaskComposite: 'xor',
+                  }}
+                />
 
-                {/* Feature List */}
-                <div className="space-y-4">
-                  {category.features.map((feature, index) => (
+                {/* Dashboard content */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0, x: direction * 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -direction * 50 }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0"
+                  >
+                    {DashboardComponent && <DashboardComponent />}
+                  </motion.div>
+                </AnimatePresence>
+
+                {/* Scan line effect */}
+                <motion.div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: 'linear-gradient(transparent 50%, rgba(0,0,0,0.1) 50%)',
+                    backgroundSize: '100% 4px',
+                  }}
+                  animate={{ opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Right: Feature details */}
+            <motion.div
+              className="order-1 lg:order-2 flex flex-col justify-center"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {/* Category badge */}
+                  <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-gradient-to-r ${activeFeature.gradient} text-white shadow-lg`}>
+                    {activeFeature.category}
+                  </span>
+
+                  {/* Title */}
+                  <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                    {activeFeature.title}
+                  </h3>
+
+                  {/* Tagline */}
+                  <p className={`text-lg font-medium mb-4 bg-gradient-to-r ${activeFeature.gradient} bg-clip-text text-transparent`}>
+                    {activeFeature.tagline}
+                  </p>
+
+                  {/* Description */}
+                  <p className="text-slate-400 mb-8 leading-relaxed">
+                    {activeFeature.description}
+                  </p>
+
+                  {/* Feature grid */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {activeFeature.features.map((feature, index) => (
+                      <motion.div
+                        key={feature.label}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 + index * 0.05 }}
+                        className="group flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50 hover:border-slate-600/50 hover:bg-slate-800/80 transition-all"
+                      >
+                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${activeFeature.gradient} bg-opacity-20 flex items-center justify-center flex-shrink-0`}>
+                          <feature.icon className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium text-slate-200 truncate">
+                            {feature.label}
+                          </div>
+                          <div className="text-xs text-slate-500 truncate">
+                            {feature.desc}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="mt-8 flex items-center justify-center gap-4">
+            {/* Dots navigation */}
+            <div className="flex items-center gap-2">
+              {features.map((feature, index) => (
+                <button
+                  key={feature.id}
+                  onClick={() => goToSlide(index)}
+                  className={`relative h-2 rounded-full transition-all duration-300 ${
+                    index === activeIndex ? 'w-8' : 'w-2'
+                  }`}
+                  style={{
+                    background: index === activeIndex
+                      ? `linear-gradient(90deg, ${feature.glowColor.replace('0.5', '1')}, ${feature.glowColor.replace('0.5', '0.6')})`
+                      : 'rgba(71, 85, 105, 0.5)',
+                  }}
+                  aria-label={`Go to ${feature.title}`}
+                >
+                  {index === activeIndex && !isPaused && (
                     <motion.div
-                      key={feature.title}
-                      initial={{ opacity: 0, x: 20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.1 * index }}
-                      className="group flex gap-4 p-4 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-200 transition-all duration-300"
-                    >
-                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-r ${category.gradient} bg-opacity-10 flex items-center justify-center flex-shrink-0`}>
-                        <feature.icon className="w-5 h-5 text-gray-700" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
-                          {feature.title}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {feature.description}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+                      className="absolute inset-0 rounded-full"
+                      style={{ background: 'rgba(255,255,255,0.3)' }}
+                      initial={{ scaleX: 0, transformOrigin: 'left' }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 6, ease: 'linear' }}
+                    />
+                  )}
+                </button>
+              ))}
             </div>
-          </motion.div>
-        ))}
+          </div>
+        </div>
 
-        {/* All Features Summary */}
+        {/* Bottom CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="mt-16 bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 sm:p-12"
+          transition={{ delay: 0.4 }}
+          className="mt-16 text-center"
         >
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-                Plus Even More Tools
-              </h3>
-              <p className="text-gray-400 mb-6">
-                CloudePulse includes everything MSPs need to run efficiently - all in one affordable platform.
-              </p>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  'M365 Licenses',
-                  'IP Geolocation',
-                  'Time Tracking',
-                  'Script Library',
-                  'Phishing Simulator',
-                  'Security Training',
-                  'Customer Portals',
-                  'Onboarding',
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-gray-300">
-                    <Check className="w-4 h-4 text-green-500" />
-                    <span className="text-sm">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex flex-col items-center md:items-end">
-              <p className="text-gray-400 text-sm mb-4 text-center md:text-right">
-                Lightweight alternative to expensive enterprise tools
-              </p>
-              <div className="flex flex-wrap justify-center md:justify-end gap-2">
-                {['BackupRadar', 'Huntress', 'KnowBe4', 'Pingdom'].map((tool) => (
-                  <span key={tool} className="px-3 py-1 bg-gray-700 text-gray-300 text-xs rounded-full">
-                    {tool}
-                  </span>
-                ))}
-              </div>
-              <button
-                onClick={() => {
-                  const element = document.querySelector('#trial');
-                  if (element) element.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-semibold rounded-xl hover:shadow-lg transition-shadow"
-              >
-                Start Free Trial
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <p className="text-slate-500 text-sm mb-4">
+            All features included in every plan. No hidden costs.
+          </p>
+          <button
+            onClick={() => {
+              const element = document.querySelector('#trial');
+              if (element) element.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-500/25 transition-all hover:scale-105"
+          >
+            Start Free Trial
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </motion.div>
       </div>
     </section>
