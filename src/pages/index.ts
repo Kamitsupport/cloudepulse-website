@@ -2,3 +2,4 @@ export { default as PrivacyPolicy } from './PrivacyPolicy';
 export { default as TermsOfService } from './TermsOfService';
 export { default as Transparency } from './Transparency';
 export { default as AboutUs } from './AboutUs';
+export { default as FeaturesPage } from './FeaturesPage';

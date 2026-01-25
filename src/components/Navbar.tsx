@@ -4,9 +4,9 @@ import { Activity, Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const navLinks = [
-  { name: 'Features', href: '#features' },
-  { name: 'How It Works', href: '#how-it-works' },
-  { name: 'Pricing', href: '#pricing' },
+  { name: 'Features', href: '/features', isPage: true },
+  { name: 'How It Works', href: '#how-it-works', isPage: false },
+  { name: 'Pricing', href: '#pricing', isPage: false },
 ];
 
 export default function Navbar() {
@@ -14,6 +14,10 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Homepage has dark hero, other pages have light backgrounds
+  const isHomePage = location.pathname === '/';
+  const useLightText = isHomePage && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,7 +81,7 @@ export default function Navbar() {
                 >
                   <Activity className="w-6 h-6 text-white" />
                 </motion.div>
-                <span className="text-xl font-bold gradient-text hidden sm:block">
+                <span className={`text-xl font-bold hidden sm:block ${useLightText ? 'text-white' : 'gradient-text'}`}>
                   CloudePulse
                 </span>
               </motion.div>
@@ -86,27 +90,42 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               {navLinks.map((link) => (
-                <motion.button
-                  key={link.name}
-                  onClick={() => scrollToSection(link.href)}
-                  className={`text-sm font-medium transition-colors ${
-                    isScrolled
-                      ? 'text-gray-600 hover:text-primary-600'
-                      : 'text-gray-700 hover:text-primary-600'
-                  }`}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ y: 0 }}
-                >
-                  {link.name}
-                </motion.button>
+                link.isPage ? (
+                  <motion.div key={link.name} whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
+                    <Link
+                      to={link.href}
+                      className={`text-sm font-medium transition-colors ${
+                        useLightText
+                          ? 'text-white/90 hover:text-white'
+                          : 'text-gray-600 hover:text-primary-600'
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ) : (
+                  <motion.button
+                    key={link.name}
+                    onClick={() => scrollToSection(link.href)}
+                    className={`text-sm font-medium transition-colors ${
+                      useLightText
+                        ? 'text-white/90 hover:text-white'
+                        : 'text-gray-600 hover:text-primary-600'
+                    }`}
+                    whileHover={{ y: -2 }}
+                    whileTap={{ y: 0 }}
+                  >
+                    {link.name}
+                  </motion.button>
+                )
               ))}
               <motion.div whileHover={{ y: -2 }} whileTap={{ y: 0 }}>
                 <Link
                   to="/about"
                   className={`text-sm font-medium transition-colors ${
-                    isScrolled
-                      ? 'text-gray-600 hover:text-primary-600'
-                      : 'text-gray-700 hover:text-primary-600'
+                    useLightText
+                      ? 'text-white/90 hover:text-white'
+                      : 'text-gray-600 hover:text-primary-600'
                   }`}
                 >
                   About Us
@@ -118,7 +137,11 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-4">
               <motion.a
                 href="https://app.cloudepulse.com"
-                className="text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors"
+                className={`text-sm font-medium transition-colors ${
+                  useLightText
+                    ? 'text-white/90 hover:text-white'
+                    : 'text-gray-600 hover:text-primary-600'
+                }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -136,14 +159,14 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <motion.button
-              className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+              className={`md:hidden p-2 rounded-lg ${useLightText ? 'hover:bg-white/10' : 'hover:bg-gray-100'}`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileTap={{ scale: 0.95 }}
             >
               {isMobileMenuOpen ? (
-                <X className="w-6 h-6 text-gray-600" />
+                <X className={`w-6 h-6 ${useLightText ? 'text-white' : 'text-gray-600'}`} />
               ) : (
-                <Menu className="w-6 h-6 text-gray-600" />
+                <Menu className={`w-6 h-6 ${useLightText ? 'text-white' : 'text-gray-600'}`} />
               )}
             </motion.button>
           </div>
@@ -162,16 +185,33 @@ export default function Navbar() {
           >
             <div className="container-custom py-6 space-y-4">
               {navLinks.map((link, index) => (
-                <motion.button
-                  key={link.name}
-                  onClick={() => scrollToSection(link.href)}
-                  className="block w-full text-left py-3 text-gray-600 hover:text-primary-600 font-medium border-b border-gray-100"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {link.name}
-                </motion.button>
+                link.isPage ? (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Link
+                      to={link.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full text-left py-3 text-gray-600 hover:text-primary-600 font-medium border-b border-gray-100"
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ) : (
+                  <motion.button
+                    key={link.name}
+                    onClick={() => scrollToSection(link.href)}
+                    className="block w-full text-left py-3 text-gray-600 hover:text-primary-600 font-medium border-b border-gray-100"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    {link.name}
+                  </motion.button>
+                )
               ))}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}

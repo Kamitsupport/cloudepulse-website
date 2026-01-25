@@ -10,7 +10,7 @@ import {
   TrialSignupForm,
   Footer,
 } from './components';
-import { PrivacyPolicy, TermsOfService, Transparency, AboutUs } from './pages';
+import { PrivacyPolicy, TermsOfService, Transparency, AboutUs, FeaturesPage } from './pages';
 
 function HomePage() {
   return (
@@ -49,6 +49,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/features" element={<FeaturesPage />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsOfService />} />
       <Route path="/transparency" element={<Transparency />} />
