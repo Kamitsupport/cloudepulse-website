@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   ChevronDown,
@@ -1167,6 +1167,7 @@ const FeatureCategoryCard = ({ category, isExpanded, onToggle, index }: FeatureC
 
 export default function FeaturesPage() {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['customer-portal', 'password-sharing', 'onboarding']);
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
@@ -1179,6 +1180,14 @@ export default function FeaturesPage() {
 
   const expandAll = () => {
     setExpandedCategories(featureCategories.map(c => c.id));
+  };
+
+  const expandAllAndScroll = () => {
+    setExpandedCategories(featureCategories.map(c => c.id));
+    setTimeout(() => {
+      const element = document.querySelector('#all-features');
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
   };
 
   const collapseAll = () => {
@@ -1301,10 +1310,7 @@ export default function FeaturesPage() {
                 <motion.button
                   whileHover={{ scale: 1.03, boxShadow: '0 20px 40px rgba(14, 165, 233, 0.3)' }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    const element = document.querySelector('#trial');
-                    if (element) element.scrollIntoView({ behavior: 'smooth' });
-                  }}
+                  onClick={() => navigate('/#trial')}
                   className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white font-semibold rounded-xl shadow-lg shadow-primary-500/25 flex items-center gap-2"
                 >
                   Start Free Trial
@@ -1313,7 +1319,7 @@ export default function FeaturesPage() {
                 <motion.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={expandAll}
+                  onClick={expandAllAndScroll}
                   className="px-6 py-4 bg-white border-2 border-slate-200 text-slate-700 font-medium rounded-xl hover:border-primary-300 hover:bg-primary-50/50 transition-all flex items-center gap-2"
                 >
                   <MousePointerClick className="w-5 h-5" />
@@ -1738,7 +1744,7 @@ export default function FeaturesPage() {
         </section>
 
         {/* All Features Accordion */}
-        <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative">
+        <section id="all-features" className="py-24 bg-gradient-to-b from-slate-50 to-white relative">
           {/* Decorative top border */}
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
