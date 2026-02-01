@@ -2,6 +2,8 @@ import { initializeApp } from 'firebase/app';
 import type { FirebaseApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import type { Firestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import type { FirebaseStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -21,12 +23,14 @@ const isFirebaseConfigured = Boolean(
 // Initialize Firebase only if configured
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
+let storage: FirebaseStorage | null = null;
 
 if (isFirebaseConfigured) {
   try {
     app = initializeApp(firebaseConfig);
     // Use the cloudepulse-native database (not the default)
     db = getFirestore(app, 'cloudepulse-native');
+    storage = getStorage(app);
   } catch (error) {
     console.error('Failed to initialize Firebase:', error);
   }
@@ -34,5 +38,5 @@ if (isFirebaseConfigured) {
   console.warn('Firebase not configured. Set VITE_FIREBASE_* environment variables.');
 }
 
-export { db };
+export { db, storage };
 export default app;

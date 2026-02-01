@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import {
   Navbar,
   Hero,
+  VideoPromo,
   Features,
   HowItWorks,
   WhyWeBuiltThis,
@@ -18,6 +19,7 @@ function HomePage() {
       <Navbar />
       <main>
         <Hero />
+        <VideoPromo />
         <WhyWeBuiltThis />
         <Features />
         <HowItWorks />
