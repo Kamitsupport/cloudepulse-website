@@ -312,7 +312,7 @@ export default function TrialSignupForm() {
             </motion.div>
             <h3 className="text-2xl font-bold text-gray-900 mb-3">Welcome aboard!</h3>
             <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              Your 14-day free trial is being set up. Check your email for login credentials
+              Your 30-day free trial is being set up. Check your email for login credentials
               and get started in minutes.
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-green-700 bg-green-100 rounded-full py-2 px-4 mx-auto w-fit">
@@ -741,7 +741,7 @@ export default function TrialSignupForm() {
       <div className="flex items-center justify-center gap-6 pt-4 text-sm text-gray-500">
         <span className="flex items-center gap-1">
           <CheckCircle className="w-4 h-4 text-green-500" />
-          14-day free trial
+          30-day free trial
         </span>
         <span className="flex items-center gap-1">
           <CheckCircle className="w-4 h-4 text-green-500" />
