@@ -1337,7 +1337,7 @@ export default function FeaturesPage() {
                 {[
                   { label: 'Feature Categories', value: '12' },
                   { label: 'Individual Features', value: '30+' },
-                  { label: 'Integrations', value: '15+' },
+                  { label: 'Integrations', value: '7+' },
                 ].map((stat, i) => (
                   <div key={i} className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full bg-gradient-to-r from-primary-500 to-violet-600" />
@@ -1891,7 +1891,7 @@ export default function FeaturesPage() {
               >
                 {[
                   { icon: Shield, text: 'Bank-grade security' },
-                  { icon: Users, text: 'Trusted by 50+ MSPs' },
+                  { icon: Users, text: 'Built for MSPs' },
                   { icon: Clock, text: '30-day free trial' },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-2">
