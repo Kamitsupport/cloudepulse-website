@@ -370,7 +370,7 @@ export default function TrialSignupForm() {
                     key={country.code}
                     type="button"
                     onClick={() => {
-                      setFormData(prev => ({ ...prev, countryCode: country.code }));
+                      setFormData(prev => ({ ...prev, countryCode: country.code, phone: '' }));
                       setShowCountryDropdown(false);
                       // Reset company selection when country changes
                       if (companySelected) {
@@ -643,6 +643,7 @@ export default function TrialSignupForm() {
           international
           countryCallingCodeEditable={false}
           defaultCountry={defaultCountry}
+          country={formData.countryCode as CountryCode || defaultCountry}
           value={formData.phone}
           onChange={(value) => setFormData(prev => ({ ...prev, phone: value || '' }))}
           className={`phone-input-container ${errors.phone ? 'has-error' : ''}`}
